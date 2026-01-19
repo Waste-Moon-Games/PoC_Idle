@@ -1,0 +1,22 @@
+{
+    "name": "Core.GlobalGameState",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1da227a9bf8af524f9f265cc08405603",
+        "GUID:01386bb96faa5dc488f6f45d72b4ce3c",
+        "GUID:cfb766ecd880dc947913336cc65232b0"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "WebGL"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

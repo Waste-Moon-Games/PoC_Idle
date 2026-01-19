@@ -1,0 +1,25 @@
+﻿<Solution>
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="UI.GameplayMenu.Animations.csproj" />
+  <Project Path="Other.Utils.csproj" />
+  <Project Path="Core.Common.csproj" />
+  <Project Path="Assembly-CSharp-firstpass.csproj" />
+  <Project Path="UI.GameplayMenu.ViewModels.csproj" />
+  <Project Path="Core.Shop.Base.csproj" />
+  <Project Path="SO.ShopConfigs.csproj" />
+  <Project Path="Core.GlobalGameState.csproj" />
+  <Project Path="Core.Consts.csproj" />
+  <Project Path="Core.Shop.Models.csproj" />
+  <Project Path="SO.EconomyConfigs.csproj" />
+  <Project Path="UI.ShopMenu.ViewModels.csproj" />
+  <Project Path="UI.ShopMenu.Views.csproj" />
+  <Project Path="SO.AnimationConfigs.csproj" />
+  <Project Path="UI.GameplayMenu.Views.csproj" />
+  <Project Path="Entry.Global.csproj" />
+  <Project Path="Entry.Local.Gameplay.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="UI.ShopMenu.Models.csproj" />
+  <Project Path="Entry.Local.Shop.csproj" />
+  <Project Path="UI.GameplayMenu.Models.csproj" />
+  <Project Path="UI.Common.csproj" />
+</Solution>

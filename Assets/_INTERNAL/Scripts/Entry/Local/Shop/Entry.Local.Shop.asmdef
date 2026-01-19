@@ -1,0 +1,31 @@
+{
+    "name": "Entry.Local.Shop",
+    "rootNamespace": "",
+    "references": [
+        "GUID:fee51631cbfd108468fa590f2885f75e",
+        "GUID:e7038c013a5b98548aad94d55a8a3ae4",
+        "GUID:9cf1ae10122610b4dbe0c299badb4a10",
+        "GUID:01386bb96faa5dc488f6f45d72b4ce3c",
+        "GUID:1a60c186851614842a3785f95f5553a4",
+        "GUID:916061a7f01c16c4bb418555461c8821",
+        "GUID:f5f465d462500774fab3f20acca2e751",
+        "GUID:e82836995439c624c89e0cd665597706",
+        "GUID:a6fc2d27a4591fd4fb1163953242147d",
+        "GUID:9e4179a2da9b1d14780535ab5adcbec0",
+        "GUID:a8723ba84a0493a4e96a275042c941d2",
+        "GUID:cfb766ecd880dc947913336cc65232b0"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "WebGL"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

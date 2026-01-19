@@ -1,0 +1,27 @@
+{
+    "name": "Entry.Local.Gameplay",
+    "rootNamespace": "",
+    "references": [
+        "GUID:fee51631cbfd108468fa590f2885f75e",
+        "GUID:9cf1ae10122610b4dbe0c299badb4a10",
+        "GUID:a6fc2d27a4591fd4fb1163953242147d",
+        "GUID:9e4179a2da9b1d14780535ab5adcbec0",
+        "GUID:a8723ba84a0493a4e96a275042c941d2",
+        "GUID:6c94bfc5a8b347a4896fe0f61acd569e",
+        "GUID:7891363107d5caf4fb12cf250bb565ac",
+        "GUID:cfb766ecd880dc947913336cc65232b0"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "WebGL"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

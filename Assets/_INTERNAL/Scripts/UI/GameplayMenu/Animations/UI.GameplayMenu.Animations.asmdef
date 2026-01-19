@@ -1,0 +1,23 @@
+{
+    "name": "UI.GameplayMenu.Animations",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:fee51631cbfd108468fa590f2885f75e",
+        "GUID:7891363107d5caf4fb12cf250bb565ac",
+        "GUID:cfb766ecd880dc947913336cc65232b0"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "WebGL"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

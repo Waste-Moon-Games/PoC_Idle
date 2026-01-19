@@ -1,0 +1,21 @@
+{
+    "name": "UI.GameplayMenu.ViewModels",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a6fc2d27a4591fd4fb1163953242147d",
+        "GUID:fee51631cbfd108468fa590f2885f75e"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "WebGL"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

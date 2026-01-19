@@ -1,0 +1,24 @@
+{
+    "name": "UI.ShopMenu.ViewModels",
+    "rootNamespace": "",
+    "references": [
+        "GUID:fee51631cbfd108468fa590f2885f75e",
+        "GUID:01386bb96faa5dc488f6f45d72b4ce3c",
+        "GUID:1a60c186851614842a3785f95f5553a4",
+        "GUID:916061a7f01c16c4bb418555461c8821",
+        "GUID:cfb766ecd880dc947913336cc65232b0"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "WebGL"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
