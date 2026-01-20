@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: SO.EconomyConfigs::SO.EconomyConfigs.MainEconomyConfig
   <InitialPlayerWallet>k__BackingField: 500
   <InitialPlayerClickAmount>k__BackingField: 1
+  <PassiveIncomeDelay>k__BackingField: 1
   <InitialMinTrippleClickChance>k__BackingField: 0.01
   <InitialCurrentTrippleClickChance>k__BackingField: 0.01
   <MaxTrippleClickChance>k__BackingField: 0.9

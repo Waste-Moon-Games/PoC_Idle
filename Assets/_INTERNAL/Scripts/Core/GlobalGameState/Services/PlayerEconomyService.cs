@@ -1,17 +1,16 @@
+using Cysharp.Threading.Tasks;
 using R3;
-using SO.EconomyConfigs;
+using SO.PlayerConfigs;
 using System;
-using System.Collections;
+using System.Threading;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using Utils.ModCoroutines;
 
 namespace Core.GlobalGameState.Services
 {
     public class PlayerEconomyService
     {
-        private static readonly WaitForSeconds _waitForSeconds = new(1f);
-        private readonly Coroutines _coroutines;
+        private CancellationTokenSource _cts;
 
         private readonly Subject<float> _coinsChangeSignal = new();
         private readonly Subject<float> _coinsPerClickChangeSignal = new();
@@ -19,6 +18,7 @@ namespace Core.GlobalGameState.Services
         private readonly Subject<float> _passiveIncomeAmountChangeSignal = new();
 
         private float _playerWallet;
+        private readonly float _passiveIncomeDelay;
 
         private float _trippleClickChance;
         private readonly float _minTrippleClickChance;
@@ -26,8 +26,6 @@ namespace Core.GlobalGameState.Services
 
         private float _playerClickAmount;
         private float _passiveIncomeAmount;
-
-        private Coroutine _passiveIncomeCoroutine;
 
         public float PlayerWallet
         {
@@ -75,18 +73,18 @@ namespace Core.GlobalGameState.Services
         public Observable<float> CoinsPerClick => _coinsPerClickSignal.AsObservable();
         public Observable<float> PassiveInconeChanged => _passiveIncomeAmountChangeSignal.AsObservable();
 
-        public PlayerEconomyService(MainEconomyConfig config, Coroutines coroutines)
+        public PlayerEconomyService(MainEconomyConfig config)
         {
             _playerClickAmount = config.InitialPlayerClickAmount;
             _playerWallet = config.InitialPlayerWallet;
+
             _passiveIncomeAmount = 0f;
+            _passiveIncomeDelay = config.PassiveIncomeDelay;
+
             _trippleClickChance = config.InitialCurrentTrippleClickChance;
 
             _minTrippleClickChance = config.InitialMinTrippleClickChance;
             _maxTrippleClickChance = config.MaxTrippleClickChance;
-
-            _coroutines = coroutines;
-            _passiveIncomeCoroutine ??= _coroutines.StartCoroutine(PassiveIncome());
         }
 
         public void IncreasePlayerClick(float amount)
@@ -144,15 +142,36 @@ namespace Core.GlobalGameState.Services
             return false;
         }
 
-        private IEnumerator PassiveIncome()
+        public void StartAsyncTasks()
         {
-            while (true)
-            {
-                PlayerWallet += PassiveIncomeAmount;
-                Debug.Log("Wallet increased");
-                _coinsChangeSignal.OnNext(PlayerWallet);
+            _cts = new CancellationTokenSource();
+            PassiveIncomeAsync(_cts.Token).Forget();
+        }
 
-                yield return _waitForSeconds;
+        public void StopAllTasks()
+        {
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = null;
+
+            _coinsChangeSignal.OnCompleted();
+            _coinsPerClickChangeSignal.OnCompleted();
+            _coinsPerClickSignal.OnCompleted();
+            _passiveIncomeAmountChangeSignal.OnCompleted();
+        }
+
+        private void ApplyPassiveIncome()
+        {
+            PlayerWallet += PassiveIncomeAmount;
+            _coinsChangeSignal.OnNext(PlayerWallet);
+        }
+
+        private async UniTask PassiveIncomeAsync(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                ApplyPassiveIncome();
+                await UniTask.Delay(TimeSpan.FromSeconds(_passiveIncomeDelay), ignoreTimeScale: true, cancellationToken: token);
             }
         }
     }

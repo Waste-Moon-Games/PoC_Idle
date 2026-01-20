@@ -53,9 +53,9 @@ namespace Entry.Local.Gameplay
 
         private void CreateModels(out MainGameModel mainGameModel, out PlayerInfoModel playerInfoModel, in DIContainer container)
         {
-            var playerEconomyService = container.Resolve<GameWorldState>().PlayerState.EconomyService;
+            var playerState = container.Resolve<GameWorldState>().PlayerState;
 
-            mainGameModel = new MainGameModel(playerEconomyService);
+            mainGameModel = new MainGameModel(playerState);
             playerInfoModel = new PlayerInfoModel();
         }
 
