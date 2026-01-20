@@ -48,20 +48,21 @@ namespace Entry.Global
             _rootContainer.RegisterInstance(_loadingView);
             _rootContainer.RegisterInstance(_coroutines);
 
-            var coroutines = _rootContainer.Resolve<Coroutines>();
             var loadingScreen = _rootContainer.Resolve<UILoadingView>();
-            _rootContainer.RegisterFactory(slc => new SceneLoaderService(loadingScreen, coroutines)).AsSingle();
+            _rootContainer.RegisterFactory(slc => new SceneLoaderService(loadingScreen)).AsSingle();
 
-            _rootContainer.RegisterFactory(gws => new GameWorldState(coroutines)).AsSingle();
+            _rootContainer.RegisterFactory(gws => new GameWorldState()).AsSingle();
         }
 
         private void Run()
         {
             _sceneNavigatorService.Start();
+            _rootContainer.Resolve<GameWorldState>().StartAsyncTasks();
         }
 
         private static void HandleApplicationQuit()
         {
+            _instance._rootContainer.Resolve<GameWorldState>().Dispose();
             _instance._sceneNavigatorService.Dispose();
             _instance._rootContainer.Dispose();
         }

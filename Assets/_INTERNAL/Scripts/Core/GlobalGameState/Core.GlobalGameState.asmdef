@@ -2,6 +2,7 @@
     "name": "Core.GlobalGameState",
     "rootNamespace": "",
     "references": [
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
         "GUID:1da227a9bf8af524f9f265cc08405603",
         "GUID:01386bb96faa5dc488f6f45d72b4ce3c",
         "GUID:cfb766ecd880dc947913336cc65232b0"

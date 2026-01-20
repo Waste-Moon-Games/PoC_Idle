@@ -2,7 +2,8 @@
     "name": "Other.Utils",
     "rootNamespace": "",
     "references": [
-        "GUID:76ad923c4bac75142bc348dd3c420935"
+        "GUID:76ad923c4bac75142bc348dd3c420935",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
     ],
     "includePlatforms": [
         "Android",

@@ -1,5 +1,3 @@
-using Utils.ModCoroutines;
-
 namespace Core.GlobalGameState
 {
     public class GameWorldState
@@ -8,9 +6,13 @@ namespace Core.GlobalGameState
 
         public PlayerState PlayerState => _playerState;
 
-        public GameWorldState(Coroutines coroutines)
+        public GameWorldState()
         {
-            _playerState = new(coroutines);
+            _playerState = new();
         }
+
+        public void StartAsyncTasks() => _playerState.StartAsyncTasks();
+
+        public void Dispose() => _playerState.StopAsyncTasks();
     }
 }

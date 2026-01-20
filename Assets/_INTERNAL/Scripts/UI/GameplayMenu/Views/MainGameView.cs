@@ -7,6 +7,7 @@ namespace UI.GameplayMenu.Views
     public class MainGameView : MonoBehaviour, IView
     {
         [SerializeField] private ClickableZoneView _clickableZoneView;
+        [SerializeField] private BonusGaugeZoneView _bonusGaugeZoneView;
 
         public ClickableZoneView ClickableZone => _clickableZoneView;
 
