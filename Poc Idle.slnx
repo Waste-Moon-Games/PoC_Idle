@@ -6,6 +6,7 @@
   <Project Path="Other.Utils.csproj" />
   <Project Path="Core.Common.csproj" />
   <Project Path="UniTask.Addressables.csproj" />
+  <Project Path="NuGetForUnity.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="UI.GameplayMenu.Models.csproj" />
   <Project Path="UniTask.TextMeshPro.csproj" />

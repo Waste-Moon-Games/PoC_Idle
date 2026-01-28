@@ -18,7 +18,7 @@ namespace UI.GameplayMenu.Models
         {
             _model = model;
 
-            _model.BonusGaugeChanged.Subscribe(HandleChangedBonusGauge).AddTo(_disposables);
+            _model.BonusesService.BonusGaugeChanged.Subscribe(HandleChangedBonusGauge).AddTo(_disposables);
         }
 
         public void Dispose() => _disposables.Dispose();
@@ -29,7 +29,7 @@ namespace UI.GameplayMenu.Models
         public void Click()
         {
             _model.EconomyService.Add();
-            _model.Click();
+            _model.BonusesService.Click();
         }
 
         private void HandleChangedBonusGauge(float amount) => _bonusGaugeChangedSignal.OnNext(amount);

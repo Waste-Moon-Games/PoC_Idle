@@ -148,7 +148,7 @@ namespace Core.GlobalGameState.Services
             PassiveIncomeAsync(_cts.Token).Forget();
         }
 
-        public void StopAllTasks()
+        public void StopAsyncTasks()
         {
             _cts?.Cancel();
             _cts?.Dispose();
