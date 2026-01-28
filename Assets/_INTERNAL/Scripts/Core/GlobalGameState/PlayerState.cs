@@ -1,11 +1,6 @@
 using Core.GlobalGameState.Services;
-using Cysharp.Threading.Tasks;
-using R3;
 using SO.PlayerConfigs;
-using System;
-using System.Threading;
 using UnityEngine;
-using Utils.ModCoroutines;
 
 namespace Core.GlobalGameState
 {
@@ -26,7 +21,7 @@ namespace Core.GlobalGameState
             var economyConfig = Resources.Load<MainEconomyConfig>("Configs/Economy/MainEconomyConfig");
             var playerConfig = Resources.Load<PlayerConfig>("Configs/Player/PlayerConfig");
 
-            _playerEconomyService = new(economyConfig);
+            _playerEconomyService = new(economyConfig, _playerBonusesService.BonusStateChanged);
             _playerUpgradeService = new(_playerEconomyService);
             _playerBonusesService = new(playerConfig);
             _shopState = new();
@@ -42,6 +37,11 @@ namespace Core.GlobalGameState
         {
             _playerEconomyService.StopAsyncTasks();
             _playerBonusesService.StopAsyncTasks();
+        }
+
+        public void Dispose()
+        {
+            _playerEconomyService?.Dispose();
         }
     }
 }

@@ -24,9 +24,9 @@ namespace UI.GameplayMenu.Views
         {
             _viewModel = viewModel as MainGameViewModel;
 
-            _viewModel.BonusGaugeChanged.Subscribe(HandleChangedBonusGauge).AddTo(_disposables);
+            _viewModel.ChangedBonusGauge.Subscribe(HandleChangedBonusGauge).AddTo(_disposables);
         }
 
-        private void HandleChangedBonusGauge(float amount) => _bonusGaugeProgressBar.fillAmount = amount;
+        private void HandleChangedBonusGauge(float amount) => _bonusGaugeProgressBar.fillAmount = Mathf.Clamp01(amount);
     }
 }

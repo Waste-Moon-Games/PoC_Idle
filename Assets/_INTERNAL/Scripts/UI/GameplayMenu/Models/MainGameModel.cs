@@ -19,6 +19,8 @@ namespace UI.GameplayMenu.Models
             _model = model;
 
             _model.BonusesService.BonusGaugeChanged.Subscribe(HandleChangedBonusGauge).AddTo(_disposables);
+
+            _model.BonusesService.RequestDefaultBonusGaugeState();
         }
 
         public void Dispose() => _disposables.Dispose();

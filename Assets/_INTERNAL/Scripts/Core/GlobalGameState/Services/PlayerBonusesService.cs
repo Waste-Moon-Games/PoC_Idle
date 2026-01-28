@@ -4,12 +4,16 @@ using SO.PlayerConfigs;
 using System;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 
 namespace Core.GlobalGameState.Services
 {
     public class PlayerBonusesService
     {
-        private CancellationTokenSource _cts;
+        private CancellationTokenSource _decreaseBonusCancellationToken;
+        private CancellationTokenSource _activeBonusCancellationToken;
+
+        private readonly Subject<bool> _bonusStateChangedSignal = new();
 
         private readonly Subject<float> _bonusGaugeChangedSignal = new();
         private readonly Subject<int> _levelChangedSignal = new();
@@ -17,6 +21,7 @@ namespace Core.GlobalGameState.Services
         private readonly Subject<int> _expToLevelUpChangedSignal = new();
 
         private float _bonusGauge;
+        private readonly float _maxBonusGauge;
         private float _bonusPerClick;
         private readonly float _decreaseBonusGaugeDelay;
 
@@ -26,6 +31,7 @@ namespace Core.GlobalGameState.Services
         private int _currentExp;
         private int _expToLevelUp;
 
+        public Observable<bool> BonusStateChanged => _bonusStateChangedSignal.AsObservable();
         public Observable<float> BonusGaugeChanged => _bonusGaugeChangedSignal.AsObservable();
         public Observable<int> LevelChanged => _levelChangedSignal.AsObservable();
         public Observable<int> CurrentExpChanged => _currentExpChangedSignal.AsObservable();
@@ -33,7 +39,8 @@ namespace Core.GlobalGameState.Services
 
         public PlayerBonusesService(PlayerConfig config)
         {
-            _bonusGauge = config.PlayerBonusGauge;
+            _maxBonusGauge = config.PlayerBonusGauge;
+            _bonusGauge = 0;
             _bonusPerClick = config.InitPlayerBonusPerClick;
 
             _level = 1;
@@ -44,9 +51,38 @@ namespace Core.GlobalGameState.Services
             _decreaseBonusGaugeDelay = config.DecreaseBonusGaugeDelay;
         }
 
+        /// <summary>
+        /// Запросить дефолтные значения бонусной прогрессии игрока
+        /// </summary>
+        public void RequestDefaultBonusGaugeState()
+        {
+            _bonusGaugeChangedSignal.OnNext(_bonusGauge);
+        }
+
+        /// <summary>
+        /// Запросить дефолтные значения уровневой прогрессии игрока
+        /// </summary>
+        public void RequestDefaultLevelState()
+        {
+            _levelChangedSignal.OnNext(_level);
+            _currentExpChangedSignal.OnNext(_currentExp);
+            _expToLevelUpChangedSignal.OnNext(_expToLevelUp);
+        }
+
         public void Click()
         {
-            _bonusGauge += _bonusPerClick;
+            if (_bonusGauge < _maxBonusGauge)
+            {
+                _bonusGauge += _bonusPerClick;
+                if(_bonusGauge >= _maxBonusGauge)
+                {
+                    _bonusStateChangedSignal.OnNext(true);
+                    _bonusGauge = _maxBonusGauge;
+                    _activeBonusCancellationToken = new();
+                    ActiveBonusTaskAsync(_activeBonusCancellationToken.Token).Forget();
+                }
+            }
+
             TryIncreaseLevel();
             _currentExp += _expPerClick;
 
@@ -56,15 +92,15 @@ namespace Core.GlobalGameState.Services
 
         public void StartAsyncTasks()
         {
-            _cts = new();
-            DecreaseBonusGaugeAsync(_cts.Token).Forget();
+            _decreaseBonusCancellationToken = new();
+            DecreaseBonusGaugeAsync(_decreaseBonusCancellationToken.Token).Forget();
         }
 
         public void StopAsyncTasks()
         {
-            _cts?.Cancel();
-            _cts?.Dispose();
-            _cts = null;
+            _decreaseBonusCancellationToken?.Cancel();
+            _decreaseBonusCancellationToken?.Dispose();
+            _decreaseBonusCancellationToken = null;
         }
 
         public void TryIncreaseExpPerClick(float amount) => _expPerClick = Mathf.RoundToInt(_expPerClick + amount);
@@ -81,6 +117,29 @@ namespace Core.GlobalGameState.Services
                 _levelChangedSignal.OnNext(_level);
                 _currentExpChangedSignal.OnNext(_currentExp);
                 _expToLevelUpChangedSignal.OnNext(_expToLevelUp);
+            }
+        }
+
+        private async UniTask ActiveBonusTaskAsync(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                if (_bonusGauge > 0)
+                {
+                    _bonusGauge--;
+                    _bonusGaugeChangedSignal.OnNext(_bonusGauge);
+
+                    if(_bonusGauge <= 0)
+                    {
+                        _bonusGauge = 0;
+                        _bonusStateChangedSignal.OnNext(false);
+                        _activeBonusCancellationToken?.Cancel();
+                        _activeBonusCancellationToken?.Dispose();
+                        _activeBonusCancellationToken = null;
+                    }
+                }
+
+                await UniTask.Delay(TimeSpan.FromSeconds(1f), cancellationToken: token);
             }
         }
 

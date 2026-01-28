@@ -12,7 +12,7 @@ namespace UI.GameplayMenu.ViewModels
 
         private MainGameModel _model;
 
-        public Observable<float> BonusGaugeChanged => _bonusGaugeChangedSignal.AsObservable();
+        public Observable<float> ChangedBonusGauge => _bonusGaugeChangedSignal.AsObservable();
 
         public void BindModel(IModel model)
         {

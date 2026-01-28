@@ -11,6 +11,7 @@ namespace Core.GlobalGameState.Services
     public class PlayerEconomyService
     {
         private CancellationTokenSource _cts;
+        private readonly CompositeDisposable _disposables = new();
 
         private readonly Subject<float> _coinsChangeSignal = new();
         private readonly Subject<float> _coinsPerClickChangeSignal = new();
@@ -26,6 +27,7 @@ namespace Core.GlobalGameState.Services
 
         private float _playerClickAmount;
         private float _passiveIncomeAmount;
+        private bool _bonusState;
 
         public float PlayerWallet
         {
@@ -73,7 +75,7 @@ namespace Core.GlobalGameState.Services
         public Observable<float> CoinsPerClick => _coinsPerClickSignal.AsObservable();
         public Observable<float> PassiveInconeChanged => _passiveIncomeAmountChangeSignal.AsObservable();
 
-        public PlayerEconomyService(MainEconomyConfig config)
+        public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged)
         {
             _playerClickAmount = config.InitialPlayerClickAmount;
             _playerWallet = config.InitialPlayerWallet;
@@ -85,6 +87,8 @@ namespace Core.GlobalGameState.Services
 
             _minTrippleClickChance = config.InitialMinTrippleClickChance;
             _maxTrippleClickChance = config.MaxTrippleClickChance;
+
+            bonusStateChaged.Subscribe(HandleChangedBonusState).AddTo(_disposables);
         }
 
         public void IncreasePlayerClick(float amount)
@@ -118,7 +122,13 @@ namespace Core.GlobalGameState.Services
             float rewardMultiplier = (randRoll < _trippleClickChance) ? 3f : 1f;
 
             float localClick = PlayerClickAmount;
-            float clickReward = localClick * rewardMultiplier;
+            float clickReward;
+
+            if (!_bonusState)
+                clickReward = localClick * rewardMultiplier;
+            else
+                clickReward = (localClick * rewardMultiplier) * 3f;
+
             PlayerWallet += clickReward;
 
             _coinsChangeSignal.OnNext(PlayerWallet);
@@ -159,6 +169,10 @@ namespace Core.GlobalGameState.Services
             _coinsPerClickSignal.OnCompleted();
             _passiveIncomeAmountChangeSignal.OnCompleted();
         }
+
+        public void Dispose() => _disposables.Dispose();
+
+        private void HandleChangedBonusState(bool state) => _bonusState = state;
 
         private void ApplyPassiveIncome()
         {

@@ -13,6 +13,10 @@ namespace Core.GlobalGameState
 
         public void StartAsyncTasks() => _playerState.StartAsyncTasks();
 
-        public void Dispose() => _playerState.StopAsyncTasks();
+        public void Dispose()
+        {
+            _playerState.StopAsyncTasks();
+            _playerState.Dispose();
+        }
     }
 }
