@@ -21,22 +21,22 @@ namespace Core.GlobalGameState
             var economyConfig = Resources.Load<MainEconomyConfig>("Configs/Economy/MainEconomyConfig");
             var playerConfig = Resources.Load<PlayerConfig>("Configs/Player/PlayerConfig");
 
-            _playerEconomyService = new(economyConfig, _playerBonusesService.BonusStateChanged);
-            _playerUpgradeService = new(_playerEconomyService);
             _playerBonusesService = new(playerConfig);
+            _playerEconomyService = new(economyConfig, _playerBonusesService.BonusStateChanged, playerConfig.BonusClickMultiplier);
+            _playerUpgradeService = new(_playerEconomyService);
             _shopState = new();
         }
 
         public void StartAsyncTasks()
         {
             _playerEconomyService.StartAsyncTasks();
-            _playerBonusesService.StartAsyncTasks();
+            _playerBonusesService.StartAsyncDecreaseTask();
         }
 
         public void StopAsyncTasks()
         {
             _playerEconomyService.StopAsyncTasks();
-            _playerBonusesService.StopAsyncTasks();
+            _playerBonusesService.StopAsyncDecreaseTask();
         }
 
         public void Dispose()

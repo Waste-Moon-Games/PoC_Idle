@@ -2,15 +2,16 @@
   <Project Path="UniTask.csproj" />
   <Project Path="UniTask.Linq.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="UI.GameplayMenu.ViewModels.csproj" />
   <Project Path="UI.GameplayMenu.Animations.csproj" />
   <Project Path="Other.Utils.csproj" />
   <Project Path="Core.Common.csproj" />
   <Project Path="UniTask.Addressables.csproj" />
+  <Project Path="UI.GameplayMenu.Views.csproj" />
   <Project Path="NuGetForUnity.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="UI.GameplayMenu.Models.csproj" />
   <Project Path="UniTask.TextMeshPro.csproj" />
-  <Project Path="UI.GameplayMenu.ViewModels.csproj" />
   <Project Path="Core.Shop.Base.csproj" />
   <Project Path="SO.ShopConfigs.csproj" />
   <Project Path="Core.GlobalGameState.csproj" />
@@ -20,7 +21,6 @@
   <Project Path="SO.PlayerConfigs.csproj" />
   <Project Path="UI.ShopMenu.Views.csproj" />
   <Project Path="SO.AnimationConfigs.csproj" />
-  <Project Path="UI.GameplayMenu.Views.csproj" />
   <Project Path="Entry.Global.csproj" />
   <Project Path="Entry.Local.Gameplay.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />

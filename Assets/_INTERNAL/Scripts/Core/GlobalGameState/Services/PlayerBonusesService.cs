@@ -4,7 +4,6 @@ using SO.PlayerConfigs;
 using System;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.Experimental.AI;
 
 namespace Core.GlobalGameState.Services
 {
@@ -21,13 +20,15 @@ namespace Core.GlobalGameState.Services
         private readonly Subject<int> _expToLevelUpChangedSignal = new();
 
         private float _bonusGauge;
+        private bool _isBonusActive = false;
         private readonly float _maxBonusGauge;
         private float _bonusPerClick;
         private readonly float _decreaseBonusGaugeDelay;
+        private readonly float _decreaseActiveBonusGaugeDelay;
 
         private readonly float _expIncreaseMultiplier;
         private int _level;
-        private int _expPerClick;
+        private int _gainedExpPerClick;
         private int _currentExp;
         private int _expToLevelUp;
 
@@ -40,15 +41,17 @@ namespace Core.GlobalGameState.Services
         public PlayerBonusesService(PlayerConfig config)
         {
             _maxBonusGauge = config.PlayerBonusGauge;
-            _bonusGauge = 0;
+            _bonusGauge = 0f;
             _bonusPerClick = config.InitPlayerBonusPerClick;
 
             _level = 1;
             _currentExp = 0;
             _expToLevelUp = config.InitExpToLevelUp;
-            _expPerClick = config.InitPlayerExpPerClick;
+            _gainedExpPerClick = config.InitGainedPlayerExpPerClick;
             _expIncreaseMultiplier = config.ExpIncreaseMultiplier;
+
             _decreaseBonusGaugeDelay = config.DecreaseBonusGaugeDelay;
+            _decreaseActiveBonusGaugeDelay = config.DecreaseActiveBonusGaugeDelay;
         }
 
         /// <summary>
@@ -71,40 +74,55 @@ namespace Core.GlobalGameState.Services
 
         public void Click()
         {
-            if (_bonusGauge < _maxBonusGauge)
+            if (_bonusGauge < _maxBonusGauge && !_isBonusActive)
             {
                 _bonusGauge += _bonusPerClick;
                 if(_bonusGauge >= _maxBonusGauge)
                 {
-                    _bonusStateChangedSignal.OnNext(true);
+                    _isBonusActive = true;
+                    _bonusStateChangedSignal.OnNext(_isBonusActive);
                     _bonusGauge = _maxBonusGauge;
-                    _activeBonusCancellationToken = new();
-                    ActiveBonusTaskAsync(_activeBonusCancellationToken.Token).Forget();
+                    StartActiveBonusTask();
                 }
             }
 
             TryIncreaseLevel();
-            _currentExp += _expPerClick;
+            _currentExp += _gainedExpPerClick;
 
-            _bonusGaugeChangedSignal.OnNext(_bonusGauge);
+            float currentBonus = _bonusGauge / _maxBonusGauge;
+            _bonusGaugeChangedSignal.OnNext(currentBonus);
             _currentExpChangedSignal.OnNext(_currentExp);
         }
 
-        public void StartAsyncTasks()
+        public void StartAsyncDecreaseTask()
         {
             _decreaseBonusCancellationToken = new();
             DecreaseBonusGaugeAsync(_decreaseBonusCancellationToken.Token).Forget();
         }
 
-        public void StopAsyncTasks()
+        public void StopAsyncDecreaseTask()
         {
             _decreaseBonusCancellationToken?.Cancel();
             _decreaseBonusCancellationToken?.Dispose();
             _decreaseBonusCancellationToken = null;
         }
 
-        public void TryIncreaseExpPerClick(float amount) => _expPerClick = Mathf.RoundToInt(_expPerClick + amount);
+        public void TryIncreaseExpPerClick(float amount) => _gainedExpPerClick = Mathf.RoundToInt(_gainedExpPerClick + amount);
         public void TryIncreaseBonusPerClick(float amount) => _bonusPerClick += amount;
+
+        private void StartActiveBonusTask()
+        {
+            _activeBonusCancellationToken = new();
+            ActiveBonusTaskAsync(_activeBonusCancellationToken.Token).Forget();
+            StopAsyncDecreaseTask();
+        }
+
+        private void StopActiveBonusTask()
+        {
+            _activeBonusCancellationToken?.Cancel();
+            _activeBonusCancellationToken?.Dispose();
+            _activeBonusCancellationToken = null;
+        }
 
         private void TryIncreaseLevel()
         {
@@ -127,19 +145,21 @@ namespace Core.GlobalGameState.Services
                 if (_bonusGauge > 0)
                 {
                     _bonusGauge--;
-                    _bonusGaugeChangedSignal.OnNext(_bonusGauge);
+                    float currentBonus = _bonusGauge / _maxBonusGauge;
+                    _bonusGaugeChangedSignal.OnNext(currentBonus);
 
-                    if(_bonusGauge <= 0)
+                    if (_bonusGauge <= 0)
                     {
                         _bonusGauge = 0;
-                        _bonusStateChangedSignal.OnNext(false);
-                        _activeBonusCancellationToken?.Cancel();
-                        _activeBonusCancellationToken?.Dispose();
-                        _activeBonusCancellationToken = null;
+                        StopActiveBonusTask();
+                        StartAsyncDecreaseTask();
+
+                        _isBonusActive = false;
+                        _bonusStateChangedSignal.OnNext(_isBonusActive);
                     }
                 }
 
-                await UniTask.Delay(TimeSpan.FromSeconds(1f), cancellationToken: token);
+                await UniTask.Delay(TimeSpan.FromSeconds(_decreaseActiveBonusGaugeDelay), cancellationToken: token);
             }
         }
 
@@ -150,7 +170,8 @@ namespace Core.GlobalGameState.Services
                 if (_bonusGauge > 0)
                 {
                     _bonusGauge--;
-                    _bonusGaugeChangedSignal.OnNext(_bonusGauge);
+                    float currentBonus = _bonusGauge / _maxBonusGauge;
+                    _bonusGaugeChangedSignal.OnNext(currentBonus);
                 }
 
                 await UniTask.Delay(TimeSpan.FromSeconds(_decreaseBonusGaugeDelay), ignoreTimeScale: true, cancellationToken: token);

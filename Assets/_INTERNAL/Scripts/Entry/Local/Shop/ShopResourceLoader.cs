@@ -14,9 +14,9 @@ namespace Entry.Local.Shop
             navigationButtonsView = Object.Instantiate(navigationViewPrefab);
         }
 
-        public PlayerInfoView LoadPlayerInfoView()
+        public EconomyPlayerInfoView LoadPlayerInfoView()
         {
-            var playerInfoViewPrefab = Resources.Load<PlayerInfoView>("UI/ShopMenu/UIBlocks/UIPlayerInfoView");
+            var playerInfoViewPrefab = Resources.Load<EconomyPlayerInfoView>("UI/ShopMenu/UIBlocks/UIPlayerInfoView");
 
             return Object.Instantiate(playerInfoViewPrefab);
         }

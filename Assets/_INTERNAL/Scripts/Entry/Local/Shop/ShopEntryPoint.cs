@@ -51,18 +51,18 @@ namespace Entry.Local.Shop
                 out ShopModel clickUpgradesModel,
                 out ShopModel passiveUpgradesModel,
                 out ShopModel prestigeUpgradesModel,
-                out PlayerInfoModel playerInfoModel);
+                out EconomyPlayerInfoModel playerInfoModel);
             CreateViewModels(
                 out NavigationButtonsViewModel navigationViewModel,
                 out ShopViewModel clickUpgradesViewModel,
                 out ShopViewModel passiveUpgradesViewModel,
                 out ShopViewModel prestigeUpgradesViewModel,
-                out PlayerInfoViewModel playerInfoViewModel);
+                out EconomyPlayerInfoViewModel playerInfoViewModel);
             CreateViews(out NavigationButtonsView navigationButtonsView,
                 out ShopView clickUpgradesView,
                 out ShopView passiveUpgradesView,
                 out ShopView prestigeUpgradesView,
-                out PlayerInfoView playerInfoView);
+                out EconomyPlayerInfoView playerInfoView);
 
             _shopMenuModel = new(_shopModels, navigationButtonsModel.Actions);
 
@@ -87,7 +87,7 @@ namespace Entry.Local.Shop
             out ShopModel clickUpgradesModel,
             out ShopModel passiveUpgradesModel,
             out ShopModel prestigeUpgradesModel,
-            out PlayerInfoModel playerInfoModel)
+            out EconomyPlayerInfoModel playerInfoModel)
         {
             var playerState = container.Resolve<GameWorldState>().PlayerState;
             var shopState = playerState.ShopState;
@@ -118,7 +118,7 @@ namespace Entry.Local.Shop
             out ShopViewModel clickUpgradesViewModel,
             out ShopViewModel passiveUpgradesViewModel,
             out ShopViewModel prestigeUpgradesViewModel,
-            out PlayerInfoViewModel playerInfoViewModel)
+            out EconomyPlayerInfoViewModel playerInfoViewModel)
         {
             clickUpgradesViewModel = new();
             passiveUpgradesViewModel = new();
@@ -131,7 +131,7 @@ namespace Entry.Local.Shop
             out ShopView clickUpgradesView,
             out ShopView passiveUpgradesView,
             out ShopView prestigeUpgradesView,
-            out PlayerInfoView playerInfoView)
+            out EconomyPlayerInfoView playerInfoView)
         {
             _loader.LoadNavigationView(out NavigationButtonsView nView);
 

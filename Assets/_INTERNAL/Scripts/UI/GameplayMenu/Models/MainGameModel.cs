@@ -1,6 +1,7 @@
 ﻿using Common.MVVM;
 using Core.GlobalGameState;
 using R3;
+using UnityEngine;
 
 namespace UI.GameplayMenu.Models
 {
@@ -20,8 +21,13 @@ namespace UI.GameplayMenu.Models
 
             _model.BonusesService.BonusGaugeChanged.Subscribe(HandleChangedBonusGauge).AddTo(_disposables);
 
-            _model.BonusesService.RequestDefaultBonusGaugeState();
+            
         }
+
+        /// <summary>
+        /// Запросить дефолтные значения бонусной прогрессии игрока
+        /// </summary>
+        public void RequestDefaultBonusGaugeState() => _model.BonusesService.RequestDefaultBonusGaugeState();
 
         public void Dispose() => _disposables.Dispose();
 

@@ -3,7 +3,6 @@ using R3;
 using SO.PlayerConfigs;
 using System;
 using System.Threading;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Core.GlobalGameState.Services
@@ -28,6 +27,8 @@ namespace Core.GlobalGameState.Services
         private float _playerClickAmount;
         private float _passiveIncomeAmount;
         private bool _bonusState;
+        private readonly float _bonusClickMultiplier;
+        private readonly float _defaultClickMultiplier = 1f;
 
         public float PlayerWallet
         {
@@ -75,7 +76,7 @@ namespace Core.GlobalGameState.Services
         public Observable<float> CoinsPerClick => _coinsPerClickSignal.AsObservable();
         public Observable<float> PassiveInconeChanged => _passiveIncomeAmountChangeSignal.AsObservable();
 
-        public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged)
+        public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged, float bonusClickMultiplier)
         {
             _playerClickAmount = config.InitialPlayerClickAmount;
             _playerWallet = config.InitialPlayerWallet;
@@ -89,6 +90,7 @@ namespace Core.GlobalGameState.Services
             _maxTrippleClickChance = config.MaxTrippleClickChance;
 
             bonusStateChaged.Subscribe(HandleChangedBonusState).AddTo(_disposables);
+            _bonusClickMultiplier = bonusClickMultiplier;
         }
 
         public void IncreasePlayerClick(float amount)
@@ -119,7 +121,7 @@ namespace Core.GlobalGameState.Services
         public void Add()
         {
             float randRoll = Random.Range(_minTrippleClickChance, _maxTrippleClickChance);
-            float rewardMultiplier = (randRoll < _trippleClickChance) ? 3f : 1f;
+            float rewardMultiplier = (randRoll < _trippleClickChance) ? _bonusClickMultiplier : _defaultClickMultiplier;
 
             float localClick = PlayerClickAmount;
             float clickReward;
@@ -127,7 +129,7 @@ namespace Core.GlobalGameState.Services
             if (!_bonusState)
                 clickReward = localClick * rewardMultiplier;
             else
-                clickReward = (localClick * rewardMultiplier) * 3f;
+                clickReward = localClick * rewardMultiplier * _bonusClickMultiplier;
 
             PlayerWallet += clickReward;
 

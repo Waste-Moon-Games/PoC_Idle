@@ -14,6 +14,7 @@ namespace UI.GameplayMenu.Views
         public void BindViewModel(IViewModel viewModel)
         {
             _clickableZoneView.BindViewModel(viewModel);
+            _bonusGaugeZoneView.BindViewModel(viewModel);
         }
 
         public void BindAnimationService(ClickAnimationsService animationService)
