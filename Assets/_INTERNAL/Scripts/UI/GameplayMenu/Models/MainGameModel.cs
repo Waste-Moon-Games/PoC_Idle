@@ -32,7 +32,7 @@ namespace UI.GameplayMenu.Models
         public void Dispose() => _disposables.Dispose();
 
         /// <summary>
-        /// Добавить монеты
+        /// Клик
         /// </summary>
         public void Click()
         {

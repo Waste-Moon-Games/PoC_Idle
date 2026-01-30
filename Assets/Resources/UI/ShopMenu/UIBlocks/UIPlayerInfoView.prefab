@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 8574628305084141727}
   - component: {fileID: 299965420889742868}
   - component: {fileID: 747829110722786150}
-  - component: {fileID: -4050834977508196286}
+  - component: {fileID: 3697323690344819064}
   m_Layer: 5
   m_Name: UIPlayerInfoView
   m_TagString: Untagged
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &-4050834977508196286
+--- !u!114 &3697323690344819064
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -189,9 +189,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1214775489868272998}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4d7e46d7b3b33644983248265e99b1a, type: 3}
+  m_Script: {fileID: 11500000, guid: 3f3a9356371f94d47b7091cbb3143230, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UI.GameplayMenu.Views::UI.GameplayMenu.Views.PlayerInfoView
+  m_EditorClassIdentifier: UI.GameplayMenu.Views::UI.GameplayMenu.Views.EconomyPlayerInfoView
   _currentCoinsCount: {fileID: 4595074162181637362}
   _currentCoinsPerClick: {fileID: 7828458912083145449}
   _currentPassiveIncome: {fileID: 5439888229352033511}
@@ -556,7 +556,7 @@ GameObject:
   - component: {fileID: 3473011693822121671}
   - component: {fileID: 4595074162181637362}
   m_Layer: 5
-  m_Name: PointCountText
+  m_Name: CurrentPointsCountText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

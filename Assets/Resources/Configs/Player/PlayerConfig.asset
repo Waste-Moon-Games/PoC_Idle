@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerConfig
   m_EditorClassIdentifier: SO.PlayerConfigs::SO.PlayerConfigs.PlayerConfig
   <InitPlayerLevel>k__BackingField: 1
-  <InitPlayerExpPerClick>k__BackingField: 1
+  <InitGainedPlayerExpPerClick>k__BackingField: 1
   <InitExpToLevelUp>k__BackingField: 100
   <ExpIncreaseMultiplier>k__BackingField: 1.2
   <PlayerBonusGauge>k__BackingField: 100

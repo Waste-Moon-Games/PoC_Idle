@@ -1,6 +1,7 @@
 ﻿using Common.MVVM;
 using R3;
 using UI.GameplayMenu.Models;
+using UnityEngine;
 
 namespace UI.GameplayMenu.ViewModels
 {
@@ -33,7 +34,11 @@ namespace UI.GameplayMenu.ViewModels
         /// </summary>
         public void RequestDefaultLevelState() => _model.RequestDefaultLevelState();
 
-        public void Dispose() => _disposables.Dispose();
+        public void Dispose()
+        {
+            _model.Dispose();
+            _disposables.Dispose();
+        }
 
         private void HandleChangedLevel(int level) => _levelChangedSingal.OnNext(level);
 

@@ -53,6 +53,7 @@ namespace Entry.Local.Gameplay
 
             var economyModel = container.Resolve<GameWorldState>().PlayerState.EconomyService;
             var playerState = container.Resolve<GameWorldState>().PlayerState;
+
             economyPlayerInfoModel.BindModel(economyModel);
             playerStatsModel.BindModel(playerState);
 
