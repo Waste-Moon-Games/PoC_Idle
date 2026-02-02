@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 378fe86a107a51d4499ca5f7b4dc7895, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: SO.PlayerConfigs::SO.PlayerConfigs.PlayerConfig
-  <InitPlayerLevel>k__BackingField: 1
+  <InitPlayerLevel>k__BackingField: 0
   <InitGainedPlayerExpPerClick>k__BackingField: 1
   <InitExpToLevelUp>k__BackingField: 100
   <ExpIncreaseMultiplier>k__BackingField: 1.2

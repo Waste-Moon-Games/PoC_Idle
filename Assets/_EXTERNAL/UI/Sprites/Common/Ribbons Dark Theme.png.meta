@@ -359,8 +359,8 @@ TextureImporter:
         y: 965
         width: 235
         height: 152
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -404,7 +404,7 @@ TextureImporter:
         width: 960
         height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -413,6 +413,28 @@ TextureImporter:
       bones: []
       spriteID: eb22a53754eb54a44ae6070e56efd667
       internalID: 3372730193443310617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ribbons Dark Theme_11
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 2094
+        width: 235
+        height: 159
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7d1923d91b81c44ea5ccd157a97262a
+      internalID: -1536325765
       vertices: []
       indices: 
       edges: []
@@ -434,6 +456,7 @@ TextureImporter:
       Ribbons Dark Theme_0: -4627005088262304967
       Ribbons Dark Theme_1: 2293613657582986739
       Ribbons Dark Theme_10: 3372730193443310617
+      Ribbons Dark Theme_11: -1536325765
       Ribbons Dark Theme_2: -2408591903501421063
       Ribbons Dark Theme_3: 5128698369957393428
       Ribbons Dark Theme_4: 6554821755462772352

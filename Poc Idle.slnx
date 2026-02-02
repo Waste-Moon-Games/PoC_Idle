@@ -11,10 +11,10 @@
   <Project Path="NuGetForUnity.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="UI.GameplayMenu.Models.csproj" />
+  <Project Path="Core.GlobalGameState.csproj" />
   <Project Path="UniTask.TextMeshPro.csproj" />
   <Project Path="Core.Shop.Base.csproj" />
   <Project Path="SO.ShopConfigs.csproj" />
-  <Project Path="Core.GlobalGameState.csproj" />
   <Project Path="Core.Consts.csproj" />
   <Project Path="Core.Shop.Models.csproj" />
   <Project Path="UI.ShopMenu.ViewModels.csproj" />
@@ -24,6 +24,7 @@
   <Project Path="Entry.Global.csproj" />
   <Project Path="Entry.Local.Gameplay.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="Core.LevelingSystem.csproj" />
   <Project Path="UniTask.Editor.csproj" />
   <Project Path="UI.ShopMenu.Models.csproj" />
   <Project Path="Entry.Local.Shop.csproj" />

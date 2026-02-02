@@ -1,9 +1,7 @@
 {
-    "name": "SO.PlayerConfigs",
+    "name": "Core.LevelingSystem",
     "rootNamespace": "",
-    "references": [
-        "GUID:89360324d247ed946915f9b71375e0c2"
-    ],
+    "references": [],
     "includePlatforms": [
         "Android",
         "Editor",

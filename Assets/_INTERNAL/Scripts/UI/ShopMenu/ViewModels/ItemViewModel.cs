@@ -8,11 +8,11 @@ namespace UI.ShopMenu.ViewModels
 {
     public class ItemViewModel : IViewModel
     {
+        private readonly CompositeDisposable _disposables = new();
         private readonly NumberFormatter _formatter = new();
 
         private readonly Subject<string> _requestNameSignal = new();
         private readonly Subject<Sprite> _requestIconSignal = new();
-        private readonly Subject<string> _requestedDescriptionSignal = new();
 
         private readonly Subject<string> _priceChangeSignal = new();
         private readonly Subject<string> _upgradeAmountChangeSignal = new();
@@ -22,7 +22,7 @@ namespace UI.ShopMenu.ViewModels
         private int _id;
         private Sprite _icon;
         private string _name;
-        private string _description;
+        private ItemType _type;
 
         private bool _isOpened;
         private string _price;
@@ -31,9 +31,10 @@ namespace UI.ShopMenu.ViewModels
 
         private ItemModel _model;
 
+        public ItemType ItemType => _type;
+
         public Observable<string> RequestedName => _requestNameSignal.AsObservable();
         public Observable<Sprite> RequestedIcon => _requestIconSignal.AsObservable();
-        public Observable<string> RequestedDescription => _requestedDescriptionSignal.AsObservable();
 
         public Observable<string> PriceChanged => _priceChangeSignal.AsObservable();
         public Observable<string> UpgradeAmountChanged => _upgradeAmountChangeSignal.AsObservable();
@@ -44,19 +45,18 @@ namespace UI.ShopMenu.ViewModels
         {
             _model = model as ItemModel;
 
-            _model.RequestesId.Subscribe(HandleRequestedId);
-            _model.RequestedName.Subscribe(HandleRequestedName);
-            _model.RequestedIcon.Subscribe(HandleRequestedIcon);
-            _model.RequestedDescription.Subscribe(desc =>
-            {
-                HandleRequestedDescription(desc.Item1, desc.Item2);
-            });
+            _model.RequestesId.Subscribe(HandleRequestedId).AddTo(_disposables);
+            _model.RequestedName.Subscribe(HandleRequestedName).AddTo(_disposables);
+            _model.RequestedIcon.Subscribe(HandleRequestedIcon).AddTo(_disposables);
+            _model.RequestedItemType.Subscribe(HandleRequestedItemType).AddTo(_disposables);
 
-            _model.PriceChanged.Subscribe(HandlePriceChanged);
-            _model.LevelChanged.Subscribe(HandleLevelChanged);
-            _model.UpgradeAmountChanged.Subscribe(HandleUpgradeAmountChanged);
-            _model.StatusChanged.Subscribe(HandleStatusChanged);
+            _model.PriceChanged.Subscribe(HandlePriceChanged).AddTo(_disposables);
+            _model.LevelChanged.Subscribe(HandleLevelChanged).AddTo(_disposables);
+            _model.UpgradeAmountChanged.Subscribe(HandleUpgradeAmountChanged).AddTo(_disposables);
+            _model.StatusChanged.Subscribe(HandleStatusChanged).AddTo(_disposables);
         }
+
+        public void Dispose() => _disposables.Dispose();
 
         public void Buy() => _model.TryBuy();
 
@@ -78,13 +78,7 @@ namespace UI.ShopMenu.ViewModels
             _requestIconSignal.OnNext(_icon);
         }
 
-        private void HandleRequestedDescription(string desc, string template)
-        {
-            _description = desc;
-            _description = template.Replace("{amount}", _upgradeAmount);
-            
-            _requestedDescriptionSignal.OnNext(_description);
-        }
+        private void HandleRequestedItemType(ItemType type) => _type = type;
 
         private void HandlePriceChanged(float price)
         {
@@ -106,13 +100,6 @@ namespace UI.ShopMenu.ViewModels
 
         private void HandleUpgradeAmountChanged(float amount)
         {
-            if (_description.Contains("вероятность"))
-            {
-                _upgradeAmount = $"{amount * 100}%";
-                _upgradeAmountChangeSignal.OnNext(_upgradeAmount);
-                return;
-            }
-
             _upgradeAmount = _formatter.FormatNumber(amount);
             _upgradeAmountChangeSignal.OnNext(_upgradeAmount);
         }

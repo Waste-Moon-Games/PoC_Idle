@@ -7,7 +7,6 @@ namespace Core.Shop.Base
     {
         [field: SerializeField] public int ID { get; private set; }
         [field: SerializeField] public string Name { get; private set; }
-        [field: SerializeField] public string Description { get; private set; }
         [field: SerializeField] public Sprite Icon { get; private set; }
         [field: SerializeField] public float Price { get; private set; }
         [field: SerializeField] public float UpgradeAmount { get; private set; }

@@ -21,15 +21,13 @@ namespace Core.Shop.Base
         #region Non-changeable Subjects
         private readonly Subject<int> _requestIdSignal = new();
         private readonly Subject<string> _requestNameSignal = new();
-        private readonly Subject<(string, string)> _requestedDescriptionSignal = new();
         private readonly Subject<Sprite> _requestIconSignal = new();
         private readonly Subject<ItemModel> _purchaseSignal = new();
+        private readonly Subject<ItemType> _requestItemTypeSignal = new();
         #endregion
 
         private readonly int _id;
         private readonly string _name;
-        private readonly string _descriptionTemplate;
-        private readonly string _description;
         private readonly Sprite _icon;
         private readonly ItemType _itemType;
 
@@ -56,9 +54,9 @@ namespace Core.Shop.Base
         #region Non-changeable Observables
         public Observable<int> RequestesId => _requestIdSignal.AsObservable();
         public Observable<string> RequestedName => _requestNameSignal.AsObservable();
-        public Observable<(string, string)> RequestedDescription => _requestedDescriptionSignal.AsObservable();
         public Observable<Sprite> RequestedIcon => _requestIconSignal.AsObservable();
         public Observable<ItemModel> Purchased => _purchaseSignal.AsObservable();
+        public Observable<ItemType> RequestedItemType => _requestItemTypeSignal.AsObservable();
         #endregion
 
         public ItemModel(ItemModelConfig sourceData)
@@ -66,15 +64,12 @@ namespace Core.Shop.Base
             _id = sourceData.ID;
             _name = sourceData.Name;
             _icon = sourceData.Icon;
-            _descriptionTemplate = sourceData.Description;
             _itemType = sourceData.Type;
 
             _isOpened = sourceData.IsOpened;
             _price = sourceData.Price;
             _upgradeAmount = sourceData.UpgradeAmount;
             _level = sourceData.Level;
-
-            _description = _descriptionTemplate.Replace("{amount}", $"{_upgradeAmount}");
         }
 
         public void RequestBaseInfo()
@@ -82,7 +77,7 @@ namespace Core.Shop.Base
             _requestIdSignal.OnNext(_id);
             _requestNameSignal.OnNext(_name);
             _requestIconSignal.OnNext(_icon);
-            _requestedDescriptionSignal.OnNext((_description, _descriptionTemplate));
+            _requestItemTypeSignal.OnNext(_itemType);
         }
 
         public void RequestGeneralInfo()
@@ -125,7 +120,6 @@ namespace Core.Shop.Base
             _upgradeAmount *= multiplier;
 
             _upgradeAmountChangeSignal.OnNext(_upgradeAmount);
-            _requestedDescriptionSignal.OnNext((_description, _descriptionTemplate));
         }
     }
 }

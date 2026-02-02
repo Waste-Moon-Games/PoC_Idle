@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ClickUpgradesMultiplierConfig
   m_EditorClassIdentifier: SO.ShopConfigs::SO.ShopConfigs.ItemsTypeMultiplierConfig
   <UpgradesMultipliers>k__BackingField:
-  - 1.05
   - 1.1
+  - 1.2
   - 1
   <UpgradesPriceMultipliers>k__BackingField:
   - 1.25
