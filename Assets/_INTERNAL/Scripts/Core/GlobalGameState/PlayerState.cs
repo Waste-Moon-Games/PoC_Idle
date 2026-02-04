@@ -1,3 +1,4 @@
+using Common.MVVM;
 using Core.GlobalGameState.Services;
 using SO.PlayerConfigs;
 using UnityEngine;

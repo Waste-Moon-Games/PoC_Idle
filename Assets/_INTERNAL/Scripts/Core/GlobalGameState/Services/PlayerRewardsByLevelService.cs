@@ -11,6 +11,7 @@ namespace Core.GlobalGameState.Services
         private readonly CompositeDisposable _disposables = new();
 
         private readonly Subject<RewardByLevelData> _rewardUnlockSignal = new();
+        private readonly Subject<float> _rewardReciveSignal = new();
 
         private readonly RewardsByLevelConfig _config;
         private readonly Dictionary<int, RewardByLevelData> _rewardsDict;
@@ -28,19 +29,32 @@ namespace Core.GlobalGameState.Services
             levelChangedSignal.Subscribe(HandleChangedLevel).AddTo(_disposables);
         }
 
-        private void TryToGetRewardByLevel(int level)
+        private void TryToUnlockRewardByLevel(int level)
         {
             var reward = _rewardsDict.TryGetValue(level, out var result) ? result : null;
-            if (reward == null || !reward.CanBeRecieved())
+            if (reward == null || !reward.CanBeUnlocked())
                 return;
 
+            reward.MarkAsUnlocked();
             _rewardUnlockSignal.OnNext(reward);
-        }
+        }        
 
         private void HandleChangedLevel(int currentLevel)
         {
             if (currentLevel <= _maxRewardsLevel)
-                TryToGetRewardByLevel(currentLevel);
+                TryToUnlockRewardByLevel(currentLevel);
+        }
+
+        public bool TryToReciveReward(int rewardKey)
+        {
+            if(_rewardsDict.TryGetValue(rewardKey, out var reward))
+            {
+                reward.MarkAsUnlocked();
+                _rewardReciveSignal.OnNext(reward.RewardAmount);
+                return true;
+            }
+
+            return false;
         }
 
         public void Dispose() => _disposables.Dispose();

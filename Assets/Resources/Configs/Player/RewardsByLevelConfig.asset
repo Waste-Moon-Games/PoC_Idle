@@ -13,43 +13,73 @@ MonoBehaviour:
   m_Name: RewardsByLevelConfig
   m_EditorClassIdentifier: SO.PlayerConfigs::SO.PlayerConfigs.RewardsByLevelConfig
   <RewardsByLevel>k__BackingField:
-  - <RequiredLevel>k__BackingField: 1
+  - <RewardId>k__BackingField: coins_1
+    <RequiredLevel>k__BackingField: 1
     <Reward>k__BackingField: 100
     <IsReceived>k__BackingField: 0
+    <IsUnlocked>k__BackingField: 0
     <Type>k__BackingField: 0
-  - <RequiredLevel>k__BackingField: 2
+    <State>k__BackingField: 0
+  - <RewardId>k__BackingField: coins_2
+    <RequiredLevel>k__BackingField: 2
     <Reward>k__BackingField: 0
     <IsReceived>k__BackingField: 0
+    <IsUnlocked>k__BackingField: 0
     <Type>k__BackingField: 0
-  - <RequiredLevel>k__BackingField: 3
+    <State>k__BackingField: 0
+  - <RewardId>k__BackingField: gems_3
+    <RequiredLevel>k__BackingField: 3
     <Reward>k__BackingField: 0
     <IsReceived>k__BackingField: 0
+    <IsUnlocked>k__BackingField: 0
     <Type>k__BackingField: 1
-  - <RequiredLevel>k__BackingField: 4
+    <State>k__BackingField: 0
+  - <RewardId>k__BackingField: coins_4
+    <RequiredLevel>k__BackingField: 4
     <Reward>k__BackingField: 0
     <IsReceived>k__BackingField: 0
+    <IsUnlocked>k__BackingField: 0
     <Type>k__BackingField: 0
-  - <RequiredLevel>k__BackingField: 5
+    <State>k__BackingField: 0
+  - <RewardId>k__BackingField: coins_5
+    <RequiredLevel>k__BackingField: 5
     <Reward>k__BackingField: 0
     <IsReceived>k__BackingField: 0
+    <IsUnlocked>k__BackingField: 0
     <Type>k__BackingField: 0
-  - <RequiredLevel>k__BackingField: 6
+    <State>k__BackingField: 0
+  - <RewardId>k__BackingField: gems_6
+    <RequiredLevel>k__BackingField: 6
     <Reward>k__BackingField: 0
     <IsReceived>k__BackingField: 0
+    <IsUnlocked>k__BackingField: 0
     <Type>k__BackingField: 1
-  - <RequiredLevel>k__BackingField: 7
+    <State>k__BackingField: 0
+  - <RewardId>k__BackingField: coins_7
+    <RequiredLevel>k__BackingField: 7
     <Reward>k__BackingField: 0
     <IsReceived>k__BackingField: 0
+    <IsUnlocked>k__BackingField: 0
     <Type>k__BackingField: 0
-  - <RequiredLevel>k__BackingField: 8
+    <State>k__BackingField: 0
+  - <RewardId>k__BackingField: coins_8
+    <RequiredLevel>k__BackingField: 8
     <Reward>k__BackingField: 0
     <IsReceived>k__BackingField: 0
+    <IsUnlocked>k__BackingField: 0
     <Type>k__BackingField: 0
-  - <RequiredLevel>k__BackingField: 9
+    <State>k__BackingField: 0
+  - <RewardId>k__BackingField: gems_9
+    <RequiredLevel>k__BackingField: 9
     <Reward>k__BackingField: 0
     <IsReceived>k__BackingField: 0
+    <IsUnlocked>k__BackingField: 0
     <Type>k__BackingField: 1
-  - <RequiredLevel>k__BackingField: 10
+    <State>k__BackingField: 0
+  - <RewardId>k__BackingField: coins_10
+    <RequiredLevel>k__BackingField: 10
     <Reward>k__BackingField: 0
     <IsReceived>k__BackingField: 0
+    <IsUnlocked>k__BackingField: 0
     <Type>k__BackingField: 0
+    <State>k__BackingField: 0
