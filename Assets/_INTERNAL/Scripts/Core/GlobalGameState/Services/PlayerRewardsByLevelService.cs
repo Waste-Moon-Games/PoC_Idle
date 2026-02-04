@@ -31,7 +31,7 @@ namespace Core.GlobalGameState.Services
         private void TryToGetRewardByLevel(int level)
         {
             var reward = _rewardsDict.TryGetValue(level, out var result) ? result : null;
-            if (reward == null)
+            if (reward == null || !reward.CanBeRecieved())
                 return;
 
             _rewardUnlockSignal.OnNext(reward);

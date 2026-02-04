@@ -15,21 +15,41 @@ MonoBehaviour:
   <RewardsByLevel>k__BackingField:
   - <RequiredLevel>k__BackingField: 1
     <Reward>k__BackingField: 100
+    <IsReceived>k__BackingField: 0
+    <Type>k__BackingField: 0
   - <RequiredLevel>k__BackingField: 2
     <Reward>k__BackingField: 0
+    <IsReceived>k__BackingField: 0
+    <Type>k__BackingField: 0
   - <RequiredLevel>k__BackingField: 3
     <Reward>k__BackingField: 0
+    <IsReceived>k__BackingField: 0
+    <Type>k__BackingField: 1
   - <RequiredLevel>k__BackingField: 4
     <Reward>k__BackingField: 0
+    <IsReceived>k__BackingField: 0
+    <Type>k__BackingField: 0
   - <RequiredLevel>k__BackingField: 5
     <Reward>k__BackingField: 0
+    <IsReceived>k__BackingField: 0
+    <Type>k__BackingField: 0
   - <RequiredLevel>k__BackingField: 6
     <Reward>k__BackingField: 0
+    <IsReceived>k__BackingField: 0
+    <Type>k__BackingField: 1
   - <RequiredLevel>k__BackingField: 7
     <Reward>k__BackingField: 0
+    <IsReceived>k__BackingField: 0
+    <Type>k__BackingField: 0
   - <RequiredLevel>k__BackingField: 8
     <Reward>k__BackingField: 0
+    <IsReceived>k__BackingField: 0
+    <Type>k__BackingField: 0
   - <RequiredLevel>k__BackingField: 9
     <Reward>k__BackingField: 0
+    <IsReceived>k__BackingField: 0
+    <Type>k__BackingField: 1
   - <RequiredLevel>k__BackingField: 10
     <Reward>k__BackingField: 0
+    <IsReceived>k__BackingField: 0
+    <Type>k__BackingField: 0

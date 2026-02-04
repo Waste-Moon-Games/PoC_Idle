@@ -7,8 +7,11 @@ namespace Core.LevelingSystem
     {
         [field: SerializeField] public int RequiredLevel { get; private set; }
         [field: SerializeField] public float Reward { get; private set; }
-        [field: SerializeField] public bool IsResived { get; private set; }
+        [field: SerializeField] public bool IsReceived { get; private set; }
+        [field: SerializeField] public RewardType Type { get; private set; }
+        [field: SerializeField] public RewardState State { get; private set; }
 
-        public void ReciveReward() => IsResived = true;
+        public void MarkAsRecieved() => IsReceived = true;
+        public bool CanBeRecieved() => !IsReceived;
     }
 }

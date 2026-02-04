@@ -148,10 +148,7 @@ namespace Core.GlobalGameState.Services
 
         public bool HasEnoughCoins(float amount)
         {
-            if (PlayerWallet >= amount)
-                return true;
-
-            return false;
+            return PlayerWallet >= amount;
         }
 
         public void StartAsyncTasks()
