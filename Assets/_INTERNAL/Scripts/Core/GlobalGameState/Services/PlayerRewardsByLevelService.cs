@@ -15,6 +15,7 @@ namespace Core.GlobalGameState.Services
         private readonly Subject<RewardByLevelData> _rewardReciveSignal = new();
 
         private readonly RewardsByLevelConfig _config;
+        private readonly PlayerEconomyService _economyService;
         private readonly Dictionary<int, RewardByLevelData> _rewardsDict;
 
         private readonly int _maxRewardsLevel;
@@ -24,23 +25,27 @@ namespace Core.GlobalGameState.Services
         public Observable<RewardByLevelData> RewardRecieved => _rewardReciveSignal.AsObservable();
         public Observable<RewardState> RequestedRewardState => _requestRewardStateSignal.AsObservable();
 
-        public PlayerRewardsByLevelService(RewardsByLevelConfig config, Observable<int> levelChangedSignal)
+        public PlayerRewardsByLevelService(RewardsByLevelConfig config, Observable<int> levelChangedSignal, PlayerEconomyService economyService)
         {
             _config = config;
+            _economyService = economyService;
 
             _rewardsDict = _config.RewardsByLevel.ToDictionary(r => r.RequiredLevel, r => r);
             _maxRewardsLevel = _rewardsDict.Keys.Max();
             levelChangedSignal.Subscribe(HandleChangedLevel).AddTo(_disposables);
         }
 
-        private void TryToUnlockRewardByLevel(int level)
+        private bool TryToUnlockRewardByLevel(int level)
         {
             var reward = _rewardsDict.TryGetValue(level, out var result) ? result : null;
-            if (reward == null || !reward.CanBeUnlocked())
-                return;
+            if(reward != null && reward.CanBeUnlocked())
+            {
+                reward.MarkAsUnlocked();
+                _rewardUnlockSignal.OnNext(reward);
+                return true;
+            }
 
-            reward.MarkAsUnlocked();
-            _rewardUnlockSignal.OnNext(reward);
+            return false;
         }        
 
         private void HandleChangedLevel(int currentLevel)
@@ -57,10 +62,12 @@ namespace Core.GlobalGameState.Services
 
         public bool TryToReciveReward(int rewardKey)
         {
-            if(_rewardsDict.TryGetValue(rewardKey, out var reward))
+            var reward = _rewardsDict.TryGetValue(rewardKey, out var result) ? result : null;
+            if(reward != null && reward.CanBeRecieved())
             {
                 reward.MarkAsRecived();
                 _rewardReciveSignal.OnNext(reward);
+                _economyService.AddReward(reward.RewardAmount);
                 return true;
             }
 

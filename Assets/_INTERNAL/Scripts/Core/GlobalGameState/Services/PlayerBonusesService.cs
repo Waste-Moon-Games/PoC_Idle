@@ -44,7 +44,7 @@ namespace Core.GlobalGameState.Services
             _bonusGauge = 0f;
             _bonusPerClick = config.InitPlayerBonusPerClick;
 
-            _level = 1;
+            _level = config.InitPlayerLevel;
             _currentExp = 0;
             _expToLevelUp = config.InitExpToLevelUp;
             _gainedExpPerClick = config.InitGainedPlayerExpPerClick;

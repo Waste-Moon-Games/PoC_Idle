@@ -1,7 +1,6 @@
 ﻿using Common.MVVM;
 using Core.GlobalGameState;
 using R3;
-using UnityEngine;
 
 namespace UI.GameplayMenu.Models
 {
@@ -20,8 +19,6 @@ namespace UI.GameplayMenu.Models
             _model = model;
 
             _model.BonusesService.BonusGaugeChanged.Subscribe(HandleChangedBonusGauge).AddTo(_disposables);
-
-            
         }
 
         /// <summary>

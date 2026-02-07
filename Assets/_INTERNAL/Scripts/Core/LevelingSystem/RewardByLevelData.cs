@@ -25,7 +25,7 @@ namespace Core.LevelingSystem
             State = RewardState.Recieved;
         }
 
-        public bool CanBeRecieved() => !IsReceived;
-        public bool CanBeUnlocked() => !IsUnlocked;
+        public bool CanBeRecieved() => !IsReceived && IsUnlocked;
+        public bool CanBeUnlocked() => !IsUnlocked && !IsReceived;
     }
 }

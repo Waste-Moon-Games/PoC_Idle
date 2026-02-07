@@ -1,7 +1,6 @@
 ﻿using Common.MVVM;
 using R3;
 using UI.GameplayMenu.Models;
-using UnityEngine;
 
 namespace UI.GameplayMenu.ViewModels
 {

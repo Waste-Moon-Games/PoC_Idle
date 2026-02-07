@@ -35,15 +35,9 @@ namespace UI.GameplayMenu.Views
             _viewModel = viewModel as EconomyPlayerInfoViewModel;
 
             _viewModel.CoinsChanged.Subscribe(UpdateCoinsCount).AddTo(_disposables);
-            _viewModel.RequestedCoins.Subscribe(UpdateCoinsCount).AddTo(_disposables);
             _viewModel.CoinsPerClickChanged.Subscribe(UpdateCoinsPerClick).AddTo(_disposables);
-            _viewModel.CoinsPerClick.Subscribe(UpdateAnimations).AddTo(_disposables);
-            _viewModel.RequestedCoinsPerClick.Subscribe(UpdateCoinsPerClick).AddTo(_disposables);
+            _viewModel.CoinsClickAd.Subscribe(UpdateAnimations).AddTo(_disposables);
             _viewModel.PassiveIncomeChanged.Subscribe(UpdateCurrentPassiveIncome).AddTo(_disposables);
-
-            _viewModel.RequestCurrentCoinsCount();
-            _viewModel.RequestCurrentCoinsPerClick();
-            _viewModel.RequestCurrentPassiveIncome();
         }
 
         public void BindAnimationService(ClickAnimationsService animationService) => _animationsService = animationService;

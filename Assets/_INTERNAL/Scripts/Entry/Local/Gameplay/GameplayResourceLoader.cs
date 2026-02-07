@@ -20,6 +20,13 @@ namespace Entry.Local.Gameplay
             navigationButtonsView = Object.Instantiate(navigationButtonsViewPrefab);
         }
 
+        public RewardsSystemView LoadRewardSystemView()
+        {
+            var rewardSystemViewPrefab = Resources.Load<RewardsSystemView>("UI/GameplayMenu/UIBlocks/RewardsViewHolder");
+
+            return Object.Instantiate(rewardSystemViewPrefab);
+        }
+
         public void LoadPlayableViews(out MainGameView mainGameView, out EconomyPlayerInfoView economyPlayerInfoView, out PlayerStatsView playerStatsView)
         {
             var mainGameViewPrefab = Resources.Load<MainGameView>("UI/GameplayMenu/UIBlocks/UIRootView");

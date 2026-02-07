@@ -7,11 +7,13 @@ namespace UI.GameplayMenu.Models
 {
     public class RewardsSystemModel : IModel
     {
-        private readonly CompositeDisposable _disposables = new();
+        private readonly Subject<List<RewardModel>> _requestRewardModelsSignal = new();
 
-        private readonly List<GetRewardModel> _rewardModels = new();
+        private readonly List<RewardModel> _rewardModels = new();
 
         private readonly PlayerRewardsByLevelService _rewardsService;
+
+        public Observable<List<RewardModel>> RequestedRewardModels => _requestRewardModelsSignal.AsObservable();
 
         public RewardsSystemModel(PlayerRewardsByLevelService rewardsService)
         {
@@ -22,7 +24,7 @@ namespace UI.GameplayMenu.Models
         {
             var rewardsList = _rewardsService.RewardsDict;
             foreach(var rewardItem in rewardsList.Values)
-                _rewardModels.Add(new GetRewardModel(this, rewardItem));
+                _rewardModels.Add(new RewardModel(this, rewardItem));
 
             InitRewardModels();
         }
@@ -36,6 +38,8 @@ namespace UI.GameplayMenu.Models
                 model.SubscribeOnRequestRewardStateSignal(_rewardsService.RequestedRewardState);
             }
         }
+
+        public void RequestRewardModels() => _requestRewardModelsSignal.OnNext(_rewardModels);
 
         public void RequestRewardState(int keyId) => _rewardsService.RequestRewardState(keyId);
         public void TryToReciveReward(int keyId) => _rewardsService.TryToReciveReward(keyId);

@@ -4,17 +4,21 @@ using UI.GameplayMenu.ViewModels;
 using UnityEngine.UI;
 using R3;
 using Core.LevelingSystem;
+using TMPro;
 
 namespace UI.GameplayMenu.Views
 {
     [RequireComponent(typeof(Button))]
-    public class GetRewardView: MonoBehaviour, IView
+    public class RewardView: MonoBehaviour, IView
     {
         private readonly CompositeDisposable _disposables = new();
 
         [SerializeField] private Button _reciveButton;
+        [SerializeField] private GameObject _lock;
+        [SerializeField] private GameObject _recieved;
+        [SerializeField] private TextMeshProUGUI _descriptionText;
 
-        private GetRewardViewModel _viewModel;
+        private RewardViewModel _viewModel;
 
         private void Start() => _reciveButton.onClick.AddListener(HandleReciveButtonClick);
 
@@ -26,8 +30,12 @@ namespace UI.GameplayMenu.Views
         }
 
         private void HandleReciveButtonClick() => _viewModel.TryToReciveThisReward();
+        private void HandleRequestedRewardAmount(float amount) => _descriptionText.text = $"{amount}";
+        
         private void HandleRewardState(RewardState state)
         {
+            Debug.Log($"Reward state: {state}");
+
             switch(state)
             {
                 case RewardState.Locked:
@@ -47,24 +55,31 @@ namespace UI.GameplayMenu.Views
 
         private void HandleLockedState()
         {
-            //to do иконку "закрытой" награды
+            if(!_lock.activeSelf)
+                _lock.SetActive(true);
         }
 
         private void HandleUnlockedState()
         {
-            //to do иконку "открытой" награды
+            if(_lock.activeSelf)
+                _lock.SetActive(false);
         }
 
         private void HandleRecieveState()
         {
-            //to do иконку "полученной" награды
+            if(!_recieved.activeSelf && !_lock.activeSelf)
+            {
+                _lock.SetActive(false);
+                _recieved.SetActive(true);
+            }
         }
 
         public void BindViewModel(IViewModel viewModel)
         {
-            _viewModel = viewModel as GetRewardViewModel;
+            _viewModel = viewModel as RewardViewModel;
 
             _viewModel.RequestedRewardState.Subscribe(HandleRewardState).AddTo(_disposables);
+            _viewModel.RewardAmountSignal.Subscribe(HandleRequestedRewardAmount).AddTo(_disposables);
 
             _viewModel.RequestRewardState();
         }

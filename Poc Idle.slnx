@@ -5,9 +5,9 @@
   <Project Path="UI.GameplayMenu.ViewModels.csproj" />
   <Project Path="UI.GameplayMenu.Animations.csproj" />
   <Project Path="Other.Utils.csproj" />
+  <Project Path="UI.GameplayMenu.Views.csproj" />
   <Project Path="Core.Common.csproj" />
   <Project Path="UniTask.Addressables.csproj" />
-  <Project Path="UI.GameplayMenu.Views.csproj" />
   <Project Path="UI.GameplayMenu.Models.csproj" />
   <Project Path="NuGetForUnity.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />

@@ -27,7 +27,7 @@ namespace Core.GlobalGameState
             _playerBonusesService = new(playerConfig);
             _playerEconomyService = new(economyConfig, _playerBonusesService.BonusStateChanged, playerConfig.BonusClickMultiplier);
             _playerUpgradeService = new(_playerEconomyService);
-            _playerRewardsByLevelService = new(rewardsByLevelConfig, _playerBonusesService.LevelChanged);
+            _playerRewardsByLevelService = new(rewardsByLevelConfig, _playerBonusesService.LevelChanged, _playerEconomyService);
 
             _shopState = new();
         }

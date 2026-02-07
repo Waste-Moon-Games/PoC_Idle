@@ -48,6 +48,8 @@ namespace Entry.Local.Gameplay
                 out MainGameView mainGameView,
                 out PlayerStatsView playerStatsView);
 
+            CreateLocalRewardsSystem(container, mainGameView);
+
             topRootView.AttachView(economyPlayerInfoView.transform);
             topRootView.AttachView(playerStatsView.transform);
 
@@ -70,6 +72,22 @@ namespace Entry.Local.Gameplay
             economyPlayerInfoView.BindAnimationService(clickAnimationsService);
 
             playerStatsView.BindViewModel(playerStatsViewModel);
+        }
+
+        private void CreateLocalRewardsSystem(in DIContainer container, in MainGameView mainGameView)
+        {
+            var rewardsService = container.Resolve<GameWorldState>().PlayerState.RewardsService;
+
+            RewardsSystemModel model = new(rewardsService);
+            model.InitRewards();
+
+            RewardsSystemViewModel viewModel = new();
+            viewModel.BindModel(model);
+
+            RewardsSystemView view = _loader.LoadRewardSystemView();
+            view.BindViewModel(viewModel);
+
+            mainGameView.AttachView(view.gameObject);
         }
 
         private void CreateModels(

@@ -5,7 +5,7 @@ using UI.GameplayMenu.Models;
 
 namespace UI.GameplayMenu.ViewModels
 {
-    public class GetRewardViewModel: IViewModel
+    public class RewardViewModel: IViewModel
     {
         private readonly CompositeDisposable _disposables = new();
 
@@ -13,9 +13,10 @@ namespace UI.GameplayMenu.ViewModels
 
         private RewardState _state;
 
-        private GetRewardModel _model;
+        private RewardModel _model;
 
         public Observable<RewardState> RequestedRewardState => _requestedRewardStateSignal.AsObservable();
+        public Observable<float> RewardAmountSignal => _model.RewardAmountSignal.AsObservable();
 
         private void HandleRequestedRewardState(RewardState state)
         {
@@ -25,7 +26,7 @@ namespace UI.GameplayMenu.ViewModels
 
         public void BindModel(IModel model)
         {
-            _model = model as GetRewardModel;
+            _model = model as RewardModel;
 
             _model.RequestedRewardStateSignal.Subscribe(HandleRequestedRewardState).AddTo(_disposables);
         }
