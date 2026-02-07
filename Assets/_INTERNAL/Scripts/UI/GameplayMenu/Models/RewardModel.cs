@@ -38,11 +38,13 @@ namespace UI.GameplayMenu.Models
 
         public void RequestRewardState() => _model.RequestRewardState(_rewardId);
 
-        public void SubscribeOnRequestRewardStateSignal(Observable<RewardState> requestRewardStateSignal)
+        public void SubscribeOnRequestRewardStateSignal(Observable<RewardByLevelData> requestRewardStateSignal)
         {
-            requestRewardStateSignal.Subscribe(source => 
+            requestRewardStateSignal
+            .Where(source => source.RequiredLevel == _rewardId)
+            .Subscribe(source => 
             {
-                _state = source;
+                _state = source.State;
                 _rewardStateSignal.OnNext(_state);
             }).AddTo(_disposables);
 
@@ -51,7 +53,9 @@ namespace UI.GameplayMenu.Models
 
         public void SubscribeOnUnlockSignal(Observable<RewardByLevelData> unlockSignal)
         {
-            unlockSignal.Subscribe(source => 
+            unlockSignal
+            .Where(source => source.RequiredLevel == _rewardId)
+            .Subscribe(source => 
             {
                 _rewardStateSignal.OnNext(source.State);
             }).AddTo(_disposables);
@@ -61,7 +65,9 @@ namespace UI.GameplayMenu.Models
 
         public void SubscribeOnRecieveSignal(Observable<RewardByLevelData> recieveSignal)
         {
-            recieveSignal.Subscribe(source => 
+            recieveSignal
+            .Where(source => source.RequiredLevel == _rewardId)
+            .Subscribe(source => 
             {
                 _rewardStateSignal.OnNext(source.State);
             }).AddTo(_disposables);

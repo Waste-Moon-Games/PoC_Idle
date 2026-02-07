@@ -10,7 +10,7 @@ namespace Core.GlobalGameState.Services
     {
         private readonly CompositeDisposable _disposables = new();
 
-        private readonly Subject<RewardState> _requestRewardStateSignal = new();
+        private readonly Subject<RewardByLevelData> _requestRewardStateSignal = new();
         private readonly Subject<RewardByLevelData> _rewardUnlockSignal = new();
         private readonly Subject<RewardByLevelData> _rewardReciveSignal = new();
 
@@ -23,7 +23,7 @@ namespace Core.GlobalGameState.Services
         public IReadOnlyDictionary<int, RewardByLevelData> RewardsDict => _rewardsDict;
         public Observable<RewardByLevelData> RewardUnlocked => _rewardUnlockSignal.AsObservable();
         public Observable<RewardByLevelData> RewardRecieved => _rewardReciveSignal.AsObservable();
-        public Observable<RewardState> RequestedRewardState => _requestRewardStateSignal.AsObservable();
+        public Observable<RewardByLevelData> RequestedRewardState => _requestRewardStateSignal.AsObservable();
 
         public PlayerRewardsByLevelService(RewardsByLevelConfig config, Observable<int> levelChangedSignal, PlayerEconomyService economyService)
         {
@@ -57,7 +57,7 @@ namespace Core.GlobalGameState.Services
         public void RequestRewardState(int rewardKey)
         {
             if(_rewardsDict.TryGetValue(rewardKey, out var reward))
-                _requestRewardStateSignal.OnNext(reward.State);
+                _requestRewardStateSignal.OnNext(reward);
         }
 
         public bool TryToReciveReward(int rewardKey)
