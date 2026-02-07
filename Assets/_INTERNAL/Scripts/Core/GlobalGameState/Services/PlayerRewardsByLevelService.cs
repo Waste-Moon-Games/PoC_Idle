@@ -10,15 +10,19 @@ namespace Core.GlobalGameState.Services
     {
         private readonly CompositeDisposable _disposables = new();
 
+        private readonly Subject<RewardState> _requestRewardStateSignal = new();
         private readonly Subject<RewardByLevelData> _rewardUnlockSignal = new();
-        private readonly Subject<float> _rewardReciveSignal = new();
+        private readonly Subject<RewardByLevelData> _rewardReciveSignal = new();
 
         private readonly RewardsByLevelConfig _config;
         private readonly Dictionary<int, RewardByLevelData> _rewardsDict;
 
         private readonly int _maxRewardsLevel;
 
+        public IReadOnlyDictionary<int, RewardByLevelData> RewardsDict => _rewardsDict;
         public Observable<RewardByLevelData> RewardUnlocked => _rewardUnlockSignal.AsObservable();
+        public Observable<RewardByLevelData> RewardRecieved => _rewardReciveSignal.AsObservable();
+        public Observable<RewardState> RequestedRewardState => _requestRewardStateSignal.AsObservable();
 
         public PlayerRewardsByLevelService(RewardsByLevelConfig config, Observable<int> levelChangedSignal)
         {
@@ -44,13 +48,19 @@ namespace Core.GlobalGameState.Services
             if (currentLevel <= _maxRewardsLevel)
                 TryToUnlockRewardByLevel(currentLevel);
         }
+        
+        public void RequestRewardState(int rewardKey)
+        {
+            if(_rewardsDict.TryGetValue(rewardKey, out var reward))
+                _requestRewardStateSignal.OnNext(reward.State);
+        }
 
         public bool TryToReciveReward(int rewardKey)
         {
             if(_rewardsDict.TryGetValue(rewardKey, out var reward))
             {
-                reward.MarkAsUnlocked();
-                _rewardReciveSignal.OnNext(reward.RewardAmount);
+                reward.MarkAsRecived();
+                _rewardReciveSignal.OnNext(reward);
                 return true;
             }
 
