@@ -47,8 +47,6 @@ namespace UI.GameplayMenu.Models
                 _state = source.State;
                 _rewardStateSignal.OnNext(_state);
             }).AddTo(_disposables);
-
-            Debug.Log($"Reward ID: {_rewardId}, state: {_state}");
         }
 
         public void SubscribeOnUnlockSignal(Observable<RewardByLevelData> unlockSignal)
@@ -59,8 +57,6 @@ namespace UI.GameplayMenu.Models
             {
                 _rewardStateSignal.OnNext(source.State);
             }).AddTo(_disposables);
-
-            Debug.Log($"Reward ID: {_rewardId}, state: {_state}");
         }
 
         public void SubscribeOnRecieveSignal(Observable<RewardByLevelData> recieveSignal)
@@ -71,8 +67,6 @@ namespace UI.GameplayMenu.Models
             {
                 _rewardStateSignal.OnNext(source.State);
             }).AddTo(_disposables);
-
-            Debug.Log($"Reward ID: {_rewardId}, state: {_state}");
         }
 
         public void TryToReciveThisReward()

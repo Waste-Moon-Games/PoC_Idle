@@ -44,7 +44,7 @@ namespace Core.GlobalGameState.Services
                 _rewardUnlockSignal.OnNext(reward);
                 return true;
             }
-
+            
             return false;
         }        
 

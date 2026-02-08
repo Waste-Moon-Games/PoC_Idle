@@ -19,7 +19,7 @@ MonoBehaviour:
     <IsReceived>k__BackingField: 0
     <IsUnlocked>k__BackingField: 0
     <Type>k__BackingField: 0
-    <State>k__BackingField: 2
+    <State>k__BackingField: 0
   - <RewardId>k__BackingField: coins_2
     <RequiredLevel>k__BackingField: 2
     <RewardAmount>k__BackingField: 350

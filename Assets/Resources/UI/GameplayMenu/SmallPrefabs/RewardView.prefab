@@ -883,6 +883,7 @@ MonoBehaviour:
   _reciveButton: {fileID: 4079039782914866288}
   _lock: {fileID: 1120442883303133163}
   _recieved: {fileID: 5771008582417220460}
+  _descriptionText: {fileID: 2463190008391475919}
 --- !u!114 &162047757697628568
 MonoBehaviour:
   m_ObjectHideFlags: 0
