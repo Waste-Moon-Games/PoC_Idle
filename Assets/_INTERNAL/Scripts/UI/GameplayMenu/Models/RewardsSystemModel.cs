@@ -34,7 +34,7 @@ namespace UI.GameplayMenu.Models
             foreach(var model in _rewardModels)
             {
                 model.SubscribeOnUnlockSignal(_rewardsService.RewardUnlocked);
-                model.SubscribeOnRecieveSignal(_rewardsService.RewardRecieved);
+                model.SubscribeOnReceiveSignal(_rewardsService.RewardReceived);
                 model.SubscribeOnRequestRewardStateSignal(_rewardsService.RequestedRewardState);
             }
         }
@@ -42,6 +42,6 @@ namespace UI.GameplayMenu.Models
         public void RequestRewardModels() => _requestRewardModelsSignal.OnNext(_rewardModels);
 
         public void RequestRewardState(int keyId) => _rewardsService.RequestRewardState(keyId);
-        public void TryToReciveReward(int keyId) => _rewardsService.TryToReciveReward(keyId);
+        public void TryToReceiveReward(int keyId) => _rewardsService.TryToReciveReward(keyId);
     }
 }

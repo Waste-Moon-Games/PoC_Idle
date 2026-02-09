@@ -44,8 +44,8 @@ namespace UI.GameplayMenu.Views
                 case RewardState.Unlocked:
                     HandleUnlockedState();
                     break;
-                case RewardState.Recieved:
-                    HandleRecieveState();
+                case RewardState.Received:
+                    HandleReceiveState();
                     break;
                 default:
                     Debug.Log("Invalid State!");
@@ -65,7 +65,7 @@ namespace UI.GameplayMenu.Views
                 _lock.SetActive(false);
         }
 
-        private void HandleRecieveState()
+        private void HandleReceiveState()
         {
             if(!_recieved.activeSelf && !_lock.activeSelf)
             {

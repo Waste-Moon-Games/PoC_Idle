@@ -4,6 +4,6 @@ namespace Core.LevelingSystem
     {
         Locked,
         Unlocked,
-        Recieved
+        Received
     }
 }

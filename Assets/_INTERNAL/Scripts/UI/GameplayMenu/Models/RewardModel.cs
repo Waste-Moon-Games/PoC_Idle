@@ -59,9 +59,9 @@ namespace UI.GameplayMenu.Models
             }).AddTo(_disposables);
         }
 
-        public void SubscribeOnRecieveSignal(Observable<RewardByLevelData> recieveSignal)
+        public void SubscribeOnReceiveSignal(Observable<RewardByLevelData> receiveSignal)
         {
-            recieveSignal
+            receiveSignal
             .Where(source => source.RequiredLevel == _rewardId)
             .Subscribe(source => 
             {
@@ -69,12 +69,12 @@ namespace UI.GameplayMenu.Models
             }).AddTo(_disposables);
         }
 
-        public void TryToReciveThisReward()
+        public void TryToReceiveThisReward()
         {
-            if (_state == RewardState.Recieved)
+            if (_state == RewardState.Received)
                 return;
 
-            _model.TryToReciveReward(_rewardId);
+            _model.TryToReceiveReward(_rewardId);
         }
     }
 }

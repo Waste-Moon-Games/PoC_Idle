@@ -8,24 +8,31 @@ namespace Core.LevelingSystem
         [field: SerializeField] public string RewardId { get; private set; } = "Default layout: reward name_level";
         [field: SerializeField] public int RequiredLevel { get; private set; }
         [field: SerializeField] public float RewardAmount { get; private set; }
-        [field: SerializeField] public bool IsReceived { get; private set; }
-        [field: SerializeField] public bool IsUnlocked { get; private set; }
         [field: SerializeField] public RewardType Type { get; private set; }
-        [field: SerializeField] public RewardState State { get; private set; }
+        [field: SerializeField] public RewardState State { get; private set; } = RewardState.Locked;
 
-        public void MarkAsUnlocked()
+        public bool IsReceived => State is RewardState.Received;
+        public bool IsUnlocked => State is RewardState.Unlocked;
+
+        public bool TryToUnlock()
         {
-            IsUnlocked = true;
+            if(State != RewardState.Locked)
+                return false;
+
             State = RewardState.Unlocked;
+            return true;
         }
 
-        public void MarkAsRecived()
+        public bool TryToRecive()
         {
-            IsReceived = true;
-            State = RewardState.Recieved;
+            if(State is not RewardState.Unlocked)
+                return false;
+
+            State = RewardState.Received;
+            return true;
         }
 
-        public bool CanBeRecieved() => !IsReceived && IsUnlocked;
-        public bool CanBeUnlocked() => !IsUnlocked && !IsReceived;
+        public bool CanBeUnlocked() => State == RewardState.Locked;
+        public bool CanBeRecieved() => State == RewardState.Unlocked;
     }
 }

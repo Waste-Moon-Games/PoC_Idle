@@ -38,6 +38,6 @@ namespace UI.GameplayMenu.ViewModels
         }
 
         public void RequestRewardState() => _model.RequestRewardState();
-        public void TryToReciveThisReward() => _model.TryToReciveThisReward();
+        public void TryToReciveThisReward() => _model.TryToReceiveThisReward();
     }
 }
