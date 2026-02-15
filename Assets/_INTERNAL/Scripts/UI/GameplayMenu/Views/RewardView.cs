@@ -13,10 +13,12 @@ namespace UI.GameplayMenu.Views
     {
         private readonly CompositeDisposable _disposables = new();
 
+        [SerializeField] private TextMeshProUGUI _requiredLevelText;
         [SerializeField] private Button _reciveButton;
-        [SerializeField] private GameObject _lock;
-        [SerializeField] private GameObject _recieved;
-        [SerializeField] private TextMeshProUGUI _descriptionText;
+        [SerializeField] private GameObject _lockState;
+        [SerializeField] private GameObject _recievedState;
+        [SerializeField] private GameObject _connector;
+        [SerializeField] private TextMeshProUGUI _amountText;
 
         private RewardViewModel _viewModel;
 
@@ -30,12 +32,10 @@ namespace UI.GameplayMenu.Views
         }
 
         private void HandleReciveButtonClick() => _viewModel.TryToReciveThisReward();
-        private void HandleRequestedRewardAmount(float amount) => _descriptionText.text = $"{amount}";
+        private void HandleRequestedRewardAmount(float amount) => _amountText.text = $"{amount}";
         
         private void HandleRewardState(RewardState state)
         {
-            Debug.Log($"Reward state: {state}");
-
             switch(state)
             {
                 case RewardState.Locked:
@@ -55,24 +55,28 @@ namespace UI.GameplayMenu.Views
 
         private void HandleLockedState()
         {
-            if(!_lock.activeSelf)
-                _lock.SetActive(true);
+            if(!_lockState.activeSelf)
+                _lockState.SetActive(true);
         }
 
         private void HandleUnlockedState()
         {
-            if(_lock.activeSelf)
-                _lock.SetActive(false);
+            if(_lockState.activeSelf)
+                _lockState.SetActive(false);
         }
 
         private void HandleReceiveState()
         {
-            if(!_recieved.activeSelf && !_lock.activeSelf)
+            if(!_recievedState.activeSelf && !_lockState.activeSelf)
             {
-                _lock.SetActive(false);
-                _recieved.SetActive(true);
+                _lockState.SetActive(false);
+                _recievedState.SetActive(true);
             }
         }
+
+        private void HandleConnectorState(bool isLast) => _connector.SetActive(!isLast);
+
+        private void HandleRewardRequiredLevel(int level) => _requiredLevelText.text = $"{level}";
 
         public void BindViewModel(IViewModel viewModel)
         {
@@ -80,6 +84,8 @@ namespace UI.GameplayMenu.Views
 
             _viewModel.RequestedRewardState.Subscribe(HandleRewardState).AddTo(_disposables);
             _viewModel.RewardAmountSignal.Subscribe(HandleRequestedRewardAmount).AddTo(_disposables);
+            _viewModel.RewardRequierdLevelSignal.Subscribe(HandleRewardRequiredLevel).AddTo(_disposables);
+            _viewModel.ConnectorStateSignal.Subscribe(HandleConnectorState).AddTo(_disposables);
 
             _viewModel.RequestRewardState();
         }

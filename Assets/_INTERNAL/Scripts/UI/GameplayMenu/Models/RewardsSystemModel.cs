@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Common.MVVM;
 using Core.GlobalGameState.Services;
 using R3;
@@ -27,6 +28,7 @@ namespace UI.GameplayMenu.Models
                 _rewardModels.Add(new RewardModel(this, rewardItem));
 
             InitRewardModels();
+            FindLastReward().SetItLast(true);
         }
 
         private void InitRewardModels()
@@ -37,6 +39,12 @@ namespace UI.GameplayMenu.Models
                 model.SubscribeOnReceiveSignal(_rewardsService.RewardReceived);
                 model.SubscribeOnRequestRewardStateSignal(_rewardsService.RequestedRewardState);
             }
+        }
+
+        private RewardModel FindLastReward()
+        {
+            RewardModel result = _rewardModels.Last();
+            return result;
         }
 
         public void RequestRewardModels() => _requestRewardModelsSignal.OnNext(_rewardModels);

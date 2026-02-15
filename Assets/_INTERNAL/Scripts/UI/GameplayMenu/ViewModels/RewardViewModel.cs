@@ -17,6 +17,8 @@ namespace UI.GameplayMenu.ViewModels
 
         public Observable<RewardState> RequestedRewardState => _requestedRewardStateSignal.AsObservable();
         public Observable<float> RewardAmountSignal => _model.RewardAmountSignal.AsObservable();
+        public Observable<int> RewardRequierdLevelSignal => _model.RewardRequiredLevelSignal.AsObservable();
+        public Observable<bool> ConnectorStateSignal => _model.ConnectorStateSignal.AsObservable();
 
         private void HandleRequestedRewardState(RewardState state)
         {

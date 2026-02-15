@@ -1,7 +1,6 @@
 using Common.MVVM;
 using Core.LevelingSystem;
 using R3;
-using UnityEngine;
 
 namespace UI.GameplayMenu.Models
 {
@@ -11,6 +10,8 @@ namespace UI.GameplayMenu.Models
 
         private readonly Subject<RewardState> _rewardStateSignal = new();
         private readonly BehaviorSubject<float> _rewardAmountSignal;
+        private readonly BehaviorSubject<int> _rewardRequiredLevelSignal;
+        private readonly BehaviorSubject<bool> _conntectorStateSignal;
 
         private RewardState _state;
         private readonly int _rewardId;
@@ -19,15 +20,20 @@ namespace UI.GameplayMenu.Models
 
         public Observable<RewardState> RequestedRewardStateSignal => _rewardStateSignal.AsObservable();
         public Observable<float> RewardAmountSignal => _rewardAmountSignal.AsObservable();
+        public Observable<int> RewardRequiredLevelSignal => _rewardRequiredLevelSignal.AsObservable();
+        public Observable<bool> ConnectorStateSignal => _conntectorStateSignal.AsObservable();
 
         public RewardModel(RewardsSystemModel model, RewardByLevelData source)
         {
             _rewardAmountSignal = new(0f);
+            _rewardRequiredLevelSignal = new(0);
+            _conntectorStateSignal = new(false);
 
             _rewardId = source.RequiredLevel;
             _rewardAmount = source.RewardAmount;
 
             _rewardAmountSignal.OnNext(_rewardAmount);
+            _rewardRequiredLevelSignal.OnNext(_rewardId);
 
             _model = model;
 
@@ -37,6 +43,7 @@ namespace UI.GameplayMenu.Models
         public void Dispose() => _disposables.Dispose();
 
         public void RequestRewardState() => _model.RequestRewardState(_rewardId);
+        public void SetItLast(bool state) => _conntectorStateSignal.OnNext(state);
 
         public void SubscribeOnRequestRewardStateSignal(Observable<RewardByLevelData> requestRewardStateSignal)
         {
