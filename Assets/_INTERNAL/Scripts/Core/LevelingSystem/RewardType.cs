@@ -4,6 +4,7 @@
     {
         Coins,
         Gems,
-        Bonus
+        ClickBonus,
+        PassiveBonus
     }
 }

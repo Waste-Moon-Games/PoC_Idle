@@ -23,11 +23,12 @@ namespace Core.GlobalGameState
             var economyConfig = Resources.Load<MainEconomyConfig>("Configs/Economy/MainEconomyConfig");
             var playerConfig = Resources.Load<PlayerConfig>("Configs/Player/PlayerConfig");
             var rewardsByLevelConfig = Resources.Load<RewardsByLevelConfig>("Configs/Player/RewardsByLevelConfig");
+            var cyclicRewardsConfig = Resources.Load<CyclicRewardsConfig>("Configs/Player/CyclicRewardsConfig");
 
             _playerBonusesService = new(playerConfig);
             _playerEconomyService = new(economyConfig, _playerBonusesService.BonusStateChanged, playerConfig.BonusClickMultiplier);
             _playerUpgradeService = new(_playerEconomyService);
-            _playerRewardsByLevelService = new(rewardsByLevelConfig, _playerBonusesService.LevelChanged, _playerEconomyService);
+            _playerRewardsByLevelService = new(rewardsByLevelConfig, cyclicRewardsConfig, _playerBonusesService.LevelChanged, _playerEconomyService);
 
             _shopState = new();
         }

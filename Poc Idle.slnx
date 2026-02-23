@@ -11,15 +11,15 @@
   <Project Path="UI.GameplayMenu.Models.csproj" />
   <Project Path="NuGetForUnity.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
+  <Project Path="Core.LevelingSystem.csproj" />
   <Project Path="Core.GlobalGameState.csproj" />
   <Project Path="UniTask.TextMeshPro.csproj" />
+  <Project Path="SO.PlayerConfigs.csproj" />
   <Project Path="Core.Shop.Base.csproj" />
   <Project Path="SO.ShopConfigs.csproj" />
   <Project Path="Core.Consts.csproj" />
-  <Project Path="Core.LevelingSystem.csproj" />
   <Project Path="Core.Shop.Models.csproj" />
   <Project Path="UI.ShopMenu.ViewModels.csproj" />
-  <Project Path="SO.PlayerConfigs.csproj" />
   <Project Path="UI.ShopMenu.Views.csproj" />
   <Project Path="SO.AnimationConfigs.csproj" />
   <Project Path="Entry.Global.csproj" />

@@ -110,7 +110,23 @@ namespace Core.GlobalGameState.Services
 
         public void IncreasePlayerPassiveIncome(float amount) => PassiveIncomeAmount += amount;
 
-        public void AddReward(float amount)
+        public void IncreasePlayerClickByLevel(float amount)
+        {
+            if (amount <= 0)
+                return;
+
+            PlayerClickAmount *= amount;
+        }
+
+        public void IncreasePlayerPassiveIncomeByLevel(float amount)
+        {
+            if (amount <= 0)
+                return;
+
+            PassiveIncomeAmount *= amount;
+        }
+
+        public void AddRewardByLevel(float amount)
         {
             if(amount <= 0)
                 return;
@@ -140,7 +156,7 @@ namespace Core.GlobalGameState.Services
         public void Spend(float amount)
         {
             if (amount < 0)
-                throw new ArgumentOutOfRangeException(nameof(amount), "Amount cannot be a negative!");
+                throw new ArgumentOutOfRangeException(nameof(amount), "RewardAmount cannot be a negative!");
 
             PlayerWallet -= amount;
             // _playerWalletChagedSignal.OnNext(PlayerWallet);

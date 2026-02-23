@@ -7,6 +7,6 @@ namespace SO.PlayerConfigs
     [CreateAssetMenu(menuName = "Configs/Player/RewardsByLevelConfig", fileName = "RewardsByLevelConfig")]
     public class RewardsByLevelConfig : ScriptableObject
     {
-        [field: SerializeField] public List<RewardByLevelData> RewardsByLevel { get; private set; }
+        [field: SerializeField] public List<RewardByLevel> RewardsByLevel { get; private set; }
     }
 }

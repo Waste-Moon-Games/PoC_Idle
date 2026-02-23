@@ -48,7 +48,7 @@ namespace UI.GameplayMenu.Views
                     HandleReceiveState();
                     break;
                 default:
-                    Debug.Log("Invalid State!");
+                    Debug.Log("Invalid RewardState!");
                     break;
             }
         }

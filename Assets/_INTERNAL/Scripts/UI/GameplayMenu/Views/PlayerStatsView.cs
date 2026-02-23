@@ -13,7 +13,7 @@ namespace UI.GameplayMenu.Views
 
         [SerializeField] private Image _expProgressBar;
 
-        [Space(5), Header("Level/Exp Info")]
+        [Space(5), Header("RewardRequiredLevel/Exp Info")]
         [SerializeField] private TextMeshProUGUI _currentLevelText;
         [SerializeField] private TextMeshProUGUI _expText;
 
@@ -35,7 +35,7 @@ namespace UI.GameplayMenu.Views
             _viewModel.RequestDefaultLevelState();
         }
 
-        private void HandleChangedLevel(int level) => _currentLevelText.text = $"Level: {level}";
+        private void HandleChangedLevel(int level) => _currentLevelText.text = $"RewardRequiredLevel: {level}";
         private void HandleExpChanges(int currentExp, int expToLevelUp)
         {
             float progress = (float)currentExp / (float)expToLevelUp;

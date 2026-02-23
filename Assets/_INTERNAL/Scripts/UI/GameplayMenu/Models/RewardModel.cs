@@ -1,6 +1,7 @@
 using Common.MVVM;
 using Core.LevelingSystem;
 using R3;
+using Utils.Extensions;
 
 namespace UI.GameplayMenu.Models
 {
@@ -23,13 +24,13 @@ namespace UI.GameplayMenu.Models
         public Observable<int> RewardRequiredLevelSignal => _rewardRequiredLevelSignal.AsObservable();
         public Observable<bool> ConnectorStateSignal => _conntectorStateSignal.AsObservable();
 
-        public RewardModel(RewardsSystemModel model, RewardByLevelData source)
+        public RewardModel(RewardsSystemModel model, RewardByLevel source)
         {
             _rewardAmountSignal = new(0f);
             _rewardRequiredLevelSignal = new(0);
             _conntectorStateSignal = new(false);
 
-            _rewardId = source.RequiredLevel;
+            _rewardId = source.RewardRequiredLevel;
             _rewardAmount = source.RewardAmount;
 
             _rewardAmountSignal.OnNext(_rewardAmount);
@@ -37,7 +38,7 @@ namespace UI.GameplayMenu.Models
 
             _model = model;
 
-            _state = source.State;
+            _state = source.RewardState;
         }
 
         public void Dispose() => _disposables.Dispose();
@@ -45,35 +46,37 @@ namespace UI.GameplayMenu.Models
         public void RequestRewardState() => _model.RequestRewardState(_rewardId);
         public void SetItLast(bool state) => _conntectorStateSignal.OnNext(state);
 
-        public void SubscribeOnRequestRewardStateSignal(Observable<RewardByLevelData> requestRewardStateSignal)
+        public void SubscribeOnRequestRewardStateSignal(Observable<RewardByLevel> requestRewardStateSignal)
         {
             requestRewardStateSignal
-            .Where(source => source.RequiredLevel == _rewardId)
-            .Subscribe(source => 
-            {
-                _state = source.State;
-                _rewardStateSignal.OnNext(_state);
-            }).AddTo(_disposables);
+                .Where(source => source.RewardRequiredLevel == _rewardId)
+                .Subscribe(source => 
+                {
+                    _state = source.RewardState;
+                    _rewardStateSignal.OnNext(_state);
+                }).AddTo(_disposables);
         }
 
-        public void SubscribeOnUnlockSignal(Observable<RewardByLevelData> unlockSignal)
+        public void SubscribeOnUnlockSignal(Observable<RewardByLevel> unlockSignal)
         {
             unlockSignal
-            .Where(source => source.RequiredLevel == _rewardId)
-            .Subscribe(source => 
-            {
-                _rewardStateSignal.OnNext(source.State);
-            }).AddTo(_disposables);
+                .Where(source => source.RewardRequiredLevel == _rewardId)
+                .Subscribe(source => 
+                {
+                    _rewardStateSignal.OnNext(source.RewardState);
+                }).AddTo(_disposables);
         }
 
-        public void SubscribeOnReceiveSignal(Observable<RewardByLevelData> receiveSignal)
+        public void SubscribeOnReceiveSignal(Observable<BaseReward> receiveSignal)
         {
             receiveSignal
-            .Where(source => source.RequiredLevel == _rewardId)
-            .Subscribe(source => 
-            {
-                _rewardStateSignal.OnNext(source.State);
-            }).AddTo(_disposables);
+                .Select(source => (object)source)
+                .OfType<RewardByLevel>()
+                .Where(reward => reward.RewardRequiredLevel == _rewardId)
+                .Subscribe(reward => 
+                {
+                    _rewardStateSignal.OnNext(reward.RewardState);
+                }).AddTo(_disposables);
         }
 
         public void TryToReceiveThisReward()

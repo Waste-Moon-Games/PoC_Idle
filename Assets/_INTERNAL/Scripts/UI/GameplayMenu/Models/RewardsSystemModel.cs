@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Common.MVVM;
 using Core.GlobalGameState.Services;
+using Core.LevelingSystem;
 using R3;
 
 namespace UI.GameplayMenu.Models

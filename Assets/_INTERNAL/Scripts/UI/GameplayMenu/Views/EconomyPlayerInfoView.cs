@@ -13,7 +13,7 @@ namespace UI.GameplayMenu.Views
     {
         private readonly CompositeDisposable _disposables = new();
 
-        [Header("Player State Info")]
+        [Header("Player RewardState Info")]
         [SerializeField] private TextMeshProUGUI _currentCoinsCount;
         [SerializeField] private TextMeshProUGUI _currentCoinsPerClick;
         [SerializeField] private TextMeshProUGUI _currentPassiveIncome;
