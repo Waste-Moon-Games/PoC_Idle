@@ -23,6 +23,9 @@ namespace Entry.Local.Shop
 {
     public class ShopEntryPoint : MonoBehaviour
     {
+        [SerializeField] private List<string> _shopConfigPaths = new();
+        [SerializeField] private List<string> _shopRateConfigPaths = new();
+
         private readonly ShopResourceLoader _loader = new();
         private readonly List<ShopModel> _shopModels = new();
 
@@ -96,13 +99,13 @@ namespace Entry.Local.Shop
 
             clickUpgradesModel = new(
                 playerState.UpgradeService, shopState, ShopIds.CLICK_UPGRADES,
-                "Configs/Shop/ClickItemsConfig", "Configs/Shop/ClickUpgradesMultiplierConfig", true);
+                _shopConfigPaths[0], _shopRateConfigPaths[0], true);
             passiveUpgradesModel = new(
                 playerState.UpgradeService, shopState, ShopIds.PASSIVE_UPGRADES,
-                "Configs/Shop/PassiveItemsConfig", "Configs/Shop/PassiveUpgradesMultiplierConfig", false);
+                _shopConfigPaths[1], _shopRateConfigPaths[1], false);
             prestigeUpgradesModel = new(
                 playerState.UpgradeService, shopState, ShopIds.PRESTIGE_UPGRADES,
-                "Configs/Shop/PrestigeItemsConfig", "Configs/Shop/PrestigeUpgradesMultiplierConfig", false);
+                _shopConfigPaths[2], _shopRateConfigPaths[2], false);
 
             _shopModels.Add(clickUpgradesModel);
             _shopModels.Add(passiveUpgradesModel);

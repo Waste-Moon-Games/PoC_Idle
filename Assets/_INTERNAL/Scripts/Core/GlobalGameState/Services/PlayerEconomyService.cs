@@ -25,8 +25,11 @@ namespace Core.GlobalGameState.Services
         private readonly float _maxTrippleClickChance;
 
         private float _playerClickAmount;
+        private float _playerClickBonusAmount = 1f;
         private float _passiveIncomeAmount;
+        private float _passiveIncomeBonusAmount = 1f;
         private bool _bonusState;
+
         private readonly float _bonusClickMultiplier;
         private readonly float _defaultClickMultiplier = 1f;
 
@@ -114,16 +117,18 @@ namespace Core.GlobalGameState.Services
         {
             if (amount <= 0)
                 return;
+            _playerClickBonusAmount += amount;
 
-            PlayerClickAmount *= amount;
+            PlayerClickAmount *= _playerClickBonusAmount;
         }
 
         public void IncreasePlayerPassiveIncomeByLevel(float amount)
         {
             if (amount <= 0)
                 return;
+            _passiveIncomeBonusAmount += amount;
 
-            PassiveIncomeAmount *= amount;
+            PassiveIncomeAmount *= _passiveIncomeAmount;
         }
 
         public void AddRewardByLevel(float amount)
@@ -149,7 +154,6 @@ namespace Core.GlobalGameState.Services
 
             PlayerWallet += clickReward;
 
-            // _playerWalletChagedSignal.OnNext(PlayerWallet);
             _coinsClickAdSignal.OnNext(clickReward);
         }
 
@@ -159,7 +163,6 @@ namespace Core.GlobalGameState.Services
                 throw new ArgumentOutOfRangeException(nameof(amount), "RewardAmount cannot be a negative!");
 
             PlayerWallet -= amount;
-            // _playerWalletChagedSignal.OnNext(PlayerWallet);
         }
 
         public bool HasEnoughCoins(float amount) => amount >= 0 && PlayerWallet >= amount;

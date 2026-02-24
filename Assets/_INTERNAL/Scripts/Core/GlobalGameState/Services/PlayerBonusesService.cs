@@ -86,12 +86,11 @@ namespace Core.GlobalGameState.Services
                 }
             }
 
-            TryIncreaseLevel();
             _currentExp += _gainedExpPerClick;
+            TryIncreaseLevel();
 
             float currentBonus = _bonusGauge / _maxBonusGauge;
             _bonusGaugeChangedSignal.OnNext(currentBonus);
-            _currentExpChangedSignal.OnNext(_currentExp);
         }
 
         public void StartAsyncDecreaseTask()
@@ -133,9 +132,10 @@ namespace Core.GlobalGameState.Services
                 _expToLevelUp = Mathf.RoundToInt(_expToLevelUp * _expIncreaseMultiplier);
 
                 _levelChangedSignal.OnNext(_level);
-                _currentExpChangedSignal.OnNext(_currentExp);
                 _expToLevelUpChangedSignal.OnNext(_expToLevelUp);
             }
+
+            _currentExpChangedSignal.OnNext(_currentExp);
         }
 
         private async UniTask ActiveBonusTaskAsync(CancellationToken token)

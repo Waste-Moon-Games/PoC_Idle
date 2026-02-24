@@ -148,6 +148,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 600d6628d20f9774faa0f6ec7d8f9dd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Entry.Local.Shop::Entry.Local.Shop.ShopEntryPoint
+  _shopConfigPaths:
+  - Configs/Shop/ClickItemsConfig
+  - Configs/Shop/PassiveItemsConfig
+  - Configs/Shop/PrestigeItemsConfig
+  _shopRateConfigPaths:
+  - Configs/Shop/ClickUpgradesRatesConfig
+  - Configs/Shop/PassiveUpgradesRatesConfig
+  - Configs/Shop/PrestigeUpgradesRatesConfig
 --- !u!4 &198504231
 Transform:
   m_ObjectHideFlags: 0
