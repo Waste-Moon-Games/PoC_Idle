@@ -23,5 +23,5 @@ MonoBehaviour:
     Amount: 1.05
     Type: 3
     State: 1
-  <CyclicRewardRequiredLevelIncreaseStep>k__BackingField: 0
-  <CyclicRewardAmountIncreaseStep>k__BackingField: 0
+  <CyclicRewardRequiredLevelIncreaseStep>k__BackingField: 5
+  <CyclicRewardAmountIncreaseStep>k__BackingField: 0.05

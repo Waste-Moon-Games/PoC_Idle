@@ -21,7 +21,7 @@ namespace Core.Shop.Models
 
         private readonly Dictionary<int, ItemModel> _itemsDict = new();
         private readonly ShopItemsConfig _itemsConfig;
-        private readonly ItemsTypeMultiplierConfig _itemsMultiplierConfig;
+        private readonly ShopRatesConfig _ratesConfig;
         private readonly PlayerUpgradeService _model;
         private readonly ShopState _shopState;
 
@@ -37,7 +37,7 @@ namespace Core.Shop.Models
             _sId = sId;
 
             _itemsConfig = Resources.Load<ShopItemsConfig>(configPath);
-            _itemsMultiplierConfig = Resources.Load<ItemsTypeMultiplierConfig>(multiplierConfigPath);
+            _ratesConfig = Resources.Load<ShopRatesConfig>(multiplierConfigPath);
             _model = model;
             _shopState = shopState;
 
@@ -105,12 +105,7 @@ namespace Core.Shop.Models
             }
         }
 
-        private void HandleBuyItem(ItemModel item)
-        {
-            _model.TryUpgradePlayer(item.Price, item.UpgradeAmount, item.Id, item.Type, _sId);
-            _shopState.AddPurchasedItemById(item, _sId);
-            _shopState.MarkAsPurchased(_sId);
-        }
+        private void HandleBuyItem(ItemModel item) => _model.TryUpgradePlayer(item.Price, item.UpgradeAmount, item.Id, item.Type, _sId);
 
         private void HandleSuccessfulPurchase(int itemId)
         {
@@ -120,12 +115,16 @@ namespace Core.Shop.Models
                 return;
             }
 
-            var priceMultiplier = _itemsMultiplierConfig.UpgradesPriceMultipliers[itemId];
-            var upgradeAmountMultiplier = _itemsMultiplierConfig.UpgradesMultipliers[itemId];
+            ItemRateEntry itemRates = _ratesConfig.Rates.FirstOrDefault(ir => ir.ItemID == item.Name);
+            float priceRate = itemRates.PriceRate;
+            float upgradeAmountRate = itemRates.BonusRate;
 
-            item.IncreasePrice(priceMultiplier);
-            item.IncreaseUpgradeAmount(upgradeAmountMultiplier);
+            item.IncreasePrice(priceRate);
+            item.IncreaseUpgradeAmount(upgradeAmountRate);
             item.IncreaseLevel();
+
+            _shopState.AddPurchasedItemById(item, _sId);
+            _shopState.MarkAsPurchased(_sId);
 
             _shopState.TryOpenNextItem(itemId, _sId);
         }

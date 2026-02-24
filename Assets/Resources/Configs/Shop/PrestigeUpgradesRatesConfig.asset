@@ -10,7 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 07b638ceb63a23846aefd1e04bffded6, type: 3}
-  m_Name: PrestigeUpgradesMultiplierConfig
+  m_Name: PrestigeUpgradesRatesConfig
   m_EditorClassIdentifier: SO.ShopConfigs::SO.ShopConfigs.ItemsTypeMultiplierConfig
-  <UpgradesMultipliers>k__BackingField: []
-  <UpgradesPriceMultipliers>k__BackingField: []
+  <Rates>k__BackingField:
+  - <ItemID>k__BackingField: Work In Progress
+    <PriceRate>k__BackingField: 1
+    <BonusRate>k__BackingField: 1

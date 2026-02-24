@@ -16,7 +16,6 @@
   <Project Path="UniTask.TextMeshPro.csproj" />
   <Project Path="SO.PlayerConfigs.csproj" />
   <Project Path="Core.Shop.Base.csproj" />
-  <Project Path="SO.ShopConfigs.csproj" />
   <Project Path="Core.Consts.csproj" />
   <Project Path="Core.Shop.Models.csproj" />
   <Project Path="UI.ShopMenu.ViewModels.csproj" />
@@ -30,4 +29,5 @@
   <Project Path="Entry.Local.Shop.csproj" />
   <Project Path="UniTask.DOTween.csproj" />
   <Project Path="UI.Common.csproj" />
+  <Project Path="SO.ShopConfigs.csproj" />
 </Solution>
