@@ -33,7 +33,7 @@ namespace UI.GameplayMenu.Models
         /// </summary>
         public void Click()
         {
-            _model.EconomyService.Add();
+            _model.EconomyService.AddCoins();
             _model.BonusesService.Click();
         }
 

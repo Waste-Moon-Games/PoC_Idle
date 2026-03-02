@@ -20,7 +20,7 @@ namespace Core.GlobalGameState.Services
         {
             if (_playerEconomyService.HasEnoughCoins(price))
             {
-                _playerEconomyService.Spend(price);
+                _playerEconomyService.TryToSpend(price);
 
                 switch (itemType)
                 {

@@ -36,6 +36,7 @@ namespace UI.GameplayMenu.Views
         
         private void HandleRewardState(RewardState state)
         {
+            Debug.Log($"Reward state: {state}");
             switch(state)
             {
                 case RewardState.Locked:

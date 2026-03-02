@@ -3,6 +3,7 @@ using R3;
 using SO.PlayerConfigs;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Core.GlobalGameState.Services
 {
@@ -10,24 +11,24 @@ namespace Core.GlobalGameState.Services
     {
         private readonly CompositeDisposable _disposables = new();
 
-        private readonly Subject<RewardByLevel> _requestRewardStateSignal = new();
-        private readonly Subject<RewardByLevel> _rewardUnlockSignal = new();
+        private readonly Subject<RewardByLevelRuntime> _requestRewardStateSignal = new();
+        private readonly Subject<RewardByLevelRuntime> _rewardUnlockSignal = new();
         private readonly Subject<BaseReward> _rewardReceiveSignal = new();
 
         private readonly RewardsByLevelConfig _rewardsByLevelConfig;
         private readonly CyclicRewardsConfig _cyclicRewardsConfig;
         private readonly PlayerEconomyService _economyService;
-        private readonly Dictionary<int, RewardByLevel> _rewardsDict;
-        private readonly Dictionary<int, CyclicReward> _cyclicRewardsDict;
+        private readonly Dictionary<int, RewardByLevelRuntime> _rewardsDict;
+        private readonly Dictionary<int, CyclicRewardRuntime> _cyclicRewardsDict;
 
         private readonly int _maxRewardsLevel;
         private readonly int _cyclicRewardLevelIncreaseStep;
         private readonly float _cyclicRewardAmountIncreaseStep;
 
-        public IReadOnlyDictionary<int, RewardByLevel> RewardsDict => _rewardsDict;
-        public Observable<RewardByLevel> RewardUnlocked => _rewardUnlockSignal.AsObservable();
+        public IReadOnlyDictionary<int, RewardByLevelRuntime> RewardsDict => _rewardsDict;
+        public Observable<RewardByLevelRuntime> RewardUnlocked => _rewardUnlockSignal.AsObservable();
         public Observable<BaseReward> RewardReceived => _rewardReceiveSignal.AsObservable();
-        public Observable<RewardByLevel> RequestedRewardState => _requestRewardStateSignal.AsObservable();
+        public Observable<RewardByLevelRuntime> RequestedRewardState => _requestRewardStateSignal.AsObservable();
 
         public PlayerRewardsByLevelService(RewardsByLevelConfig rewardsByLevelConfig, CyclicRewardsConfig cyclicRewardsConfig, Observable<int> levelChangedSignal, PlayerEconomyService economyService)
         {
@@ -36,8 +37,12 @@ namespace Core.GlobalGameState.Services
 
             _economyService = economyService;
 
-            _rewardsDict = _rewardsByLevelConfig.RewardsByLevel.ToDictionary(r => r.RewardRequiredLevel, r => r);
-            _cyclicRewardsDict = _cyclicRewardsConfig.CyclicRewards.ToDictionary(c => c.RewardRequiredLevel, c => c);
+            _rewardsDict = RewardFactory
+                .CreateRewardsByLevelList(rewardsByLevelConfig.RewardsByLevel)
+                .ToDictionary(r => r.RewardRequiredLevel, r => r);
+            _cyclicRewardsDict = RewardFactory
+                .CreateCyclicRewardsList(cyclicRewardsConfig.CyclicRewards)
+                .ToDictionary(c => c.RewardRequiredLevel, c => c);
 
             _maxRewardsLevel = _rewardsDict.Keys.Max();
 
@@ -61,7 +66,7 @@ namespace Core.GlobalGameState.Services
             }
         }
 
-        private bool TryReceiveCyclicReward(int level, out CyclicReward reward)
+        private bool TryReceiveCyclicReward(int level, out CyclicRewardRuntime reward)
         {
             reward = null;
 
@@ -75,7 +80,7 @@ namespace Core.GlobalGameState.Services
             return true;
         }
 
-        private void CascadeCyclicReward(CyclicReward receivedReward)
+        private void CascadeCyclicReward(CyclicRewardRuntime receivedReward)
         {
             int currentLevel = receivedReward.RewardRequiredLevel;
 
@@ -87,7 +92,7 @@ namespace Core.GlobalGameState.Services
 
             _cyclicRewardsDict.Remove(currentLevel);
 
-            var newReward = new CyclicReward(nextAmount, nextLevel, type);
+            var newReward = new CyclicRewardRuntime(nextAmount, nextLevel, type);
             _cyclicRewardsDict[nextLevel] = newReward;
         }
 
@@ -97,6 +102,7 @@ namespace Core.GlobalGameState.Services
             if(reward is not null && reward.CanBeUnlocked())
             {
                 reward.TryToUnlock();
+                Debug.Log($"Reward {reward.RewardID}/State: {reward.RewardState}");
                 _rewardUnlockSignal.OnNext(reward);
                 return true;
             }
@@ -126,7 +132,15 @@ namespace Core.GlobalGameState.Services
             {
                 reward.TryToReceive();
                 _rewardReceiveSignal.OnNext(reward);
-                _economyService.AddRewardByLevel(reward.RewardAmount);
+                switch (reward.RewardType)
+                {
+                    case RewardType.Coins:
+                        _economyService.AddCoinsRewardByLevel(reward.RewardAmount);
+                        break;
+                    case RewardType.Gems:
+                        _economyService.AddGemsRewardByLevel(reward.RewardAmount);
+                        break;
+                }
                 return true;
             }
 

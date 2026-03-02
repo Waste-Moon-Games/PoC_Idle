@@ -1,3 +1,5 @@
+using Core.Common.Player;
+using Core.GlobalGameState.Player;
 using Cysharp.Threading.Tasks;
 using R3;
 using SO.PlayerConfigs;
@@ -12,46 +14,55 @@ namespace Core.GlobalGameState.Services
         private CancellationTokenSource _cts;
         private readonly CompositeDisposable _disposables = new();
 
-        private readonly BehaviorSubject<float> _playerWalletChagedSignal;
+        #region Subjects
         private readonly BehaviorSubject<float> _playerClickAmountChangedSignal;
         private readonly Subject<float> _coinsClickAdSignal = new();
         private readonly BehaviorSubject<float> _passiveIncomeAmountChangedSignal;
+        #endregion
 
-        private float _playerWallet;
+        #region PlayerWallets
+        private readonly ICurrencyWallet _coinsWallet;
+        private readonly ICurrencyWallet _gemsWallet;
+        #endregion
+
+        #region Delays
         private readonly float _passiveIncomeDelay;
+        #endregion
 
+        #region Gems Reward Chance
+        private int _gemsClickRewardAmount = 1;
+        private float _gemsRewardClickChance = 0f;
+        private readonly float _minGemsRewardClickChance;
+        private readonly float _maxGemsRewardClickChance;
+        #endregion
+
+        #region Tripple Click Chance
         private float _trippleClickChance;
         private readonly float _minTrippleClickChance;
         private readonly float _maxTrippleClickChance;
+        #endregion
 
+        #region Bonuses
         private float _playerClickAmount;
         private float _playerClickBonusAmount = 1f;
         private float _passiveIncomeAmount;
         private float _passiveIncomeBonusAmount = 1f;
         private bool _bonusState;
+        #endregion
 
+        #region Multipliers
         private readonly float _bonusClickMultiplier;
         private readonly float _defaultClickMultiplier = 1f;
+        #endregion
 
-        public float PlayerWallet
-        {
-            get => _playerWallet;
-            private set
-            {
-                if (value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(_playerWallet), "A wallet cannot be negative");
-
-                _playerWallet = value;
-                _playerWalletChagedSignal.OnNext(_playerWallet);
-            }
-        }
+        #region Properties
         public float PlayerClickAmount
         {
             get => _playerClickAmount;
             private set
             {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(_playerClickAmount), "Add price cannot be a negative");
+                    throw new ArgumentOutOfRangeException(nameof(_playerClickAmount), "AddCoins price cannot be a negative");
 
                 _playerClickAmount = value;
                 _playerClickAmountChangedSignal.OnNext(_playerClickAmount);
@@ -80,20 +91,33 @@ namespace Core.GlobalGameState.Services
                 _trippleClickChance = value;
             }
         }
+        #endregion
 
-        public Observable<float> PlayerWalletChanged => _playerWalletChagedSignal.AsObservable();
+        #region Wallets Observables
+        public Observable<float> CoinsWalletChanged => _coinsWallet.AmountChanged.AsObservable();
+        public Observable<float> GemsWalletChanged => _gemsWallet.AmountChanged.AsObservable();
+        #endregion
+
+        #region UI Observables
         public Observable<float> PlayerClickAmountChanged => _playerClickAmountChangedSignal.AsObservable();
         public Observable<float> CoinsClickAd => _coinsClickAdSignal.AsObservable();
-        public Observable<float> PassiveInconeChanged => _passiveIncomeAmountChangedSignal.AsObservable();
+        public Observable<float> PassiveIncomeChanged => _passiveIncomeAmountChangedSignal.AsObservable();
+        #endregion
 
         public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged, float bonusClickMultiplier)
         {
-            _playerWalletChagedSignal = new(0f);
+            _coinsWallet = new CurrencyWallet("Coins_Wallet", config.InitialCoinsWalletAmount);
+            _gemsWallet = new CurrencyWallet("Gems_Wallet", config.InitialGemsWalletAmount);
+
+            _gemsRewardClickChance = config.InitialGemsClickRewardChance;
+            _minGemsRewardClickChance = config.InitialGemsClickRewardChance;
+            _maxGemsRewardClickChance = config.MaxGemsClickRewardChance;
+            _gemsClickRewardAmount = config.InitialGemsClickRewardAmount;
+
             _playerClickAmountChangedSignal = new(0f);
             _passiveIncomeAmountChangedSignal = new(0f);
 
             PlayerClickAmount = config.InitialPlayerClickAmount;
-            PlayerWallet = config.InitialPlayerWallet;
 
             PassiveIncomeAmount = 0f;
             _passiveIncomeDelay = config.PassiveIncomeDelay;
@@ -105,6 +129,8 @@ namespace Core.GlobalGameState.Services
 
             bonusStateChaged.Subscribe(HandleChangedBonusState).AddTo(_disposables);
             _bonusClickMultiplier = bonusClickMultiplier;
+
+            _passiveIncomeAmountChangedSignal.AddTo(_disposables);
         }
 
         public void IncreasePlayerClick(float amount) => PlayerClickAmount += amount;
@@ -116,7 +142,8 @@ namespace Core.GlobalGameState.Services
         public void IncreasePlayerClickByLevel(float amount)
         {
             if (amount <= 0)
-                return;
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
             _playerClickBonusAmount += amount;
 
             PlayerClickAmount *= _playerClickBonusAmount;
@@ -125,47 +152,33 @@ namespace Core.GlobalGameState.Services
         public void IncreasePlayerPassiveIncomeByLevel(float amount)
         {
             if (amount <= 0)
-                return;
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
             _passiveIncomeBonusAmount += amount;
 
-            PassiveIncomeAmount *= _passiveIncomeAmount;
+            PassiveIncomeAmount *= _passiveIncomeBonusAmount;
         }
 
-        public void AddRewardByLevel(float amount)
+        public void AddCoinsRewardByLevel(float amount) => _coinsWallet.Add(amount);
+        public void AddGemsRewardByLevel(float amount) => _gemsWallet.Add(amount);
+
+        public void AddCoins()
         {
-            if(amount <= 0)
-                return;
+            float clickReward = CalculateReward();
 
-            PlayerWallet += amount;
-        }
-
-        public void Add()
-        {
-            float randRoll = Random.Range(_minTrippleClickChance, _maxTrippleClickChance);
-            float rewardMultiplier = (randRoll < TrippleClickChance) ? _bonusClickMultiplier : _defaultClickMultiplier;
-
-            float localClick = PlayerClickAmount;
-            float clickReward;
-
-            if (!_bonusState)
-                clickReward = localClick * rewardMultiplier;
-            else
-                clickReward = localClick * rewardMultiplier * _bonusClickMultiplier;
-
-            PlayerWallet += clickReward;
+            _coinsWallet.Add(clickReward);
+            if (TryAddGems())
+            {
+                int clickGemsReward = CalculateGemsReward();
+                _gemsWallet.Add(clickGemsReward);
+            }
 
             _coinsClickAdSignal.OnNext(clickReward);
         }
 
-        public void Spend(float amount)
-        {
-            if (amount < 0)
-                throw new ArgumentOutOfRangeException(nameof(amount), "RewardAmount cannot be a negative!");
+        public bool TryToSpend(float amount) => _coinsWallet.TryToSpend(amount);
 
-            PlayerWallet -= amount;
-        }
-
-        public bool HasEnoughCoins(float amount) => amount >= 0 && PlayerWallet >= amount;
+        public bool HasEnoughCoins(float amount) => amount >= 0 && _coinsWallet.Amount >= amount;
 
         public void StartAsyncTasks()
         {
@@ -180,9 +193,52 @@ namespace Core.GlobalGameState.Services
             _cts = null;
         }
 
-        public void Dispose() => _disposables.Dispose();
+        public void Dispose()
+        {
+            _disposables.Dispose();
+            (_coinsWallet as IDisposable).Dispose();
+            (_gemsWallet as IDisposable).Dispose();
+        }
 
         private void HandleChangedBonusState(bool state) => _bonusState = state;
+
+        private bool TryAddGems()
+        {
+            float randRoll = RandRoll(_minGemsRewardClickChance, _maxGemsRewardClickChance);
+
+            return randRoll < _gemsRewardClickChance;
+        }
+
+        private int CalculateGemsReward()
+        {
+            //TODO: сделать рандомный бросок на x2 получение гемов за клик
+            int result = _gemsClickRewardAmount;
+
+            return result;
+        }
+
+        private float CalculateReward()
+        {
+            float randRoll = RandRoll(_minTrippleClickChance, _maxTrippleClickChance);
+            float rewardMultiplier = (randRoll < TrippleClickChance) ? _bonusClickMultiplier : _defaultClickMultiplier;
+
+            float localClick = PlayerClickAmount;
+            float clickReward;
+
+            if (!_bonusState)
+                clickReward = localClick * rewardMultiplier;
+            else
+                clickReward = localClick * rewardMultiplier * _bonusClickMultiplier;
+
+            return clickReward;
+        }
+
+        private float RandRoll(float minValue, float maxValue)
+        {
+            float randRollResult = Random.Range(minValue, maxValue);
+
+            return randRollResult;
+        }
 
         private float CalculatePassiveIncomeTick()
         {
@@ -192,10 +248,10 @@ namespace Core.GlobalGameState.Services
         private void ApplyPassiveIncome()
         {
             var income = CalculatePassiveIncomeTick();
-            if(income <= 0f)
+            if (income <= 0f)
                 return;
 
-            PlayerWallet += income;
+            _coinsWallet.Add(income);
         }
 
         private async UniTask PassiveIncomeAsync(CancellationToken token)

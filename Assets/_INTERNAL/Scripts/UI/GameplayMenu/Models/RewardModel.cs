@@ -24,7 +24,7 @@ namespace UI.GameplayMenu.Models
         public Observable<int> RewardRequiredLevelSignal => _rewardRequiredLevelSignal.AsObservable();
         public Observable<bool> ConnectorStateSignal => _conntectorStateSignal.AsObservable();
 
-        public RewardModel(RewardsSystemModel model, RewardByLevel source)
+        public RewardModel(RewardsSystemModel model, RewardByLevelRuntime source)
         {
             _rewardAmountSignal = new(0f);
             _rewardRequiredLevelSignal = new(0);
@@ -46,7 +46,7 @@ namespace UI.GameplayMenu.Models
         public void RequestRewardState() => _model.RequestRewardState(_rewardId);
         public void SetItLast(bool state) => _conntectorStateSignal.OnNext(state);
 
-        public void SubscribeOnRequestRewardStateSignal(Observable<RewardByLevel> requestRewardStateSignal)
+        public void SubscribeOnRequestRewardStateSignal(Observable<RewardByLevelRuntime> requestRewardStateSignal)
         {
             requestRewardStateSignal
                 .Where(source => source.RewardRequiredLevel == _rewardId)
@@ -57,7 +57,7 @@ namespace UI.GameplayMenu.Models
                 }).AddTo(_disposables);
         }
 
-        public void SubscribeOnUnlockSignal(Observable<RewardByLevel> unlockSignal)
+        public void SubscribeOnUnlockSignal(Observable<RewardByLevelRuntime> unlockSignal)
         {
             unlockSignal
                 .Where(source => source.RewardRequiredLevel == _rewardId)
@@ -71,7 +71,7 @@ namespace UI.GameplayMenu.Models
         {
             receiveSignal
                 .Select(source => (object)source)
-                .OfType<RewardByLevel>()
+                .OfType<RewardByLevelRuntime>()
                 .Where(reward => reward.RewardRequiredLevel == _rewardId)
                 .Subscribe(reward => 
                 {

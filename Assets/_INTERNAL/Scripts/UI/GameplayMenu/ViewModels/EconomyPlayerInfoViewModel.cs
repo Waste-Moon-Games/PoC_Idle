@@ -10,10 +10,16 @@ namespace UI.GameplayMenu.ViewModels
 
         private EconomyPlayerInfoModel _model;
 
+        #region Wallets Observables
         public Observable<float> CoinsChanged => _model.CoinsChanged.AsObservable();
+        public Observable<float> GemsChanged => _model.GemsChanged.AsObservable();
+        #endregion
+
+        #region UI Observables
         public Observable<float> CoinsClickAd => _model.CoinsClickAd.AsObservable();
         public Observable<float> CoinsPerClickChanged => _model.CoinsPerClickChanged.AsObservable();
         public Observable<float> PassiveIncomeChanged => _model.PassiveIncomeChanged.AsObservable();
+        #endregion
 
         public void BindModel(IModel model)
         {
