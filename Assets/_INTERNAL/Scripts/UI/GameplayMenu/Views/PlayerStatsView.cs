@@ -38,7 +38,6 @@ namespace UI.GameplayMenu.Views
         private void HandleChangedLevel(int level) => _currentLevelText.text = $"Уровень: {level}";
         private void HandleExpChanges(int currentExp, int expToLevelUp)
         {
-            Debug.Log($"Current exp: {currentExp}");
             float progress = (float)currentExp / (float)expToLevelUp;
             _expText.text = $"{currentExp}/{expToLevelUp}";
             _expProgressBar.fillAmount = progress;

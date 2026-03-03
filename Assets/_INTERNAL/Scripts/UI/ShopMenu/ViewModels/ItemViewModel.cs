@@ -83,7 +83,6 @@ namespace UI.ShopMenu.ViewModels
         private void HandlePriceChanged(float price)
         {
             _price = _formatter.FormatNumber(price);
-            Debug.Log($"Price: {price}");
             _priceChangeSignal.OnNext(_price);
         }
 

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using R3;
 using Core.LevelingSystem;
 using TMPro;
+using Utils.Formatter;
 
 namespace UI.GameplayMenu.Views
 {
@@ -12,6 +13,7 @@ namespace UI.GameplayMenu.Views
     public class RewardView: MonoBehaviour, IView
     {
         private readonly CompositeDisposable _disposables = new();
+        private readonly NumberFormatter _formatter = new();
 
         [SerializeField] private TextMeshProUGUI _requiredLevelText;
         [SerializeField] private Button _reciveButton;
@@ -32,11 +34,10 @@ namespace UI.GameplayMenu.Views
         }
 
         private void HandleReciveButtonClick() => _viewModel.TryToReciveThisReward();
-        private void HandleRequestedRewardAmount(float amount) => _amountText.text = $"{amount}";
+        private void HandleRequestedRewardAmount(float amount) => _amountText.text = $"{_formatter.FormatNumber(amount)}";
         
         private void HandleRewardState(RewardState state)
         {
-            Debug.Log($"Reward state: {state}");
             switch(state)
             {
                 case RewardState.Locked:

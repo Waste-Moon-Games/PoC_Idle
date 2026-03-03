@@ -102,7 +102,6 @@ namespace Core.GlobalGameState.Services
             if(reward is not null && reward.CanBeUnlocked())
             {
                 reward.TryToUnlock();
-                Debug.Log($"Reward {reward.RewardID}/State: {reward.RewardState}");
                 _rewardUnlockSignal.OnNext(reward);
                 return true;
             }

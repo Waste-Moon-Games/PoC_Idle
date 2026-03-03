@@ -19,5 +19,5 @@ MonoBehaviour:
   <PlayerBonusGauge>k__BackingField: 100
   <InitPlayerBonusPerClick>k__BackingField: 2.5
   <BonusClickMultiplier>k__BackingField: 2
-  <DecreaseBonusGaugeDelay>k__BackingField: 0.1
+  <DecreaseBonusGaugeDelay>k__BackingField: 0.15
   <DecreaseActiveBonusGaugeDelay>k__BackingField: 0.1

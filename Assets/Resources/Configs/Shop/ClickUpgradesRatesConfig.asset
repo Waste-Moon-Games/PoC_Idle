@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: SO.ShopConfigs::SO.ShopConfigs.ItemsTypeMultiplierConfig
   <Rates>k__BackingField:
   - <ItemID>k__BackingField: "\u041A\u043B\u0438\u043A"
-    <PriceRate>k__BackingField: 1.05
+    <PriceRate>k__BackingField: 1.15
     <BonusRate>k__BackingField: 1.1
   - <ItemID>k__BackingField: "\u0414\u0432\u043E\u0439\u043D\u043E\u0439 \u043A\u043B\u0438\u043A"
-    <PriceRate>k__BackingField: 1.15
-    <BonusRate>k__BackingField: 1.25
+    <PriceRate>k__BackingField: 1.25
+    <BonusRate>k__BackingField: 1.15
   - <ItemID>k__BackingField: "\u0428\u0430\u043D\u0441 \u0442\u0440\u043E\u0439\u043D\u043E\u0433\u043E
       \u043A\u043B\u0438\u043A\u0430"
-    <PriceRate>k__BackingField: 1.5
+    <PriceRate>k__BackingField: 2
     <BonusRate>k__BackingField: 1

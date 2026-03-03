@@ -10,31 +10,28 @@
 
     public class CyclicRewardRuntime : BaseReward
     {
-        private int _rewardRequiredLevel;
-        private float _rewardAmount;
-        private RewardType _rewardType;
-
-        public int RewardRequiredLevel => _rewardRequiredLevel;
-        public float RewardAmount => _rewardAmount;
-        public RewardType RewardType => _rewardType;
+        public int RewardRequiredLevel => base.RequiredLevel;
+        public float RewardAmount => base.Amount;
+        public RewardType RewardType => base.Type;
 
         public CyclicRewardRuntime(CyclicReward source)
         {
-            _rewardRequiredLevel = source.RewardRequiredLevel;
-            _rewardAmount = source.RewardAmount;
-            _rewardType = source.RewardType;
+            base.RequiredLevel = source.RewardRequiredLevel;
+            base.Amount = source.RewardAmount;
+            base.Type = source.RewardType;
+            base.State = RewardState.Unlocked;
         }
 
         public CyclicRewardRuntime(float newAmount, int newLevel, RewardType type)
         {
-            State = RewardState.Unlocked;
+            base.State = RewardState.Unlocked;
 
-            Type = type;
+            base.Type = type;
 
-            Amount = newAmount;
-            RequiredLevel = newLevel;
+            base.Amount = newAmount;
+            base.RequiredLevel = newLevel;
 
-            ID = $"bonus_{RequiredLevel}_{Type}";
+            base.ID = $"bonus_{RequiredLevel}_{Type}";
         }
     }
 }
