@@ -1,4 +1,5 @@
 ﻿<Solution>
+  <Project Path="SDK.YandexSDK.csproj" />
   <Project Path="UniTask.csproj" />
   <Project Path="UniTask.Linq.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
@@ -18,6 +19,7 @@
   <Project Path="Core.Shop.Base.csproj" />
   <Project Path="Core.Consts.csproj" />
   <Project Path="Core.Shop.Models.csproj" />
+  <Project Path="Core.SaveSystem.Web.csproj" />
   <Project Path="UI.ShopMenu.ViewModels.csproj" />
   <Project Path="UI.ShopMenu.Views.csproj" />
   <Project Path="SO.AnimationConfigs.csproj" />
@@ -29,5 +31,7 @@
   <Project Path="Entry.Local.Shop.csproj" />
   <Project Path="UniTask.DOTween.csproj" />
   <Project Path="UI.Common.csproj" />
+  <Project Path="Core.SaveSystemBase.csproj" />
   <Project Path="SO.ShopConfigs.csproj" />
+  <Project Path="Core.SaveSystem.Mobile.csproj" />
 </Solution>
