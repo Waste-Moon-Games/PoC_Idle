@@ -27,6 +27,7 @@ namespace Core.GlobalGameState.Services
         private readonly float _cyclicRewardAmountIncreaseStep;
 
         public IReadOnlyDictionary<int, RewardByLevelRuntime> RewardsDict => _rewardsDict;
+        public IReadOnlyDictionary<int, CyclicRewardRuntime> CyclicRewardsDict => _cyclicRewardsDict;
         public Observable<RewardByLevelRuntime> RewardUnlocked => _rewardUnlockSignal.AsObservable();
         public Observable<BaseReward> RewardReceived => _rewardReceiveSignal.AsObservable();
         public Observable<RewardByLevelRuntime> RequestedRewardState => _requestRewardStateSignal.AsObservable();
@@ -69,11 +70,17 @@ namespace Core.GlobalGameState.Services
 
             _economyService = economyService;
 
-            _rewardsDict = RewardFactory
-                .CreateRewardsByLevelList(loadedData.ReceivedRewards)
+            bool hasLoadedRewards = loadedData.ReceivedRewards is { Count: > 0 };
+            bool hasLoadedCyclicRewards = loadedData.CyclicRewards is { Count: > 0 };
+
+            _rewardsDict = (hasLoadedRewards
+                ? RewardFactory.CreateRewardsByLevelList(loadedData.ReceivedRewards)
+                : RewardFactory.CreateRewardsByLevelList(rewardsByLevelConfig.RewardsByLevel))
                 .ToDictionary(r => r.RewardRequiredLevel, r => r);
-            _cyclicRewardsDict = RewardFactory
-                .CreateCyclicRewardsList(loadedData.CyclicRewards)
+
+            _cyclicRewardsDict = (hasLoadedCyclicRewards
+                ? RewardFactory.CreateCyclicRewardsList(loadedData.CyclicRewards)
+                : RewardFactory.CreateCyclicRewardsList(cyclicRewardsConfig.CyclicRewards))
                 .ToDictionary(c => c.RewardRequiredLevel, c => c);
 
             _maxRewardsLevel = _rewardsDict.Keys.Max();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Core.SaveSystemBase
@@ -13,41 +14,38 @@ namespace Core.SaveSystemBase
         {
             bool isWebGL = Application.platform == RuntimePlatform.WebGLPlayer;
 
-            Type strategyType = null;
-            string assemblyName = string.Empty;
-            string typeName = string.Empty;
+            string typeName = isWebGL
+                ? "Core.SaveSystem.Web.YandexSaveSystemStrategy"
+                : "Core.SaveSystem.Mobile.MobileSaveSystemStrategy";
 
-            if (isWebGL)
-            {
-                typeName = "Core.SaveSystem.Web.YandexSaveSystemStrategy";
-                assemblyName = "Core.SaveSystem.Web";
-            }
-            else
-            {
-                typeName = "Core.SaveSystem.Mobile.MobileSaveSystemStrategy";
-                assemblyName = "Core.SaveSystem.Mobile";
-            }
+            string assemblyName = isWebGL
+                ? "Core.SaveSystem.Web"
+                : "Core.SaveSystem.Mobile";
 
             string fullTypeName = $"{typeName},{assemblyName}";
 
             Debug.Log($"[Save System Context] Attempting to load strategy: {fullTypeName}");
 
-            strategyType = Type.GetType(fullTypeName);
-            if(strategyType != null)
+            Type strategyType = Type.GetType(fullTypeName)
+                ?? AppDomain.CurrentDomain
+                    .GetAssemblies()
+                    .FirstOrDefault(a => a.GetName().Name == assemblyName)
+                    ?.GetType(typeName);
+
+            if (strategyType != null)
             {
                 _currentStrategy = (ISaveSystemStrategy)Activator.CreateInstance(strategyType);
                 Debug.Log($"[Save System Context] SUCCESS: Strategy loaded for {(isWebGL ? "WebGL" : "Mobile")}");
+                return;
             }
-            else
-            {
-                Debug.LogWarning($"[Save System Context] FAILED: Could not find type {fullTypeName}. Falling back to Player Prefs (or dummy).");
-                throw new Exception($"Save System Strategy not found: {fullTypeName}. Check Assembly Definition");
-            }
+
+            Debug.LogWarning($"[Save System Context] FAILED: Could not find type {fullTypeName}.");
+            throw new Exception($"Save System Strategy not found: {fullTypeName}. Check Assembly Definition/stripping settings.");
         }
 
         public void Save<T>(T data, string key)
         {
-            if (_currentStrategy == null) 
+            if (_currentStrategy == null)
                 return;
             _currentStrategy.Save(data, key);
         }
