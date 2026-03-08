@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core.Consts;
+using UnityEngine;
 
 namespace Core.LevelingSystem
 {

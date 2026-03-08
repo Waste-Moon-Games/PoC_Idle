@@ -3,9 +3,9 @@ using UnityEngine;
 using UI.GameplayMenu.ViewModels;
 using UnityEngine.UI;
 using R3;
-using Core.LevelingSystem;
 using TMPro;
 using Utils.Formatter;
+using Core.Consts;
 
 namespace UI.GameplayMenu.Views
 {
@@ -38,6 +38,7 @@ namespace UI.GameplayMenu.Views
         
         private void HandleRewardState(RewardState state)
         {
+            // TODO, перенести логику во ViewModel
             switch(state)
             {
                 case RewardState.Locked:

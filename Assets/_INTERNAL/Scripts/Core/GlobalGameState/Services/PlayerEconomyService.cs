@@ -1,5 +1,6 @@
 using Core.Common.Player;
 using Core.GlobalGameState.Player;
+using Core.SaveSystemBase.Data;
 using Cysharp.Threading.Tasks;
 using R3;
 using SO.PlayerConfigs;
@@ -91,6 +92,8 @@ namespace Core.GlobalGameState.Services
                 _trippleClickChance = value;
             }
         }
+        public ICurrencyWallet CoinsWallet => _coinsWallet;
+        public ICurrencyWallet GemsWallet => _gemsWallet;
         #endregion
 
         #region Wallets Observables
@@ -123,6 +126,39 @@ namespace Core.GlobalGameState.Services
             _passiveIncomeDelay = config.PassiveIncomeDelay;
 
             TrippleClickChance = config.InitialCurrentTrippleClickChance;
+
+            _minTrippleClickChance = config.InitialMinTrippleClickChance;
+            _maxTrippleClickChance = config.MaxTrippleClickChance;
+
+            bonusStateChaged.Subscribe(HandleChangedBonusState).AddTo(_disposables);
+            _bonusClickMultiplier = bonusClickMultiplier;
+
+            _passiveIncomeAmountChangedSignal.AddTo(_disposables);
+        }
+
+        public PlayerEconomyService(
+            MainEconomyConfig config,
+            Observable<bool> bonusStateChaged,
+            float bonusClickMultiplier,
+            PlayerData loadedData)
+        {
+            _coinsWallet = new CurrencyWallet("Coins_Wallet", config.InitialCoinsWalletAmount);
+            _gemsWallet = new CurrencyWallet("Gems_Wallet", config.InitialGemsWalletAmount);
+
+            _gemsRewardClickChance = config.InitialGemsClickRewardChance;
+            _minGemsRewardClickChance = config.InitialGemsClickRewardChance;
+            _maxGemsRewardClickChance = config.MaxGemsClickRewardChance;
+            _gemsClickRewardAmount = config.InitialGemsClickRewardAmount;
+
+            _playerClickAmountChangedSignal = new(0f);
+            _passiveIncomeAmountChangedSignal = new(0f);
+
+            PlayerClickAmount = loadedData.PlayerClickAmount;
+
+            PassiveIncomeAmount = loadedData.PassiveIncomeAmount;
+            _passiveIncomeDelay = config.PassiveIncomeDelay;
+
+            TrippleClickChance = loadedData.TrippleClickChance;
 
             _minTrippleClickChance = config.InitialMinTrippleClickChance;
             _maxTrippleClickChance = config.MaxTrippleClickChance;

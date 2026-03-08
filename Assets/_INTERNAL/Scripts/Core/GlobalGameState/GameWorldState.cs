@@ -1,3 +1,5 @@
+using Core.SaveSystemBase;
+
 namespace Core.GlobalGameState
 {
     public class GameWorldState
@@ -6,9 +8,9 @@ namespace Core.GlobalGameState
 
         public PlayerState PlayerState => _playerState;
 
-        public GameWorldState()
+        public GameWorldState(SaveSystemContext saveSystemContext)
         {
-            _playerState = new();
+            _playerState = new(saveSystemContext);
         }
 
         public void StartAsyncTasks() => _playerState.StartAsyncTasks();

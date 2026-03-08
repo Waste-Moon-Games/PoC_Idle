@@ -1,9 +1,10 @@
-﻿using Core.LevelingSystem;
+﻿using Core.Consts;
+using Core.LevelingSystem;
+using Core.SaveSystemBase.Data;
 using R3;
 using SO.PlayerConfigs;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Core.GlobalGameState.Services
 {
@@ -30,7 +31,11 @@ namespace Core.GlobalGameState.Services
         public Observable<BaseReward> RewardReceived => _rewardReceiveSignal.AsObservable();
         public Observable<RewardByLevelRuntime> RequestedRewardState => _requestRewardStateSignal.AsObservable();
 
-        public PlayerRewardsByLevelService(RewardsByLevelConfig rewardsByLevelConfig, CyclicRewardsConfig cyclicRewardsConfig, Observable<int> levelChangedSignal, PlayerEconomyService economyService)
+        public PlayerRewardsByLevelService(
+            RewardsByLevelConfig rewardsByLevelConfig,
+            CyclicRewardsConfig cyclicRewardsConfig,
+            Observable<int> levelChangedSignal,
+            PlayerEconomyService economyService)
         {
             _rewardsByLevelConfig = rewardsByLevelConfig;
             _cyclicRewardsConfig = cyclicRewardsConfig;
@@ -42,6 +47,33 @@ namespace Core.GlobalGameState.Services
                 .ToDictionary(r => r.RewardRequiredLevel, r => r);
             _cyclicRewardsDict = RewardFactory
                 .CreateCyclicRewardsList(cyclicRewardsConfig.CyclicRewards)
+                .ToDictionary(c => c.RewardRequiredLevel, c => c);
+
+            _maxRewardsLevel = _rewardsDict.Keys.Max();
+
+            _cyclicRewardLevelIncreaseStep = _cyclicRewardsConfig.CyclicRewardRequiredLevelIncreaseStep;
+            _cyclicRewardAmountIncreaseStep = _cyclicRewardsConfig.CyclicRewardAmountIncreaseStep;
+
+            levelChangedSignal.Subscribe(HandleChangedLevel).AddTo(_disposables);
+        }
+
+        public PlayerRewardsByLevelService(
+            RewardsByLevelConfig rewardsByLevelConfig,
+            CyclicRewardsConfig cyclicRewardsConfig,
+            Observable<int> levelChangedSignal,
+            PlayerEconomyService economyService,
+            PlayerData loadedData)
+        {
+            _rewardsByLevelConfig = rewardsByLevelConfig;
+            _cyclicRewardsConfig = cyclicRewardsConfig;
+
+            _economyService = economyService;
+
+            _rewardsDict = RewardFactory
+                .CreateRewardsByLevelList(loadedData.ReceivedRewards)
+                .ToDictionary(r => r.RewardRequiredLevel, r => r);
+            _cyclicRewardsDict = RewardFactory
+                .CreateCyclicRewardsList(loadedData.CyclicRewards)
                 .ToDictionary(c => c.RewardRequiredLevel, c => c);
 
             _maxRewardsLevel = _rewardsDict.Keys.Max();

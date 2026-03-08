@@ -1,4 +1,7 @@
-﻿namespace Core.LevelingSystem
+﻿using Core.Consts;
+using Core.SaveSystemBase.Data;
+
+namespace Core.LevelingSystem
 {
     [System.Serializable]
     public class CyclicReward : BaseReward
@@ -19,6 +22,14 @@
             base.RequiredLevel = source.RewardRequiredLevel;
             base.Amount = source.RewardAmount;
             base.Type = source.RewardType;
+            base.State = RewardState.Unlocked;
+        }
+
+        public CyclicRewardRuntime(RewardData source)
+        {
+            base.RequiredLevel = source.RequiredLevel;
+            base.Amount = source.RewardAmount;
+            base.Type = source.Type;
             base.State = RewardState.Unlocked;
         }
 

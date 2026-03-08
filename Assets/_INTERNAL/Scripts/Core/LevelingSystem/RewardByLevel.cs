@@ -1,3 +1,6 @@
+using Core.Consts;
+using Core.SaveSystemBase.Data;
+
 namespace Core.LevelingSystem
 {
     [System.Serializable]
@@ -24,6 +27,13 @@ namespace Core.LevelingSystem
             base.Amount = source.RewardAmount;
             base.Type = source.RewardType;
             base.State = source.RewardState;
+        }
+
+        public RewardByLevelRuntime(RewardData source)
+        {
+            base.ID = source.RequiredLevel.ToString();
+            base.RequiredLevel = source.RequiredLevel;
+            base.Amount = source.RewardAmount;
         }
     }
 }

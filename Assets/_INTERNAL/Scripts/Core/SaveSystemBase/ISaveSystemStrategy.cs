@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Core.SaveSystemBase
 {
     public interface ISaveSystemStrategy

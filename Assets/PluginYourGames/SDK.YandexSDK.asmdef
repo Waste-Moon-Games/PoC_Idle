@@ -2,7 +2,8 @@
     "name": "SDK.YandexSDK",
     "rootNamespace": "",
     "references": [
-        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:bf93234d9311a3d48a9bb96649811e52"
     ],
     "includePlatforms": [
         "Editor",

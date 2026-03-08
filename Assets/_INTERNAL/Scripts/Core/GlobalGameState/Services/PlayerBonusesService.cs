@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Core.SaveSystemBase.Data;
+using Cysharp.Threading.Tasks;
 using R3;
 using SO.PlayerConfigs;
 using System;
@@ -32,6 +33,10 @@ namespace Core.GlobalGameState.Services
         private int _currentExp;
         private int _expToLevelUp;
 
+        public int Level => _level;
+        public int CurrentExp => _currentExp;
+        public int ExpToLevelUp => _expToLevelUp;
+
         public Observable<bool> BonusStateChanged => _bonusStateChangedSignal.AsObservable();
         public Observable<float> BonusGaugeChanged => _bonusGaugeChangedSignal.AsObservable();
         public Observable<int> LevelChanged => _levelChangedSignal.AsObservable();
@@ -48,6 +53,22 @@ namespace Core.GlobalGameState.Services
             _currentExp = 0;
             _expToLevelUp = config.InitExpToLevelUp;
             _gainedExpPerClick = config.InitGainedPlayerExpPerClick;
+            _expIncreaseMultiplier = config.ExpIncreaseMultiplier;
+
+            _decreaseBonusGaugeDelay = config.DecreaseBonusGaugeDelay;
+            _decreaseActiveBonusGaugeDelay = config.DecreaseActiveBonusGaugeDelay;
+        }
+
+        public PlayerBonusesService(PlayerConfig config, PlayerData loadedData)
+        {
+            _maxBonusGauge = config.PlayerBonusGauge;
+            _bonusGauge = 0f;
+            _bonusPerClick = config.InitPlayerBonusPerClick;
+
+            _level = loadedData.Level;
+            _currentExp = loadedData.CurrentExp;
+            _expToLevelUp = loadedData.ExpToLevelUp;
+            _gainedExpPerClick = loadedData.GainedExpPerClick;
             _expIncreaseMultiplier = config.ExpIncreaseMultiplier;
 
             _decreaseBonusGaugeDelay = config.DecreaseBonusGaugeDelay;

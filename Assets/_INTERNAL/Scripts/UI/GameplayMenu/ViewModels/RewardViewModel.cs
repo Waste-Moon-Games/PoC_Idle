@@ -1,5 +1,5 @@
 using Common.MVVM;
-using Core.LevelingSystem;
+using Core.Consts;
 using R3;
 using UI.GameplayMenu.Models;
 

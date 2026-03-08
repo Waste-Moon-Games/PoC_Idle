@@ -1,4 +1,4 @@
-namespace Core.LevelingSystem
+namespace Core.Consts
 {
     public enum RewardState
     {
