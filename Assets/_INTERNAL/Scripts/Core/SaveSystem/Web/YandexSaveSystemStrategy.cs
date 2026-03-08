@@ -1,10 +1,12 @@
 using Core.SaveSystemBase;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting;
 using YG;
 
 namespace Core.SaveSystem.Web
 {
+    [Preserve]
     public class YandexSaveSystemStrategy : ISaveSystemStrategy
     {
         private Dictionary<string, string> _dataCache = new();
@@ -115,7 +117,8 @@ namespace Core.SaveSystem.Web
             public void RebuildDictionary()
             {
                 Dictionary = new();
-                for (int i = 0; i < Keys.Count; i++)
+                int pairCount = Mathf.Min(Keys.Count, Values.Count);
+                for (int i = 0; i < pairCount; i++)
                 {
                     Dictionary[Keys[i]] = Values[i];
                 }

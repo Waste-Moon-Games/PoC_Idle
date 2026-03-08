@@ -36,6 +36,7 @@ namespace Core.GlobalGameState.Services
         public int Level => _level;
         public int CurrentExp => _currentExp;
         public int ExpToLevelUp => _expToLevelUp;
+        public int GainedExpPerClick => _gainedExpPerClick;
 
         public Observable<bool> BonusStateChanged => _bonusStateChangedSignal.AsObservable();
         public Observable<float> BonusGaugeChanged => _bonusGaugeChangedSignal.AsObservable();
