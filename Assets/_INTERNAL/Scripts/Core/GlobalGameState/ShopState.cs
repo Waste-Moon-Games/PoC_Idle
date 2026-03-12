@@ -78,11 +78,6 @@ namespace Core.GlobalGameState
                     continue;
                 }
 
-                if (savedShop.IsOpened)
-                    shop.Open();
-                else
-                    shop.Close();
-
                 var itemsById = (savedShop.Items ?? new List<ItemUpgradeData>())
                     .Where(item => item != null)
                     .ToDictionary(item => item.ID, item => item);

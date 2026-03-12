@@ -20,6 +20,6 @@ MonoBehaviour:
   <StartPrice>k__BackingField: 10000000
   <StartUpgradeAmount>k__BackingField: 0
   <StartLevel>k__BackingField: 0
-  <IsOpenedByDefault>k__BackingField: 0
+  <IsOpenedByDefault>k__BackingField: 1
   <PriceRate>k__BackingField: 1
   <BonusRate>k__BackingField: 1

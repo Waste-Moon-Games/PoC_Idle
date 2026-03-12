@@ -102,6 +102,9 @@ namespace Core.Shop.Base
             Price = config.StartPrice;
             UpgradeAmount = config.StartUpgradeAmount;
             Level = config.StartLevel;
+
+            if (config.ID == 0)
+                ChangeStatus(true);
         }
 
         public ItemModel(ItemModelConfig config, ItemUpgradeData loadedData) : this(config)
@@ -148,8 +151,8 @@ namespace Core.Shop.Base
 
         public void ChangeStatus(bool value) => IsOpened = value;
         public void TryBuy() => _tryPurchaseSignal.OnNext(this);
-        public void IncreasePrice(float value) => Price += value;
-        public void IncreaseUpgradeAmount(float value) => UpgradeAmount += value;
+        public void IncreasePrice(float value) => Price *= value;
+        public void IncreaseUpgradeAmount(float value) => UpgradeAmount *= value;
         public void IncreaseLevel() => Level++;
 
         public bool IsValidSaveFor(ItemUpgradeData loadedData) => loadedData != null && loadedData.ID == Id;
