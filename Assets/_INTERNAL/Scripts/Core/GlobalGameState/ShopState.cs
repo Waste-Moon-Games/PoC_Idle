@@ -15,13 +15,14 @@ namespace Core.GlobalGameState
     {
         private readonly CompositeDisposable _disposables = new();
         private readonly Dictionary<string, ShopModel> _shopsDict = new();
-
-        private readonly HashSet<string> _hasPurchasedByShop = new();
+        private readonly PlayerUpgradeService _playerUpgradeService;
 
         public IReadOnlyDictionary<string, ShopModel> ShopModels => _shopsDict;
 
         public ShopState(PlayerUpgradeService playerUpgradeService)
         {
+            _playerUpgradeService = playerUpgradeService;
+
             ShopConfigsDatabase configsDatabase = Resources.Load<ShopConfigsDatabase>("Configs/Shop/ShopConfigsDatabase");
 
             CreateShopModels(playerUpgradeService, configsDatabase);
@@ -58,22 +59,56 @@ namespace Core.GlobalGameState
                 configsDatabase.GetRatesConfigByID(ShopIds.PRESTIGE_UPGRADES));
 
             _shopsDict[prestigeShopModel.ShopId] = prestigeShopModel;
+
+            foreach (var shop in _shopsDict.Values)
+            {
+                shop.PurchaseSignal.Subscribe(s => HandleBuyItem(s.Item1, s.Item2)).AddTo(_disposables);
+            }
         }
 
         public List<ShopStateData> Capture()
         {
-            return _shopsDict.Select(kv => new ShopStateData()
+            return _shopsDict.Select(shop => new ShopStateData
             {
-                ShopID = kv.Key,
-                Items = kv.Value.ItemsDict.Select(items => items.Value.Capture()).ToList()
+                ShopID = shop.Key,
+                Items = shop.Value.ItemsDict.ToDictionary(
+                    item => item.Key,
+                    item => item.Value.Capture())
             }).ToList();
         }
 
         public void Restore(List<ShopStateData> datas)
         {
-            for (int i = 0; i < datas.Count; i++)
-            {
+            var configsDatabase = Resources.Load<ShopConfigsDatabase>("Configs/Shop/ShopConfigsDatabase");
 
+            foreach (var shopData in datas)
+            {
+                var shopConfig = configsDatabase.GetItemsConfigByID(shopData.ShopID);
+
+                if (shopConfig == null)
+                {
+                    Debug.LogWarning($"Config not found for shop {shopData.ShopID}");
+                    continue;
+                }
+
+                var loadedItems = new List<ItemModel>();
+
+                foreach (var configItem in shopConfig.Items)
+                {
+                    if (!shopData.Items.TryGetValue(configItem.ID, out var savedItem))
+                    {
+                        savedItem = new ItemUpgradeData
+                        {
+                            ID = configItem.ID,
+                            Level = 0,
+                            IsOpened = configItem.IsOpened
+                        };
+                    }
+
+                    loadedItems.Add(new ItemModel(configItem, savedItem));
+                }
+
+                _shopsDict[shopData.ShopID].InitializeItems(true, loadedItems);
             }
         }
 
@@ -86,26 +121,9 @@ namespace Core.GlobalGameState
 
         public void Dispose() => _disposables.Clear();
 
-        private void InitAvailableItemsById(List<ItemModel> items, Dictionary<int, ItemModel> itemsDict)
+        private void HandleBuyItem(ItemModel item, string shopID)
         {
-            foreach (var item in items)
-                itemsDict[item.Id] = item;
-
-            var sortedIds = itemsDict.Keys.OrderBy(x => x).ToList();
-
-            for (int id = 1; id < sortedIds.Count; id++)
-            {
-                int currentId = sortedIds[id];
-                int prevId = sortedIds[id - 1];
-
-                if (itemsDict.TryGetValue(prevId, out var prevItem) &&
-                    prevItem != null &&
-                    itemsDict.TryGetValue(currentId, out var currentItem))
-                {
-                    if (prevItem.Level > 0 && prevItem.Level % 5 == 0 && prevItem.IsOpened)
-                        currentItem.ChangeStatus(true);
-                }
-            }
+            _playerUpgradeService.TryUpgradePlayer(item.Price, item.UpgradeAmount, item.Id, item.Type, shopID);
         }
     }
 }

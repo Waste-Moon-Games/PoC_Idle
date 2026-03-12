@@ -21,3 +21,4 @@ MonoBehaviour:
   <BonusClickMultiplier>k__BackingField: 2
   <DecreaseBonusGaugeDelay>k__BackingField: 0.15
   <DecreaseActiveBonusGaugeDelay>k__BackingField: 0.1
+  <IsDebug>k__BackingField: 0

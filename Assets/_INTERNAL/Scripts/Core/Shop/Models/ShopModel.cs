@@ -17,6 +17,7 @@ namespace Core.Shop.Models
         private readonly Subject<Dictionary<int, ItemModel>> _requestAvailableItemsSignal = new();
         private readonly Subject<bool> _stateChangedSignal = new();
         private readonly BehaviorSubject<List<ItemModel>> _itemsInitializedSignal;
+        private readonly Subject<(ItemModel, string)> _purchaseSignal = new();
 
         private readonly Dictionary<int, ItemModel> _itemsDict = new();
         private readonly ShopItemsConfig _itemsConfig;
@@ -30,6 +31,7 @@ namespace Core.Shop.Models
         public Observable<List<ItemModel>> ItemsInitialized => _itemsInitializedSignal.AsObservable();
         public Observable<Dictionary<int, ItemModel>> RequestedAvailableItems => _requestAvailableItemsSignal.AsObservable();
         public Observable<bool> StateChange => _stateChangedSignal.AsObservable();
+        public Observable<(ItemModel, string)> PurchaseSignal => _purchaseSignal.AsObservable();
 
         public ShopModel(Observable<(int, string)> successfulPurchase, Observable<int> failedPurchase, string sId, bool state, ShopItemsConfig itemsConfig, ShopRatesConfig ratesConfig)
         {
@@ -75,6 +77,8 @@ namespace Core.Shop.Models
                     _itemsDict[itemModel.Id] = itemModel;
                 }
             }
+
+            _itemsInitializedSignal.OnNext(_itemsDict.Values.ToList());
         }
 
         public void SubscribeOnItems()
@@ -125,7 +129,8 @@ namespace Core.Shop.Models
 
         private void HandleBuyItem(ItemModel item)
         {
-            //_model.TryUpgradePlayer(item.Price, item.UpgradeAmount, item.Id, item.Type, _sId);
+            _purchaseSignal.OnNext((item, ShopId));
+            Debug.Log($"Item {item.Name} purchased in {ShopId}");
         }
 
         private void HandleSuccessfulPurchase(int itemId)

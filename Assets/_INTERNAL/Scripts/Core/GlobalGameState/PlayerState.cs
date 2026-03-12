@@ -39,8 +39,12 @@ namespace Core.GlobalGameState
             var cyclicRewardsConfig = Resources.Load<CyclicRewardsConfig>("Configs/Player/CyclicRewardsConfig");
 
             bool hasSavedData = false;
+
+            if (playerConfig.IsDebug)
+                _saveSystemContext.Delete(_playerSaveDataKey);
+
 #if UNITY_WEBGL && !UNITY_EDITOR
-            hasSavedData = !string.IsNullOrEmpty(YG.YG2.saves.JsonData);
+            hasSavedData = !string.IsNullOrEmpty(YG2.saves.JsonData);
 #else
             hasSavedData = PlayerPrefs.HasKey(_playerSaveDataKey);
 #endif

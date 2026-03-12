@@ -28,8 +28,8 @@ namespace Core.Shop.Base
         private readonly Subject<ItemType> _requestItemTypeSignal = new();
         #endregion
 
-        private readonly int _id;
-        private readonly string _name;
+        private int _id;
+        private string _name;
         private readonly Sprite _icon;
         private readonly ItemType _itemType;
 
@@ -143,7 +143,12 @@ namespace Core.Shop.Base
 
         public void Restore(ItemUpgradeData loadedData)
         {
-
+            _id = loadedData.ID;
+            _name = loadedData.Name;
+            Price = loadedData.Price;
+            UpgradeAmount = loadedData.UpgradeAmount;
+            Level = loadedData.Level;
+            IsOpened = loadedData.IsOpened;
         }
 
         public void RequestBaseInfo()

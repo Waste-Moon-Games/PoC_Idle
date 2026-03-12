@@ -18,6 +18,7 @@ using UI.GameplayMenu.Views;
 using NavigationButtonsView = UI.ShopMenu.Views.NavigationButtonsView;
 using NavigationButtonsViewModel = UI.ShopMenu.ViewModels.NavigationButtonsViewModel;
 using NavigationButtonsModel = UI.ShopMenu.Models.NavigationButtonsModel;
+using System.Linq;
 
 namespace Entry.Local.Shop
 {
@@ -49,6 +50,7 @@ namespace Entry.Local.Shop
         private void CreateScene(in DIContainer container, out NavigationButtonsModel navigationButtonsModel)
         {
             navigationButtonsModel = new();
+            var shopState = container.Resolve<GameWorldState>().PlayerState.ShopState;
 
             CreateModels(container,
                 out EconomyPlayerInfoModel playerInfoModel);
@@ -64,16 +66,21 @@ namespace Entry.Local.Shop
                 out ShopView prestigeUpgradesView,
                 out EconomyPlayerInfoView playerInfoView);
 
+            _shopModels.AddRange(shopState.ShopModels.Values);
             _shopMenuModel = new(_shopModels, navigationButtonsModel.Actions);
 
             playerInfoViewModel.BindModel(playerInfoModel);
-            //clickUpgradesViewModel.BindModel(clickUpgradesModel);
+
+            var clickUpgradesModel = shopState.ShopModels.FirstOrDefault(x => x.Key == ShopIds.CLICK_UPGRADES).Value;
+            clickUpgradesViewModel.BindModel(clickUpgradesModel);
             clickUpgradesView.BindViewModel(clickUpgradesViewModel);
 
-            //passiveUpgradesViewModel.BindModel(passiveUpgradesModel);
+            var passiveUpgradesModel = shopState.ShopModels.FirstOrDefault(x => x.Key == ShopIds.PASSIVE_UPGRADES).Value;
+            passiveUpgradesViewModel.BindModel(passiveUpgradesModel);
             passiveUpgradesView.BindViewModel(passiveUpgradesViewModel);
 
-            //prestigeUpgradesViewModel.BindModel(prestigeUpgradesModel);
+            var prestigeUpgradesModel = shopState.ShopModels.FirstOrDefault(x => x.Key == ShopIds.PRESTIGE_UPGRADES).Value;
+            prestigeUpgradesViewModel.BindModel(prestigeUpgradesModel);
             prestigeUpgradesView.BindViewModel(prestigeUpgradesViewModel);
 
             playerInfoView.BindFormatter(new());

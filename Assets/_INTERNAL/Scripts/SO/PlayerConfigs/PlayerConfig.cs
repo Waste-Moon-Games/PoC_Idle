@@ -15,5 +15,7 @@ namespace SO.PlayerConfigs
         [field: SerializeField] public float BonusClickMultiplier { get; private set; }
         [field: SerializeField] public float DecreaseBonusGaugeDelay { get; private set; }
         [field: SerializeField] public float DecreaseActiveBonusGaugeDelay { get; private set; }
+
+        [field: SerializeField] public bool IsDebug { get; private set; }
 	}
 }

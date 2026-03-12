@@ -18,6 +18,8 @@ namespace Core.SaveSystem.Web
 
         private void ParseCurrentData()
         {
+            YG2.onGetSDKData -= OnSdkDataLoaded;
+
             if (string.IsNullOrEmpty(YG2.saves.JsonData))
             {
                 _dataCache.Clear();
