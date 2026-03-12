@@ -7,16 +7,8 @@ namespace SO.ShopConfigs
     [CreateAssetMenu(fileName = "ShopItemsConfig", menuName = "Configs/Shop/ShopItemsConfig")]
     public class ShopItemsConfig : ScriptableObject
     {
-        [SerializeField] private ShopRatesConfig _ratesConfig;
-
         [field: SerializeField] public string ShopID { get; private set; }
-        [field: SerializeField] public List<ItemModelConfig> Items { get; private set; }
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            _ratesConfig.SyncWith(Items, ShopID);
-        }
-#endif
+        [field: SerializeField] public bool OpenedByDefault { get; private set; }
+        [field: SerializeField] public List<ItemModelConfig> Items { get; private set; } = new();
     }
 }
