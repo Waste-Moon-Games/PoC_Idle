@@ -1,4 +1,4 @@
-﻿using Core.GlobalGameState.Services;
+using Core.GlobalGameState.Services;
 using Core.SaveSystemBase;
 using Core.SaveSystemBase.Data;
 using Core.Shop.Base;
@@ -23,46 +23,26 @@ namespace Core.GlobalGameState
         {
             _playerUpgradeService = playerUpgradeService;
 
-            ShopConfigsDatabase configsDatabase = Resources.Load<ShopConfigsDatabase>("Configs/Shop/ShopConfigsDatabase");
+            var configsDatabase = Resources.Load<ShopConfigsDatabase>("Configs/Shop/Shops/ShopConfigsDatabase");
+            if (configsDatabase == null)
+            {
+                Debug.LogError("ShopConfigsDatabase not found in Resources/Configs/Shop/Shops.");
+                return;
+            }
 
-            CreateShopModels(playerUpgradeService, configsDatabase);
+            CreateShopModels(configsDatabase);
         }
 
-        private void CreateShopModels(PlayerUpgradeService playerUpgradeService, ShopConfigsDatabase configsDatabase)
+        private void CreateShopModels(ShopConfigsDatabase configsDatabase)
         {
-            ShopModel clickShopModel = new(
-                playerUpgradeService.SuccessfulPurchase,
-                playerUpgradeService.FailedPurchase,
-                ShopIds.CLICK_UPGRADES,
-                true,
-                configsDatabase.GetItemsConfigByID(ShopIds.CLICK_UPGRADES),
-                configsDatabase.GetRatesConfigByID(ShopIds.CLICK_UPGRADES));
-
-            _shopsDict[clickShopModel.ShopId] = clickShopModel;
-
-            ShopModel passiveShopModel = new(
-                playerUpgradeService.SuccessfulPurchase,
-                playerUpgradeService.FailedPurchase,
-                ShopIds.PASSIVE_UPGRADES,
-                false,
-                configsDatabase.GetItemsConfigByID(ShopIds.PASSIVE_UPGRADES),
-                configsDatabase.GetRatesConfigByID(ShopIds.PASSIVE_UPGRADES));
-
-            _shopsDict[passiveShopModel.ShopId] = passiveShopModel;
-
-            ShopModel prestigeShopModel = new(
-                playerUpgradeService.SuccessfulPurchase,
-                playerUpgradeService.FailedPurchase,
-                ShopIds.PRESTIGE_UPGRADES,
-                false,
-                configsDatabase.GetItemsConfigByID(ShopIds.PRESTIGE_UPGRADES),
-                configsDatabase.GetRatesConfigByID(ShopIds.PRESTIGE_UPGRADES));
-
-            _shopsDict[prestigeShopModel.ShopId] = prestigeShopModel;
-
-            foreach (var shop in _shopsDict.Values)
+            foreach (var shopConfig in configsDatabase.ItemsConfigs)
             {
-                shop.PurchaseSignal.Subscribe(s => HandleBuyItem(s.Item1, s.Item2)).AddTo(_disposables);
+                if (shopConfig == null || string.IsNullOrWhiteSpace(shopConfig.ShopID))
+                    continue;
+
+                var shopModel = new ShopModel(_playerUpgradeService.SuccessfulPurchase, _playerUpgradeService.FailedPurchase, shopConfig);
+                _shopsDict[shopModel.ShopId] = shopModel;
+                shopModel.PurchaseSignal.Subscribe(s => HandleBuyItem(s.Item1, s.Item2)).AddTo(_disposables);
             }
         }
 
@@ -71,59 +51,46 @@ namespace Core.GlobalGameState
             return _shopsDict.Select(shop => new ShopStateData
             {
                 ShopID = shop.Key,
-                Items = shop.Value.ItemsDict.ToDictionary(
-                    item => item.Key,
-                    item => item.Value.Capture())
+                IsOpened = shop.Value.IsOpened,
+                Items = shop.Value.ItemsDict.Values
+                    .OrderBy(item => item.Id)
+                    .Select(item => item.Capture())
+                    .ToList()
             }).ToList();
         }
 
         public void Restore(List<ShopStateData> datas)
         {
-            var configsDatabase = Resources.Load<ShopConfigsDatabase>("Configs/Shop/ShopConfigsDatabase");
-
-            foreach (var shopData in datas)
+            if (datas == null || datas.Count == 0)
             {
-                var shopConfig = configsDatabase.GetItemsConfigByID(shopData.ShopID);
+                foreach (var shop in _shopsDict.Values)
+                    shop.InitializeItemsFromConfig();
+                return;
+            }
 
-                if (shopConfig == null)
+            var saveById = datas.ToDictionary(d => d.ShopID, d => d);
+
+            foreach (var shop in _shopsDict.Values)
+            {
+                if (!saveById.TryGetValue(shop.ShopId, out var savedShop))
                 {
-                    Debug.LogWarning($"Config not found for shop {shopData.ShopID}");
+                    shop.InitializeItemsFromConfig();
                     continue;
                 }
 
-                var loadedItems = new List<ItemModel>();
+                var itemsById = (savedShop.Items ?? new List<ItemUpgradeData>())
+                    .Where(item => item != null)
+                    .ToDictionary(item => item.ID, item => item);
 
-                foreach (var configItem in shopConfig.Items)
-                {
-                    if (!shopData.Items.TryGetValue(configItem.ID, out var savedItem))
-                    {
-                        savedItem = new ItemUpgradeData
-                        {
-                            ID = configItem.ID,
-                            Level = 0,
-                            IsOpened = configItem.IsOpened
-                        };
-                    }
-
-                    loadedItems.Add(new ItemModel(configItem, savedItem));
-                }
-
-                _shopsDict[shopData.ShopID].InitializeItems(true, loadedItems);
+                shop.InitializeItemsFromSave(itemsById);
             }
         }
 
-        public void InitSubscribes()
-        {
-            foreach (var model in _shopsDict.Values)
-                foreach (var item in model.ItemsDict.Values)
-                    item.Purchased.Subscribe().AddTo(_disposables);
-        }
-
-        public void Dispose() => _disposables.Clear();
+        public void Dispose() => _disposables.Dispose();
 
         private void HandleBuyItem(ItemModel item, string shopID)
         {
-            _playerUpgradeService.TryUpgradePlayer(item.Price, item.UpgradeAmount, item.Id, item.Type, shopID);
+            _playerUpgradeService.TryUpgradePlayer(item.Price, item.UpgradeAmount, item.Id, item.Type, item.CurrencyType, shopID);
         }
     }
 }

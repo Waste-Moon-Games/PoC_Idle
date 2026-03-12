@@ -158,6 +158,7 @@ namespace Core.GlobalGameState
             SavePlayerState();
             _playerEconomyService?.Dispose();
             _playerRewardsByLevelService?.Dispose();
+            _shopState?.Dispose();
         }
     }
 }

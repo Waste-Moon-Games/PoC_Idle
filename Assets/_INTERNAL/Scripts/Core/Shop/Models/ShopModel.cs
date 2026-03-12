@@ -1,4 +1,5 @@
 using Common.MVVM;
+using Core.SaveSystemBase.Data;
 using Core.Shop.Base;
 using R3;
 using SO.ShopConfigs;
@@ -11,21 +12,21 @@ namespace Core.Shop.Models
     public class ShopModel : IModel
     {
         private readonly string _sId;
-
         private readonly CompositeDisposable _disposables = new();
+        private CompositeDisposable _itemsDisposables = new();
 
         private readonly Subject<Dictionary<int, ItemModel>> _requestAvailableItemsSignal = new();
         private readonly Subject<bool> _stateChangedSignal = new();
-        private readonly BehaviorSubject<List<ItemModel>> _itemsInitializedSignal;
+        private readonly BehaviorSubject<List<ItemModel>> _itemsInitializedSignal = new(new List<ItemModel>());
         private readonly Subject<(ItemModel, string)> _purchaseSignal = new();
 
         private readonly Dictionary<int, ItemModel> _itemsDict = new();
         private readonly ShopItemsConfig _itemsConfig;
-        private readonly ShopRatesConfig _ratesConfig;
 
         private bool _state;
 
         public string ShopId => _sId;
+        public bool IsOpened => _state;
         public IReadOnlyDictionary<int, ItemModel> ItemsDict => _itemsDict;
 
         public Observable<List<ItemModel>> ItemsInitialized => _itemsInitializedSignal.AsObservable();
@@ -33,125 +34,127 @@ namespace Core.Shop.Models
         public Observable<bool> StateChange => _stateChangedSignal.AsObservable();
         public Observable<(ItemModel, string)> PurchaseSignal => _purchaseSignal.AsObservable();
 
-        public ShopModel(Observable<(int, string)> successfulPurchase, Observable<int> failedPurchase, string sId, bool state, ShopItemsConfig itemsConfig, ShopRatesConfig ratesConfig)
+        public ShopModel(Observable<(int, string)> successfulPurchase, Observable<(int, string)> failedPurchase, ShopItemsConfig itemsConfig)
         {
-            _sId = sId;
-
+            _sId = itemsConfig.ShopID;
             _itemsConfig = itemsConfig;
-            _ratesConfig = ratesConfig;
+            _state = itemsConfig.OpenedByDefault;
 
             successfulPurchase
                 .Where(info => info.Item2 == _sId)
                 .Subscribe(info => HandleSuccessfulPurchase(info.Item1))
                 .AddTo(_disposables);
-            failedPurchase.Subscribe(HandleFailedPurchased).AddTo(_disposables);
 
-            _state = state;
+            failedPurchase
+                .Where(info => info.Item2 == _sId)
+                .Subscribe(HandleFailedPurchased)
+                .AddTo(_disposables);
 
-            var defaultItemsState = new List<ItemModel>();
-            for (int i = 0; i < _itemsConfig.Items.Count; i++)
-            {
-                var item = _itemsConfig.Items[i];
-                defaultItemsState.Add(new(item));
-            }
-
-            _itemsInitializedSignal = new(defaultItemsState);
+            InitializeItemsFromConfig();
         }
 
-        public void InitializeItems(bool saveState, List<ItemModel> items)
+        public void InitializeItemsFromConfig()
         {
-            if (saveState)
+            _itemsDisposables.Dispose();
+            _itemsDisposables = new CompositeDisposable();
+            _itemsDict.Clear();
+
+            foreach (var itemConfig in _itemsConfig.Items)
             {
-                for(int i = 0; i < items.Count; i++)
-                {
-                    var item = items[i];
-                    _itemsDict[item.Id] = item;
-                }
-            }
-            else
-            {
-                for (int i = 0; i < _itemsConfig.Items.Count; i++)
-                {
-                    var itemConfig = _itemsConfig.Items[i];
-                    var itemModel = new ItemModel(itemConfig);
-                    _itemsDict[itemModel.Id] = itemModel;
-                }
+                if (itemConfig == null)
+                    continue;
+
+                var model = new ItemModel(itemConfig);
+                _itemsDict[model.Id] = model;
             }
 
-            _itemsInitializedSignal.OnNext(_itemsDict.Values.ToList());
+            SubscribeOnItems();
+            _itemsInitializedSignal.OnNext(_itemsDict.Values.OrderBy(i => i.Id).ToList());
         }
 
-        public void SubscribeOnItems()
+        public void InitializeItemsFromSave(Dictionary<int, ItemUpgradeData> savedItems)
         {
-            foreach (var item in _itemsDict.Values)
-                item.Purchased.Subscribe(HandleBuyItem).AddTo(_disposables);
+            _itemsDisposables.Dispose();
+            _itemsDisposables = new CompositeDisposable();
+            _itemsDict.Clear();
+
+            foreach (var itemConfig in _itemsConfig.Items)
+            {
+                if (itemConfig == null)
+                    continue;
+
+                savedItems.TryGetValue(itemConfig.ID, out var savedItem);
+                var model = savedItem != null ? new ItemModel(itemConfig, savedItem) : new ItemModel(itemConfig);
+                _itemsDict[model.Id] = model;
+            }
+
+            SubscribeOnItems();
+            _itemsInitializedSignal.OnNext(_itemsDict.Values.OrderBy(i => i.Id).ToList());
         }
 
         public void RequestState() => _stateChangedSignal.OnNext(_state);
 
-        /// <summary>
-        /// Открыть магазин
-        /// </summary>
         public void Open()
         {
             _state = true;
             _stateChangedSignal.OnNext(_state);
         }
 
-        /// <summary>
-        /// Закрыть магазин
-        /// </summary>
         public void Close()
         {
             _state = false;
             _stateChangedSignal.OnNext(_state);
         }
 
-        public void Dispose() => _disposables.Dispose();
+        public void Dispose()
+        {
+            _itemsDisposables.Dispose();
+            _disposables.Dispose();
+        }
 
         public void RequestItems() => _requestAvailableItemsSignal.OnNext(_itemsDict);
 
-        private void TryOpenNextItem(int itemId)
+        private void SubscribeOnItems()
         {
-            OpenNextItemById(itemId, _itemsDict);
+            foreach (var item in _itemsDict.Values)
+                item.Purchased.Subscribe(HandleBuyItem).AddTo(_itemsDisposables);
         }
 
-        private void OpenNextItemById(int itemId, Dictionary<int, ItemModel> items)
+        private void TryOpenNextItem(int itemId)
         {
-            if (!items.TryGetValue(itemId, out var prevItem)) return;
-            if (!items.TryGetValue(itemId + 1, out var item)) return;
+            if (!_itemsDict.TryGetValue(itemId, out var prevItem))
+                return;
 
-            if (item.IsOpened) return;
+            if (!_itemsDict.TryGetValue(itemId + 1, out var nextItem))
+                return;
 
-            if (prevItem.Level % 5 == 0 && prevItem.IsOpened)
-                item.ChangeStatus(true);
+            if (nextItem.IsOpened)
+                return;
+
+            if (prevItem.Level > 0 && prevItem.Level % 5 == 0)
+                nextItem.ChangeStatus(true);
         }
 
         private void HandleBuyItem(ItemModel item)
         {
             _purchaseSignal.OnNext((item, ShopId));
-            Debug.Log($"Item {item.Name} purchased in {ShopId}");
         }
 
         private void HandleSuccessfulPurchase(int itemId)
         {
-            if(!_itemsDict.TryGetValue(itemId, out var item))
-            {
-                Debug.Log($"Purchased item ID {itemId} not found in shop {_sId}");
+            if (!_itemsDict.TryGetValue(itemId, out var item))
                 return;
-            }
 
-            ItemRateEntry itemRates = _ratesConfig.Rates.FirstOrDefault(ir => ir.ItemID == item.Name);
-            float priceRate = itemRates.PriceRate;
-            float upgradeAmountRate = itemRates.BonusRate;
-
-            item.IncreasePrice(priceRate);
-            item.IncreaseUpgradeAmount(upgradeAmountRate);
+            item.IncreasePrice(item.PriceRate);
+            item.IncreaseUpgradeAmount(item.BonusRate);
             item.IncreaseLevel();
 
             TryOpenNextItem(itemId);
         }
 
-        private void HandleFailedPurchased(int itemId) => Debug.Log($"Item with info {itemId} cannot was bought");
+        private void HandleFailedPurchased((int, string) failedPurchase)
+        {
+            Debug.Log($"Purchase failed in {_sId}. Item id: {failedPurchase.Item1}");
+        }
     }
 }

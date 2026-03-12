@@ -22,7 +22,6 @@ namespace UI.ShopMenu.ViewModels
         {
             _model = model as ShopModel;
 
-            _model.SubscribeOnItems();
 
             _model.RequestedAvailableItems.Subscribe(HandleRequestedItems);
             _model.StateChange.Subscribe(HandleChangedState);
@@ -40,6 +39,8 @@ namespace UI.ShopMenu.ViewModels
 
         private void HandleRequestedItems(Dictionary<int, ItemModel> itemModels)
         {
+            _items.Clear();
+
             foreach (var item in itemModels.Values)
             {
                 var itemViewModel = new ItemViewModel();

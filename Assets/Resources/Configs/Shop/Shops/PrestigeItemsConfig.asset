@@ -14,12 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: SO.ShopConfigs::SO.ShopConfigs.ShopItemsConfig
   _ratesConfig: {fileID: 11400000, guid: 3f6fa918b98152e4b867b26461c349e5, type: 2}
   <ShopID>k__BackingField: prestige_upgrades_shop
+  <OpenedByDefault>k__BackingField: 0
   <Items>k__BackingField:
-  - <ID>k__BackingField: 0
-    <Name>k__BackingField: Work In Progress
-    <Icon>k__BackingField: {fileID: -7586013100092555949, guid: dbf2fa81c92394c41b30ccbf06c7a048, type: 3}
-    <Price>k__BackingField: 100000000
-    <UpgradeAmount>k__BackingField: 0
-    <Level>k__BackingField: 0
-    <IsOpened>k__BackingField: 0
-    <Type>k__BackingField: 3
+  - {fileID: 11400000, guid: 92ff7217c684e594388ac43ce47eb392, type: 2}
