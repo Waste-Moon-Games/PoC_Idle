@@ -26,6 +26,7 @@ namespace Core.Shop.Models
         private bool _state;
 
         public string ShopId => _sId;
+        public bool IsOpened => _state;
         public IReadOnlyDictionary<int, ItemModel> ItemsDict => _itemsDict;
 
         public Observable<List<ItemModel>> ItemsInitialized => _itemsInitializedSignal.AsObservable();

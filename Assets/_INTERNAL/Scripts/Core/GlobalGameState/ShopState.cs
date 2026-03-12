@@ -51,7 +51,11 @@ namespace Core.GlobalGameState
             return _shopsDict.Select(shop => new ShopStateData
             {
                 ShopID = shop.Key,
-                Items = shop.Value.ItemsDict.ToDictionary(item => item.Key, item => item.Value.Capture())
+                IsOpened = shop.Value.IsOpened,
+                Items = shop.Value.ItemsDict.Values
+                    .OrderBy(item => item.Id)
+                    .Select(item => item.Capture())
+                    .ToList()
             }).ToList();
         }
 
@@ -74,7 +78,16 @@ namespace Core.GlobalGameState
                     continue;
                 }
 
-                shop.InitializeItemsFromSave(savedShop.Items ?? new Dictionary<int, ItemUpgradeData>());
+                if (savedShop.IsOpened)
+                    shop.Open();
+                else
+                    shop.Close();
+
+                var itemsById = (savedShop.Items ?? new List<ItemUpgradeData>())
+                    .Where(item => item != null)
+                    .ToDictionary(item => item.ID, item => item);
+
+                shop.InitializeItemsFromSave(itemsById);
             }
         }
 
