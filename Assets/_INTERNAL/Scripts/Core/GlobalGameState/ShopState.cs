@@ -23,10 +23,10 @@ namespace Core.GlobalGameState
         {
             _playerUpgradeService = playerUpgradeService;
 
-            var configsDatabase = Resources.Load<ShopConfigsDatabase>("Configs/Shop/ShopConfigsDatabase");
+            var configsDatabase = Resources.Load<ShopConfigsDatabase>("Configs/Shop/Shops/ShopConfigsDatabase");
             if (configsDatabase == null)
             {
-                Debug.LogError("ShopConfigsDatabase not found in Resources/Configs/Shop.");
+                Debug.LogError("ShopConfigsDatabase not found in Resources/Configs/Shop/Shops.");
                 return;
             }
 

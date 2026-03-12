@@ -1,4 +1,5 @@
 using Common.MVVM;
+using Core.SaveSystemBase.Data;
 using Core.Shop.Base;
 using R3;
 using SO.ShopConfigs;
@@ -70,7 +71,7 @@ namespace Core.Shop.Models
             _itemsInitializedSignal.OnNext(_itemsDict.Values.OrderBy(i => i.Id).ToList());
         }
 
-        public void InitializeItemsFromSave(Dictionary<int, Core.SaveSystemBase.Data.ItemUpgradeData> savedItems)
+        public void InitializeItemsFromSave(Dictionary<int, ItemUpgradeData> savedItems)
         {
             _itemsDisposables.Dispose();
             _itemsDisposables = new CompositeDisposable();
@@ -136,7 +137,6 @@ namespace Core.Shop.Models
         private void HandleBuyItem(ItemModel item)
         {
             _purchaseSignal.OnNext((item, ShopId));
-            Debug.Log($"Try purchase item {item.Name} in {ShopId}");
         }
 
         private void HandleSuccessfulPurchase(int itemId)
