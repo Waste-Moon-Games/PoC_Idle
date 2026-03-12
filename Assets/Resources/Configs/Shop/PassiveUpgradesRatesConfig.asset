@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b638ceb63a23846aefd1e04bffded6, type: 3}
   m_Name: PassiveUpgradesRatesConfig
   m_EditorClassIdentifier: SO.ShopConfigs::SO.ShopConfigs.ItemsTypeMultiplierConfig
+  <ShopID>k__BackingField: passive_upgrades_shop
   <Rates>k__BackingField:
   - <ItemID>k__BackingField: "\u041F\u0435\u0440\u0432\u043E\u0435 \u0443\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u0435
       \u043F\u0430\u0441\u0438\u0432\u0430"

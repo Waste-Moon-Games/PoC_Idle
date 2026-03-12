@@ -19,11 +19,13 @@
   <Project Path="SO.PlayerConfigs.csproj" />
   <Project Path="Core.Shop.Base.csproj" />
   <Project Path="Core.Consts.csproj" />
+  <Project Path="Core.SaveSystem.Factory.csproj" />
   <Project Path="Core.Shop.Models.csproj" />
   <Project Path="UI.ShopMenu.ViewModels.csproj" />
   <Project Path="UI.ShopMenu.Views.csproj" />
   <Project Path="SO.AnimationConfigs.csproj" />
   <Project Path="Entry.Global.csproj" />
+  <Project Path="SO.ShopConfigs.csproj" />
   <Project Path="Entry.Local.Gameplay.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="UniTask.Editor.csproj" />
@@ -32,6 +34,5 @@
   <Project Path="Entry.Local.Shop.csproj" />
   <Project Path="UniTask.DOTween.csproj" />
   <Project Path="UI.Common.csproj" />
-  <Project Path="SO.ShopConfigs.csproj" />
   <Project Path="Core.SaveSystem.Mobile.csproj" />
 </Solution>

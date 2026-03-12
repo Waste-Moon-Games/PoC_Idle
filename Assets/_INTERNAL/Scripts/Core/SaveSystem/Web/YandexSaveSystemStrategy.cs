@@ -1,12 +1,10 @@
 using Core.SaveSystemBase;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Scripting;
 using YG;
 
 namespace Core.SaveSystem.Web
 {
-    [Preserve]
     public class YandexSaveSystemStrategy : ISaveSystemStrategy
     {
         private Dictionary<string, string> _dataCache = new();

@@ -1,5 +1,7 @@
 ﻿using Common.MVVM;
+using Core.SaveSystemBase.Data;
 using R3;
+using System;
 using UnityEngine;
 
 namespace Core.Shop.Base
@@ -38,11 +40,52 @@ namespace Core.Shop.Base
 
         public string Name => _name;
         public int Id => _id;
-        public int Level => _level;
+        public int Level
+        {
+            get => _level;
+            private set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(_level));
+
+                _level = value;
+                _levelChangeSignal.OnNext(_level);
+            }
+        }
         public ItemType Type => _itemType;
-        public bool IsOpened => _isOpened;
-        public float Price => _price;
-        public float UpgradeAmount => _upgradeAmount;
+        public bool IsOpened
+        {
+            get => _isOpened;
+            private set
+            {
+                _isOpened = value;
+                _statusChangeSignal.OnNext(_isOpened);
+            }
+        }
+        public float Price
+        {
+            get => _price;
+            private set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(_price));
+
+                _price = value;
+                _priceChangeSignal.OnNext(_price);
+            }
+        }
+        public float UpgradeAmount
+        {
+            get => _upgradeAmount;
+            private set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(_upgradeAmount));
+
+                _upgradeAmount = value;
+                _upgradeAmountChangeSignal.OnNext(_upgradeAmount);
+            }
+        }
 
         #region Changeable Observables
         public Observable<float> PriceChanged => _priceChangeSignal.AsObservable();
@@ -66,10 +109,41 @@ namespace Core.Shop.Base
             _icon = sourceData.Icon;
             _itemType = sourceData.Type;
 
-            _isOpened = sourceData.IsOpened;
-            _price = sourceData.Price;
-            _upgradeAmount = sourceData.UpgradeAmount;
-            _level = sourceData.Level;
+            IsOpened = sourceData.IsOpened;
+            Price = sourceData.Price;
+            UpgradeAmount = sourceData.UpgradeAmount;
+            Level = sourceData.Level;
+        }
+
+        public ItemModel(ItemModelConfig sourceData, ItemUpgradeData loadedData)
+        {
+            _id = loadedData.ID;
+            _name = loadedData.Name;
+            _icon = sourceData.Icon;
+            _itemType = sourceData.Type;
+
+            IsOpened = loadedData.IsOpened;
+            Price = loadedData.Price;
+            UpgradeAmount = loadedData.UpgradeAmount;
+            Level = loadedData.Level;
+        }
+
+        public ItemUpgradeData Capture()
+        {
+            return new ItemUpgradeData()
+            {
+                ID = _id,
+                Name = _name,
+                Price = Price,
+                UpgradeAmount = UpgradeAmount,
+                IsOpened = _isOpened,
+                Level = _level,
+            };
+        }
+
+        public void Restore(ItemUpgradeData loadedData)
+        {
+
         }
 
         public void RequestBaseInfo()
@@ -82,16 +156,15 @@ namespace Core.Shop.Base
 
         public void RequestGeneralInfo()
         {
-            _statusChangeSignal.OnNext(_isOpened);
-            _priceChangeSignal.OnNext(_price);
-            _levelChangeSignal.OnNext(_level);
-            _upgradeAmountChangeSignal.OnNext(_upgradeAmount);
+            _statusChangeSignal.OnNext(IsOpened);
+            _priceChangeSignal.OnNext(Price);
+            _levelChangeSignal.OnNext(Level);
+            _upgradeAmountChangeSignal.OnNext(UpgradeAmount);
         }
 
         public void ChangeStatus(bool value)
         {
-            _isOpened = value;
-            _statusChangeSignal.OnNext(value);
+            IsOpened = value;
         }
 
         public void TryBuy()
@@ -102,14 +175,12 @@ namespace Core.Shop.Base
 
         public void IncreasePrice(float multiplier)
         {
-            _price *= multiplier;
-            _priceChangeSignal.OnNext(_price);
+            Price *= multiplier;
         }
 
         public void IncreaseLevel()
         {
-            _level++;
-            _levelChangeSignal.OnNext(_level);
+            Level++;
 #if UNITY_EDITOR
             Debug.Log($"[INCREASE] {Name} (ID:{Id}, Inst:{InstanceId}) → Level = {Level}");
 #endif
@@ -117,9 +188,7 @@ namespace Core.Shop.Base
 
         public void IncreaseUpgradeAmount(float multiplier)
         {
-            _upgradeAmount *= multiplier;
-
-            _upgradeAmountChangeSignal.OnNext(_upgradeAmount);
+            UpgradeAmount *= multiplier;
         }
     }
 }

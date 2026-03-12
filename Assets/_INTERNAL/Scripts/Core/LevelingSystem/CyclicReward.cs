@@ -13,6 +13,7 @@ namespace Core.LevelingSystem
 
     public class CyclicRewardRuntime : BaseReward
     {
+        public string RewardID => base.ID;
         public int RewardRequiredLevel => base.RequiredLevel;
         public float RewardAmount => base.Amount;
         public RewardType RewardType => base.Type;

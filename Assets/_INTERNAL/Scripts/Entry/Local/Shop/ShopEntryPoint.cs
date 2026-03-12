@@ -51,9 +51,6 @@ namespace Entry.Local.Shop
             navigationButtonsModel = new();
 
             CreateModels(container,
-                out ShopModel clickUpgradesModel,
-                out ShopModel passiveUpgradesModel,
-                out ShopModel prestigeUpgradesModel,
                 out EconomyPlayerInfoModel playerInfoModel);
             CreateViewModels(
                 out NavigationButtonsViewModel navigationViewModel,
@@ -70,13 +67,13 @@ namespace Entry.Local.Shop
             _shopMenuModel = new(_shopModels, navigationButtonsModel.Actions);
 
             playerInfoViewModel.BindModel(playerInfoModel);
-            clickUpgradesViewModel.BindModel(clickUpgradesModel);
+            //clickUpgradesViewModel.BindModel(clickUpgradesModel);
             clickUpgradesView.BindViewModel(clickUpgradesViewModel);
 
-            passiveUpgradesViewModel.BindModel(passiveUpgradesModel);
+            //passiveUpgradesViewModel.BindModel(passiveUpgradesModel);
             passiveUpgradesView.BindViewModel(passiveUpgradesViewModel);
 
-            prestigeUpgradesViewModel.BindModel(prestigeUpgradesModel);
+            //prestigeUpgradesViewModel.BindModel(prestigeUpgradesModel);
             prestigeUpgradesView.BindViewModel(prestigeUpgradesViewModel);
 
             playerInfoView.BindFormatter(new());
@@ -87,29 +84,12 @@ namespace Entry.Local.Shop
         }
 
         private void CreateModels(in DIContainer container,
-            out ShopModel clickUpgradesModel,
-            out ShopModel passiveUpgradesModel,
-            out ShopModel prestigeUpgradesModel,
             out EconomyPlayerInfoModel playerInfoModel)
         {
             var playerState = container.Resolve<GameWorldState>().PlayerState;
             var shopState = playerState.ShopState;
             shopState.Dispose();
             shopState.InitSubscribes();
-
-            clickUpgradesModel = new(
-                playerState.UpgradeService, shopState, ShopIds.CLICK_UPGRADES,
-                _shopConfigPaths[0], _shopRateConfigPaths[0], true);
-            passiveUpgradesModel = new(
-                playerState.UpgradeService, shopState, ShopIds.PASSIVE_UPGRADES,
-                _shopConfigPaths[1], _shopRateConfigPaths[1], false);
-            prestigeUpgradesModel = new(
-                playerState.UpgradeService, shopState, ShopIds.PRESTIGE_UPGRADES,
-                _shopConfigPaths[2], _shopRateConfigPaths[2], false);
-
-            _shopModels.Add(clickUpgradesModel);
-            _shopModels.Add(passiveUpgradesModel);
-            _shopModels.Add(prestigeUpgradesModel);
 
             playerInfoModel = new();
 

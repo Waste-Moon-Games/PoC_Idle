@@ -32,7 +32,6 @@ namespace Core.GlobalGameState
         public PlayerState(SaveSystemContext saveSystemContext)
         {
             _saveSystemContext = saveSystemContext;
-            _shopState = new();
 
             var economyConfig = Resources.Load<MainEconomyConfig>("Configs/Economy/MainEconomyConfig");
             var playerConfig = Resources.Load<PlayerConfig>("Configs/Player/PlayerConfig");
@@ -54,6 +53,8 @@ namespace Core.GlobalGameState
             _playerEconomyService = new(economyConfig, _playerBonusesService.BonusStateChanged, playerConfig.BonusClickMultiplier);
             _playerUpgradeService = new(_playerEconomyService);
             _playerRewardsByLevelService = new(rewardsByLevelConfig, cyclicRewardsConfig, _playerBonusesService.LevelChanged, _playerEconomyService);
+            
+            _shopState = new(_playerUpgradeService);
         }
 
         public void StartAsyncTasks()
@@ -74,6 +75,9 @@ namespace Core.GlobalGameState
             _playerEconomyService = new(economyConfig, _playerBonusesService.BonusStateChanged, playerConfig.BonusClickMultiplier, loadedData);
             _playerUpgradeService = new(_playerEconomyService);
             _playerRewardsByLevelService = new(rewardsByLevelConfig, cyclicRewardsConfig, _playerBonusesService.LevelChanged, _playerEconomyService);
+            _shopState = new(_playerUpgradeService);
+
+            _shopState.Restore(loadedData.ShopsData);
         }
 
         private void SavePlayerState()
@@ -94,10 +98,11 @@ namespace Core.GlobalGameState
                 GainedExpPerClick = _playerBonusesService.GainedExpPerClick,
                 ExpToLevelUp = _playerBonusesService.ExpToLevelUp,
 
-                PurchasedUpgradesByShops = CreateShopsData(),
+                ShopsData = CreateShopsData(),
                 ReceivedRewards = CreateRewardsData(),
                 CyclicRewards = CreateCyclicRewardsData()
             };
+
             _saveSystemContext.Save(playerData, _playerSaveDataKey);
         }
 
@@ -136,66 +141,7 @@ namespace Core.GlobalGameState
             return cyclicRewardsData;
         }
 
-        private Dictionary<string, Dictionary<string, ItemUpgradeData>> CreateShopsData()
-        {
-            Dictionary<string, Dictionary<string, ItemUpgradeData>> purchasedUpgradesByShops = new();
-
-            Dictionary<string, ItemUpgradeData> purchasedClickUpgrades = new();
-            Dictionary<string, ItemUpgradeData> purchasedPassiveUpgrades = new();
-            Dictionary<string, ItemUpgradeData> purchasedPrestigeUpgrades = new();
-
-            var clickUpgrades = _shopState.GetPurchasedItems(ShopIds.CLICK_UPGRADES);
-            var passiveUpgrades = _shopState.GetPurchasedItems(ShopIds.PASSIVE_UPGRADES);
-            var prestigeUpgrade = _shopState.GetPurchasedItems(ShopIds.PRESTIGE_UPGRADES);
-
-            foreach (var item in clickUpgrades.Values)
-            {
-                ItemUpgradeData upgradeData = new()
-                {
-                    Name = item.Name,
-                    Id = item.Id,
-                    Level = item.Level,
-                    IsOpened = item.IsOpened,
-                    Price = item.Price,
-                    UpgradeAmount = item.UpgradeAmount
-                };
-                purchasedClickUpgrades.Add(upgradeData.Name, upgradeData);
-            }
-
-            foreach (var item in passiveUpgrades.Values)
-            {
-                ItemUpgradeData upgradeData = new()
-                {
-                    Name = item.Name,
-                    Id = item.Id,
-                    Level = item.Level,
-                    IsOpened = item.IsOpened,
-                    Price = item.Price,
-                    UpgradeAmount = item.UpgradeAmount
-                };
-                purchasedPassiveUpgrades.Add(upgradeData.Name, upgradeData);
-            }
-
-            foreach (var item in prestigeUpgrade.Values)
-            {
-                ItemUpgradeData upgradeData = new()
-                {
-                    Name = item.Name,
-                    Id = item.Id,
-                    Level = item.Level,
-                    IsOpened = item.IsOpened,
-                    Price = item.Price,
-                    UpgradeAmount = item.UpgradeAmount
-                };
-                purchasedPrestigeUpgrades.Add(upgradeData.Name, upgradeData);
-            }
-
-            purchasedUpgradesByShops[ShopIds.CLICK_UPGRADES] = purchasedClickUpgrades;
-            purchasedUpgradesByShops[ShopIds.PASSIVE_UPGRADES] = purchasedPassiveUpgrades;
-            purchasedUpgradesByShops[ShopIds.PRESTIGE_UPGRADES] = purchasedPrestigeUpgrades;
-
-            return purchasedUpgradesByShops;
-        }
+        private List<ShopStateData> CreateShopsData() => _shopState.Capture();
 
         public void StopAsyncTasks()
         {

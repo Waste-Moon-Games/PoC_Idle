@@ -7,10 +7,13 @@ namespace SO.ShopConfigs
     [CreateAssetMenu(fileName = "ShopRatesConfig", menuName = "Configs/Shop/ShopRatesConfig")]
     public class ShopRatesConfig : ScriptableObject
     {
+        [field: SerializeField] public string ShopID { get; private set; }
         [field: SerializeField] public List<ItemRateEntry> Rates { get; private set; } = new();
 
-        public void SyncWith(List<ItemModelConfig> itemsConfig)
+        public void SyncWith(List<ItemModelConfig> itemsConfig, string shopID)
         {
+            ShopID = shopID;
+
             foreach (var item in itemsConfig)
             {
                 if (Rates.Exists(r => r.ItemID == item.Name))

@@ -4,7 +4,7 @@
     public class ItemUpgradeData
     {
         public string Name;
-        public int Id;
+        public int ID;
         public int Level;
         public bool IsOpened;
         public float Price;

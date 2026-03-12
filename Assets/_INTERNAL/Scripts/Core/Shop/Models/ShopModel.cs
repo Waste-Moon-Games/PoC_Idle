@@ -1,6 +1,4 @@
 using Common.MVVM;
-using Core.GlobalGameState;
-using Core.GlobalGameState.Services;
 using Core.Shop.Base;
 using R3;
 using SO.ShopConfigs;
@@ -18,44 +16,65 @@ namespace Core.Shop.Models
 
         private readonly Subject<Dictionary<int, ItemModel>> _requestAvailableItemsSignal = new();
         private readonly Subject<bool> _stateChangedSignal = new();
+        private readonly BehaviorSubject<List<ItemModel>> _itemsInitializedSignal;
 
         private readonly Dictionary<int, ItemModel> _itemsDict = new();
         private readonly ShopItemsConfig _itemsConfig;
         private readonly ShopRatesConfig _ratesConfig;
-        private readonly PlayerUpgradeService _model;
-        private readonly ShopState _shopState;
 
         private bool _state;
 
         public string ShopId => _sId;
+        public IReadOnlyDictionary<int, ItemModel> ItemsDict => _itemsDict;
 
+        public Observable<List<ItemModel>> ItemsInitialized => _itemsInitializedSignal.AsObservable();
         public Observable<Dictionary<int, ItemModel>> RequestedAvailableItems => _requestAvailableItemsSignal.AsObservable();
         public Observable<bool> StateChange => _stateChangedSignal.AsObservable();
 
-        public ShopModel(PlayerUpgradeService model, ShopState shopState, string sId, string configPath, string multiplierConfigPath, bool state)
+        public ShopModel(Observable<(int, string)> successfulPurchase, Observable<int> failedPurchase, string sId, bool state, ShopItemsConfig itemsConfig, ShopRatesConfig ratesConfig)
         {
             _sId = sId;
 
-            _itemsConfig = Resources.Load<ShopItemsConfig>(configPath);
-            _ratesConfig = Resources.Load<ShopRatesConfig>(multiplierConfigPath);
-            _model = model;
-            _shopState = shopState;
+            _itemsConfig = itemsConfig;
+            _ratesConfig = ratesConfig;
 
-            _model.SuccessfulPurchase
+            successfulPurchase
                 .Where(info => info.Item2 == _sId)
                 .Subscribe(info => HandleSuccessfulPurchase(info.Item1))
                 .AddTo(_disposables);
-            _model.FailedPurchase.Subscribe(HandleFailedPurchased).AddTo(_disposables);
+            failedPurchase.Subscribe(HandleFailedPurchased).AddTo(_disposables);
 
             _state = state;
-        }
-        
-        public void InitializeItems()
-        {
-            InitItemsById(_shopState.HasPurchased(_sId), _shopState.GetPurchasedItems(_sId));
 
-            List<ItemModel> items = _itemsDict.Values.ToList();
-            _shopState.InitAvailableItems(items, _sId);
+            var defaultItemsState = new List<ItemModel>();
+            for (int i = 0; i < _itemsConfig.Items.Count; i++)
+            {
+                var item = _itemsConfig.Items[i];
+                defaultItemsState.Add(new(item));
+            }
+
+            _itemsInitializedSignal = new(defaultItemsState);
+        }
+
+        public void InitializeItems(bool saveState, List<ItemModel> items)
+        {
+            if (saveState)
+            {
+                for(int i = 0; i < items.Count; i++)
+                {
+                    var item = items[i];
+                    _itemsDict[item.Id] = item;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _itemsConfig.Items.Count; i++)
+                {
+                    var itemConfig = _itemsConfig.Items[i];
+                    var itemModel = new ItemModel(itemConfig);
+                    _itemsDict[itemModel.Id] = itemModel;
+                }
+            }
         }
 
         public void SubscribeOnItems()
@@ -88,24 +107,26 @@ namespace Core.Shop.Models
 
         public void RequestItems() => _requestAvailableItemsSignal.OnNext(_itemsDict);
 
-        private void InitItemsById(bool shopItemsState, IReadOnlyDictionary<int, ItemModel> itemsDict)
+        private void TryOpenNextItem(int itemId)
         {
-            if (shopItemsState)
-            {
-                foreach (var kpv in itemsDict)
-                    _itemsDict[kpv.Key] = kpv.Value;
-            }
-            else
-            {
-                foreach (var itemConfig in _itemsConfig.Items)
-                {
-                    var itemModel = new ItemModel(itemConfig);
-                    _itemsDict[itemModel.Id] = itemModel;
-                }
-            }
+            OpenNextItemById(itemId, _itemsDict);
         }
 
-        private void HandleBuyItem(ItemModel item) => _model.TryUpgradePlayer(item.Price, item.UpgradeAmount, item.Id, item.Type, _sId);
+        private void OpenNextItemById(int itemId, Dictionary<int, ItemModel> items)
+        {
+            if (!items.TryGetValue(itemId, out var prevItem)) return;
+            if (!items.TryGetValue(itemId + 1, out var item)) return;
+
+            if (item.IsOpened) return;
+
+            if (prevItem.Level % 5 == 0 && prevItem.IsOpened)
+                item.ChangeStatus(true);
+        }
+
+        private void HandleBuyItem(ItemModel item)
+        {
+            //_model.TryUpgradePlayer(item.Price, item.UpgradeAmount, item.Id, item.Type, _sId);
+        }
 
         private void HandleSuccessfulPurchase(int itemId)
         {
@@ -123,10 +144,7 @@ namespace Core.Shop.Models
             item.IncreaseUpgradeAmount(upgradeAmountRate);
             item.IncreaseLevel();
 
-            _shopState.AddPurchasedItemById(item, _sId);
-            _shopState.MarkAsPurchased(_sId);
-
-            _shopState.TryOpenNextItem(itemId, _sId);
+            TryOpenNextItem(itemId);
         }
 
         private void HandleFailedPurchased(int itemId) => Debug.Log($"Item with info {itemId} cannot was bought");

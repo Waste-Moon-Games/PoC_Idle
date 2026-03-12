@@ -9,12 +9,13 @@ namespace SO.ShopConfigs
     {
         [SerializeField] private ShopRatesConfig _ratesConfig;
 
+        [field: SerializeField] public string ShopID { get; private set; }
         [field: SerializeField] public List<ItemModelConfig> Items { get; private set; }
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            _ratesConfig.SyncWith(Items);
+            _ratesConfig.SyncWith(Items, ShopID);
         }
 #endif
     }

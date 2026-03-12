@@ -1,10 +1,8 @@
 using Core.SaveSystemBase;
 using UnityEngine;
-using UnityEngine.Scripting;
 
 namespace Core.SaveSystem.Mobile
 {
-    [Preserve]
     public class MobileSaveSystemStrategy : ISaveSystemStrategy
     {
         public void Save<T>(T data, string key)

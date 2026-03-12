@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ClickItemsConfig
   m_EditorClassIdentifier: SO.ShopConfigs::SO.ShopConfigs.ShopItemsConfig
   _ratesConfig: {fileID: 11400000, guid: 30971e41a184d1b4ab265e2a6a578ce9, type: 2}
+  <ShopID>k__BackingField: click_upgrades_shop
   <Items>k__BackingField:
   - <ID>k__BackingField: 0
     <Name>k__BackingField: "\u041A\u043B\u0438\u043A"

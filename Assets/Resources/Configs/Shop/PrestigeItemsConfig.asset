@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: PrestigeItemsConfig
   m_EditorClassIdentifier: SO.ShopConfigs::SO.ShopConfigs.ShopItemsConfig
   _ratesConfig: {fileID: 11400000, guid: 3f6fa918b98152e4b867b26461c349e5, type: 2}
+  <ShopID>k__BackingField: prestige_upgrades_shop
   <Items>k__BackingField:
   - <ID>k__BackingField: 0
     <Name>k__BackingField: Work In Progress

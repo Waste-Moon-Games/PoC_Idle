@@ -1,60 +1,90 @@
-﻿using Core.Shop.Base;
+﻿using Core.GlobalGameState.Services;
+using Core.SaveSystemBase;
+using Core.SaveSystemBase.Data;
+using Core.Shop.Base;
+using Core.Shop.Models;
 using R3;
+using SO.ShopConfigs;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Core.GlobalGameState
 {
-    public class ShopState
+    public class ShopState : ISaveabale<List<ShopStateData>>
     {
         private readonly CompositeDisposable _disposables = new();
-        private readonly Dictionary<string, Dictionary<int, ItemModel>> _purchasedItemsByShop = new();
+        private readonly Dictionary<string, ShopModel> _shopsDict = new();
 
         private readonly HashSet<string> _hasPurchasedByShop = new();
 
-        public void InitAvailableItems(List<ItemModel> items, string shopId)
+        public IReadOnlyDictionary<string, ShopModel> ShopModels => _shopsDict;
+
+        public ShopState(PlayerUpgradeService playerUpgradeService)
         {
-            if (!_purchasedItemsByShop.ContainsKey(shopId))
-                _purchasedItemsByShop[shopId] = new Dictionary<int, ItemModel>();
+            ShopConfigsDatabase configsDatabase = Resources.Load<ShopConfigsDatabase>("Configs/Shop/ShopConfigsDatabase");
 
-            var targetDict = _purchasedItemsByShop[shopId];
-
-            InitAvailableItemsById(items, targetDict);
+            CreateShopModels(playerUpgradeService, configsDatabase);
         }
 
-        public Dictionary<int, ItemModel> GetPurchasedItems(string shopId)
+        private void CreateShopModels(PlayerUpgradeService playerUpgradeService, ShopConfigsDatabase configsDatabase)
         {
-            return _purchasedItemsByShop.TryGetValue(shopId, out var dict) ? dict : new();
+            ShopModel clickShopModel = new(
+                playerUpgradeService.SuccessfulPurchase,
+                playerUpgradeService.FailedPurchase,
+                ShopIds.CLICK_UPGRADES,
+                true,
+                configsDatabase.GetItemsConfigByID(ShopIds.CLICK_UPGRADES),
+                configsDatabase.GetRatesConfigByID(ShopIds.CLICK_UPGRADES));
+
+            _shopsDict[clickShopModel.ShopId] = clickShopModel;
+
+            ShopModel passiveShopModel = new(
+                playerUpgradeService.SuccessfulPurchase,
+                playerUpgradeService.FailedPurchase,
+                ShopIds.PASSIVE_UPGRADES,
+                false,
+                configsDatabase.GetItemsConfigByID(ShopIds.PASSIVE_UPGRADES),
+                configsDatabase.GetRatesConfigByID(ShopIds.PASSIVE_UPGRADES));
+
+            _shopsDict[passiveShopModel.ShopId] = passiveShopModel;
+
+            ShopModel prestigeShopModel = new(
+                playerUpgradeService.SuccessfulPurchase,
+                playerUpgradeService.FailedPurchase,
+                ShopIds.PRESTIGE_UPGRADES,
+                false,
+                configsDatabase.GetItemsConfigByID(ShopIds.PRESTIGE_UPGRADES),
+                configsDatabase.GetRatesConfigByID(ShopIds.PRESTIGE_UPGRADES));
+
+            _shopsDict[prestigeShopModel.ShopId] = prestigeShopModel;
         }
 
-        public bool HasPurchased(string shopId) => _hasPurchasedByShop.Contains(shopId);
-        public void MarkAsPurchased(string shopId) => _hasPurchasedByShop.Add(shopId);
+        public List<ShopStateData> Capture()
+        {
+            return _shopsDict.Select(kv => new ShopStateData()
+            {
+                ShopID = kv.Key,
+                Items = kv.Value.ItemsDict.Select(items => items.Value.Capture()).ToList()
+            }).ToList();
+        }
+
+        public void Restore(List<ShopStateData> datas)
+        {
+            for (int i = 0; i < datas.Count; i++)
+            {
+
+            }
+        }
 
         public void InitSubscribes()
         {
-            foreach (var targetDict in _purchasedItemsByShop.Values)
-                foreach (var item in targetDict.Values)
+            foreach (var model in _shopsDict.Values)
+                foreach (var item in model.ItemsDict.Values)
                     item.Purchased.Subscribe().AddTo(_disposables);
         }
 
         public void Dispose() => _disposables.Clear();
-
-        public void TryOpenNextItem(int itemId, string shopId)
-        {
-            var targetDict = _purchasedItemsByShop[shopId];
-            OpenNextItemById(itemId, targetDict);
-        }
-
-        public void AddPurchasedItemById(ItemModel item, string shopId)
-        {
-            if (!_purchasedItemsByShop.TryGetValue(shopId, out var targetDict))
-            {
-                targetDict = new();
-                _purchasedItemsByShop[shopId] = targetDict;
-            }
-
-            targetDict[item.Id] = item;
-        }
 
         private void InitAvailableItemsById(List<ItemModel> items, Dictionary<int, ItemModel> itemsDict)
         {
@@ -76,17 +106,6 @@ namespace Core.GlobalGameState
                         currentItem.ChangeStatus(true);
                 }
             }
-        }
-
-        private void OpenNextItemById(int itemId, Dictionary<int, ItemModel> items)
-        {
-            if (!items.TryGetValue(itemId, out var prevItem)) return;
-            if (!items.TryGetValue(itemId + 1, out var item)) return;
-
-            if (item.IsOpened) return;
-
-            if (prevItem.Level % 5 == 0 && prevItem.IsOpened)
-                item.ChangeStatus(true);
         }
     }
 }

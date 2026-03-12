@@ -16,9 +16,9 @@ namespace Core.SaveSystemBase.Data
         public int Level = 0;
         public int GainedExpPerClick = 1;
         public int CurrentExp = 0;
-        public int ExpToLevelUp = 0;
+        public int ExpToLevelUp = 100;
 
-        public Dictionary<string, Dictionary<string, ItemUpgradeData>> PurchasedUpgradesByShops = new();
+        public List<ShopStateData> ShopsData = new();
         public List<RewardData> ReceivedRewards = new();
         public List<RewardData> CyclicRewards = new();
     }

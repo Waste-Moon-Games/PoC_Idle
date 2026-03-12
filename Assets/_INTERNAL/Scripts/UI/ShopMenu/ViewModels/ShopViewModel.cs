@@ -22,7 +22,6 @@ namespace UI.ShopMenu.ViewModels
         {
             _model = model as ShopModel;
 
-            _model.InitializeItems();
             _model.SubscribeOnItems();
 
             _model.RequestedAvailableItems.Subscribe(HandleRequestedItems);
