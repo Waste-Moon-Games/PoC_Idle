@@ -94,10 +94,6 @@ namespace Entry.Local.Shop
             out EconomyPlayerInfoModel playerInfoModel)
         {
             var playerState = container.Resolve<GameWorldState>().PlayerState;
-            var shopState = playerState.ShopState;
-            shopState.Dispose();
-            shopState.InitSubscribes();
-
             playerInfoModel = new();
 
             var economyModel = container.Resolve<GameWorldState>().PlayerState.EconomyService;
