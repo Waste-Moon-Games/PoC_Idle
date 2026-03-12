@@ -6,6 +6,7 @@ namespace Core.SaveSystemBase.Data
     public class ShopStateData
     {
         public string ShopID;
-        public Dictionary<int, ItemUpgradeData> Items = new();
+        public bool IsOpened;
+        public List<ItemUpgradeData> Items = new();
     }
 }
