@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 namespace YG.Insides
@@ -65,6 +66,6 @@ namespace YG.Insides
             CallAction.CallIByAttribute(typeof(DeletePlatformAttribute), typeof(PlatformInfo), YG2.infoYG.platformInfo);
             CallAction.CallIByAttribute(typeof(DeletePlatformAttribute), typeof(CommonOptions), YG2.infoYG.common);
         }
-#endif
     }
 }
+#endif
