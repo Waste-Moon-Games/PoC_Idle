@@ -1,0 +1,18 @@
+{
+    "name": "SDK.YandexSDK.Modules.Authorization.Editor",
+    "rootNamespace": "",
+    "references": [
+        "SDK.YandexSDK"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,8 +1,4 @@
-using UnityEditor;
 using UnityEngine;
-#if UNITY_EDITOR
-using YG.EditorScr;
-#endif
 
 namespace YG
 {
@@ -15,9 +11,7 @@ namespace YG
         public HeaderYGAttribute(string header)
         {
             this.header = header;
-#if UNITY_EDITOR
-            color = TextStyles.colorHeader;
-#endif
+            color = new Color(1.0f, 0.5f, 0.0f);
             indent = 20;
         }
 
@@ -78,27 +72,4 @@ namespace YG
                 return color;
         }
     }
-
-#if UNITY_EDITOR
-    [CustomPropertyDrawer(typeof(HeaderYGAttribute))]
-    public class YGHeaderDrawer : DecoratorDrawer
-    {
-        public override void OnGUI(Rect position)
-        {
-            HeaderYGAttribute attr = (HeaderYGAttribute)attribute;
-
-            GUIStyle headerStyle = TextStyles.Header();
-            headerStyle.normal.textColor = attr.color;
-
-            position.y += attr.indent / 2;
-            EditorGUI.LabelField(position, attr.header, headerStyle);
-        }
-
-        public override float GetHeight()
-        {
-            HeaderYGAttribute attr = (HeaderYGAttribute)attribute;
-            return base.GetHeight() + attr.indent;
-        }
-    }
-#endif
 }
