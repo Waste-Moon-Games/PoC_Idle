@@ -1,4 +1,8 @@
+#if UNITY_WEBGL
+using Core.SaveSystem.Web;
+#else
 using Core.SaveSystem.Mobile;
+#endif
 using Core.SaveSystemBase;
 
 public static class SaveSystemStrategyFactory

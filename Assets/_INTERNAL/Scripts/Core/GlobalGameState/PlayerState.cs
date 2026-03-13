@@ -5,7 +5,7 @@ using Core.Shop.Base;
 using SO.PlayerConfigs;
 using System.Collections.Generic;
 using UnityEngine;
-#if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL
 using YG;
 #endif
 
@@ -43,7 +43,7 @@ namespace Core.GlobalGameState
             if (playerConfig.IsDebug)
                 _saveSystemContext.Delete(_playerSaveDataKey);
 
-#if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL
             hasSavedData = !string.IsNullOrEmpty(YG2.saves.JsonData);
 #else
             hasSavedData = PlayerPrefs.HasKey(_playerSaveDataKey);
