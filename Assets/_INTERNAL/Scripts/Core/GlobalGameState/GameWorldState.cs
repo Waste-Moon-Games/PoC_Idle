@@ -1,4 +1,5 @@
 using Core.SaveSystemBase;
+using Cysharp.Threading.Tasks;
 
 namespace Core.GlobalGameState
 {
@@ -13,7 +14,10 @@ namespace Core.GlobalGameState
             _playerState = new(saveSystemContext);
         }
 
-        public void StartAsyncTasks() => _playerState.StartAsyncTasks();
+        public async UniTask StartAsyncTasks()
+        {
+            await _playerState.StartAsyncTasks();
+        }
 
         public void Dispose()
         {

@@ -70,7 +70,6 @@ namespace UI.ShopMenu.Views
 
         private void HandleChangedUpgradeAmount(string amount)
         {
-            //to do, можно будет вернуть описание: $"{amount} + {desc}", условно говоря
             var tempDesc = TypeSelfCheck();
             _upgradeAmountText.text = $"+<color=#FFD600>{amount}</color> к {tempDesc}.";
         }

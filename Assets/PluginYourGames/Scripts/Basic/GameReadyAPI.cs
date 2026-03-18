@@ -34,7 +34,7 @@
                     Message("Game Ready API (manual call)");
 #endif
                 gameReadyDone = true;
-                iPlatform.GameReadyAPI();
+                iPlatform?.GameReadyAPI();
             }
         }
 

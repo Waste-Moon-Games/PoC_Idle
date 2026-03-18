@@ -1,10 +1,12 @@
 using Core.GlobalGameState;
 using Core.SaveSystemBase;
+using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using UI.Common;
 using UnityEngine;
 using Utils.DI;
-using Utils.ModCoroutines;
 using Utils.SceneLoader;
+using YG;
 
 namespace Entry.Global
 {
@@ -16,16 +18,15 @@ namespace Entry.Global
 
         private readonly SceneNavigatorService _sceneNavigatorService;
         private readonly UILoadingView _loadingView;
-        private readonly Coroutines _coroutines;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        public static void AutoStart()
+        public static async Task AutoStart()
         {
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
             _instance = new GameEntry();
-            _instance.Run();
+            await _instance.Run();
 
             Application.quitting += HandleApplicationQuit;
         }
@@ -33,10 +34,8 @@ namespace Entry.Global
         private GameEntry()
         {
             var loadingScreenPrefab = Resources.Load<UILoadingView>("UI/Common/UILoadingView");
-            var coroutinesPrefab = Resources.Load<Coroutines>("Other/Utils/[COROUTINES]");
 
             _loadingView = Object.Instantiate(loadingScreenPrefab);
-            _coroutines = Object.Instantiate(coroutinesPrefab);
 
             RegisterGlobalServices();
 
@@ -47,7 +46,6 @@ namespace Entry.Global
         private void RegisterGlobalServices()
         {
             _rootContainer.RegisterInstance(_loadingView);
-            _rootContainer.RegisterInstance(_coroutines);
 
             var loadingScreen = _rootContainer.Resolve<UILoadingView>();
             _rootContainer.RegisterFactory(slc => new SceneLoaderService(loadingScreen)).AsSingle();
@@ -58,10 +56,11 @@ namespace Entry.Global
             _rootContainer.RegisterFactory(gws => new GameWorldState(saveSystemContex)).AsSingle();
         }
 
-        private void Run()
+        private async UniTask Run()
         {
+            await _rootContainer.Resolve<GameWorldState>().StartAsyncTasks();
+
             _sceneNavigatorService.Start();
-            _rootContainer.Resolve<GameWorldState>().StartAsyncTasks();
         }
 
         private static void HandleApplicationQuit()
@@ -69,6 +68,7 @@ namespace Entry.Global
             _instance._rootContainer.Resolve<GameWorldState>().Dispose();
             _instance._sceneNavigatorService.Dispose();
             _instance._rootContainer.Dispose();
+            YG2.GameplayStop();
         }
     }
 }

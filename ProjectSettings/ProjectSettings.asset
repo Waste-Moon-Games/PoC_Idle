@@ -70,6 +70,7 @@ PlayerSettings:
   androidStartInFullscreen: 1
   androidRenderOutsideSafeArea: 1
   androidUseSwappy: 1
+  androidDisplayOptions: 1
   androidBlitType: 2
   androidResizeableActivity: 0
   androidDefaultWindowWidth: 1920
@@ -142,7 +143,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 0.3a
+  bundleVersion: 0.9a
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -177,9 +178,10 @@ PlayerSettings:
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
   AndroidBundleVersionCode: 1
-  AndroidMinSdkVersion: 23
+  AndroidMinSdkVersion: 25
   AndroidTargetSdkVersion: 35
   AndroidPreferredInstallLocation: 1
+  AndroidPreferredDataLocation: 1
   aotOptions: 
   stripEngineCode: 1
   iPhoneStrippingLevel: 0
@@ -194,11 +196,11 @@ PlayerSettings:
   VertexChannelCompressionMask: 4054
   iPhoneSdkVersion: 988
   iOSSimulatorArchitecture: 0
-  iOSTargetOSVersionString: 13.0
+  iOSTargetOSVersionString: 15.0
   tvOSSdkVersion: 0
   tvOSSimulatorArchitecture: 0
   tvOSRequireExtendedGameController: 0
-  tvOSTargetOSVersionString: 13.0
+  tvOSTargetOSVersionString: 15.0
   VisionOSSdkVersion: 0
   VisionOSTargetOSVersionString: 1.0
   uIPrerenderedIcon: 0
@@ -268,6 +270,7 @@ PlayerSettings:
   useCustomGradleSettingsTemplate: 1
   useCustomProguardFile: 0
   AndroidTargetArchitectures: 3
+  AndroidAllowedArchitectures: -1
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
   AndroidKeystoreName: '{inproject}: PoC.keystore'
@@ -566,7 +569,7 @@ PlayerSettings:
   locationUsageDescription: 
   microphoneUsageDescription: 
   bluetoothUsageDescription: 
-  macOSTargetOSVersion: 11.0
+  macOSTargetOSVersion: 12.0
   switchNMETAOverride: 
   switchNetLibKey: 
   switchSocketMemoryPoolSize: 6144
@@ -821,23 +824,23 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Android: DOTWEEN;YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg
+    Android: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;YandexGamesPlatform_yg
     EmbeddedLinux: DOTWEEN
     GameCoreScarlett: DOTWEEN
     GameCoreXboxOne: DOTWEEN
-    LinuxHeadlessSimulation: DOTWEEN;YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg
-    Nintendo Switch: DOTWEEN;YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg
-    PS4: DOTWEEN;YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg
-    PS5: DOTWEEN;YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg
+    LinuxHeadlessSimulation: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;YandexGamesPlatform_yg
+    Nintendo Switch: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;YandexGamesPlatform_yg
+    PS4: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;YandexGamesPlatform_yg
+    PS5: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;YandexGamesPlatform_yg
     QNX: DOTWEEN
     Stadia: DOTWEEN
-    Standalone: DOTWEEN;YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg
+    Standalone: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;YandexGamesPlatform_yg
     VisionOS: DOTWEEN
-    WebGL: DOTWEEN;YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg
-    Windows Store Apps: DOTWEEN;YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg
-    XboxOne: DOTWEEN;YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg
-    iPhone: DOTWEEN;YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg
-    tvOS: DOTWEEN;YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg
+    WebGL: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;YandexGamesPlatform_yg
+    Windows Store Apps: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;YandexGamesPlatform_yg
+    XboxOne: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;YandexGamesPlatform_yg
+    iPhone: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;YandexGamesPlatform_yg
+    tvOS: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;YandexGamesPlatform_yg
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
@@ -960,8 +963,9 @@ PlayerSettings:
   hmiLoadingImage: {fileID: 0}
   platformRequiresReadableAssets: 0
   virtualTexturingSupportEnabled: 0
-  insecureHttpOption: 0
+  insecureHttpOption: 2
   androidVulkanDenyFilterList: []
   androidVulkanAllowFilterList: []
   androidVulkanDeviceFilterListAsset: {fileID: 0}
   d3d12DeviceFilterListAsset: {fileID: 0}
+  allowedHttpConnections: 3

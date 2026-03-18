@@ -34,7 +34,10 @@ namespace Core.Shop.Models
         public Observable<bool> StateChange => _stateChangedSignal.AsObservable();
         public Observable<(ItemModel, string)> PurchaseSignal => _purchaseSignal.AsObservable();
 
-        public ShopModel(Observable<(int, string)> successfulPurchase, Observable<(int, string)> failedPurchase, ShopItemsConfig itemsConfig)
+        public ShopModel(
+            Observable<(int, string)> successfulPurchase,
+            Observable<(int, string)> failedPurchase,
+            ShopItemsConfig itemsConfig)
         {
             _sId = itemsConfig.ShopID;
             _itemsConfig = itemsConfig;
@@ -106,16 +109,19 @@ namespace Core.Shop.Models
             _stateChangedSignal.OnNext(_state);
         }
 
-        public void Dispose()
+        public void ItemsDisposablesClear()
         {
-            _itemsDisposables.Dispose();
-            _disposables.Dispose();
+            _itemsDisposables.Clear();
         }
+            
+        public void Dispose() => _disposables.Dispose();
 
         public void RequestItems() => _requestAvailableItemsSignal.OnNext(_itemsDict);
 
-        private void SubscribeOnItems()
+        public void SubscribeOnItems()
         {
+            _itemsDisposables.Clear();
+
             foreach (var item in _itemsDict.Values)
                 item.Purchased.Subscribe(HandleBuyItem).AddTo(_itemsDisposables);
         }

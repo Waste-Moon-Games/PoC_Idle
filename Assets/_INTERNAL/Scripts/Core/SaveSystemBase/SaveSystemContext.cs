@@ -1,4 +1,6 @@
-﻿namespace Core.SaveSystemBase
+﻿using Core.SaveSystemBase.Data;
+
+namespace Core.SaveSystemBase
 {
     public class SaveSystemContext
     {
@@ -6,19 +8,19 @@
 
         public SaveSystemContext(ISaveSystemStrategy saveSystemStrategy) => _currentStrategy = saveSystemStrategy;
 
-        public void Save<T>(T data, string key)
+        public void Save(PlayerData data, string key)
         {
             if (_currentStrategy == null)
                 return;
             _currentStrategy.Save(data, key);
         }
 
-        public T Load<T>(string key, T defaultValue)
+        public PlayerData Load(string key)
         {
             if (_currentStrategy == null)
-                return defaultValue;
+                return new();
 
-            return _currentStrategy.Load<T>(key, defaultValue);
+            return _currentStrategy.Load(key);
         }
 
         public void Delete(string key)

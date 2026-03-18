@@ -7,6 +7,7 @@ using System;
 using UI.GameplayMenu.Models;
 using Utils.DI;
 using Utils.SceneLoader;
+using YG;
 using Object = UnityEngine.Object;
 
 namespace Entry.Global
@@ -26,7 +27,11 @@ namespace Entry.Global
             _rootContainer = rootContainer;
         }
 
-        public void Start() => LoadScene(SceneNames.GAME);
+        public void Start()
+        {
+            LoadScene(SceneNames.GAME);
+            YG2.GameReadyAPI();
+        }
 
         public void Dispose() => _disposables.Clear();
 
@@ -68,7 +73,6 @@ namespace Entry.Global
                     case MainMenuEvents.ShopClicked:
                         LoadScene(SceneNames.SHOP);
                         break;
-                    //to do больше сцен/действий
                 }
             }).AddTo(_disposables);
         }

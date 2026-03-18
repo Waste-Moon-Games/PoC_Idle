@@ -7,6 +7,7 @@ using R3;
 using System.Collections.Generic;
 using UnityEngine;
 using Utils.DI;
+using Utils.Formatter;
 
 using UI.ShopMenu.ViewModels;
 using UI.ShopMenu.Views;
@@ -35,7 +36,7 @@ namespace Entry.Local.Shop
         private void OnDestroy()
         {
             foreach (ShopModel model in _shopModels)
-                model.Dispose();
+                model.ItemsDisposablesClear();
 
             _shopMenuModel.Dispose();
         }
@@ -67,23 +68,26 @@ namespace Entry.Local.Shop
                 out EconomyPlayerInfoView playerInfoView);
 
             _shopModels.AddRange(shopState.ShopModels.Values);
+            foreach (var shopModel in _shopModels)
+                shopModel.SubscribeOnItems();
+
             _shopMenuModel = new(_shopModels, navigationButtonsModel.Actions);
 
             playerInfoViewModel.BindModel(playerInfoModel);
 
-            var clickUpgradesModel = shopState.ShopModels.FirstOrDefault(x => x.Key == ShopIds.CLICK_UPGRADES).Value;
+            var clickUpgradesModel = _shopModels.FirstOrDefault(x => x.ShopId == ShopIds.CLICK_UPGRADES);
             clickUpgradesViewModel.BindModel(clickUpgradesModel);
             clickUpgradesView.BindViewModel(clickUpgradesViewModel);
 
-            var passiveUpgradesModel = shopState.ShopModels.FirstOrDefault(x => x.Key == ShopIds.PASSIVE_UPGRADES).Value;
+            var passiveUpgradesModel = _shopModels.FirstOrDefault(x => x.ShopId == ShopIds.PASSIVE_UPGRADES);
             passiveUpgradesViewModel.BindModel(passiveUpgradesModel);
             passiveUpgradesView.BindViewModel(passiveUpgradesViewModel);
 
-            var prestigeUpgradesModel = shopState.ShopModels.FirstOrDefault(x => x.Key == ShopIds.PRESTIGE_UPGRADES).Value;
+            var prestigeUpgradesModel = _shopModels.FirstOrDefault(x => x.ShopId == ShopIds.PRESTIGE_UPGRADES);
             prestigeUpgradesViewModel.BindModel(prestigeUpgradesModel);
             prestigeUpgradesView.BindViewModel(prestigeUpgradesViewModel);
 
-            playerInfoView.BindFormatter(new());
+            playerInfoView.BindFormatter(new NumberFormatter());
             playerInfoView.BindViewModel(playerInfoViewModel);
 
             navigationViewModel.BindModel(navigationButtonsModel);
@@ -93,7 +97,6 @@ namespace Entry.Local.Shop
         private void CreateModels(in DIContainer container,
             out EconomyPlayerInfoModel playerInfoModel)
         {
-            var playerState = container.Resolve<GameWorldState>().PlayerState;
             playerInfoModel = new();
 
             var economyModel = container.Resolve<GameWorldState>().PlayerState.EconomyService;

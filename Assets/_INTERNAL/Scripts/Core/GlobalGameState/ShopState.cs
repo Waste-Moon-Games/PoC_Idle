@@ -86,7 +86,13 @@ namespace Core.GlobalGameState
             }
         }
 
-        public void Dispose() => _disposables.Dispose();
+        public void Dispose()
+        {
+            foreach(var shopModel in _shopsDict.Values)
+                shopModel.Dispose();
+
+            _disposables.Dispose();
+        }
 
         private void HandleBuyItem(ItemModel item, string shopID)
         {

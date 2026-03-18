@@ -160,7 +160,12 @@ namespace YG
         public static void GetDataInvoke()
         {
             if (_SDKEnabled)
+            {
                 onGetSDKData?.Invoke();
+                Debug.LogWarning("[Yandex Plugin] SDK initialized!");
+            }
+
+            Debug.LogWarning("[Yandex Plugin] SDK doesn't initialize!");
         }
 
         public static void Message(string message)

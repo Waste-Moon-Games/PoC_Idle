@@ -1,22 +1,25 @@
 using Core.SaveSystemBase;
+using Core.SaveSystemBase.Data;
 using UnityEngine;
 
 namespace Core.SaveSystem.Mobile
 {
     public class MobileSaveSystemStrategy : ISaveSystemStrategy
     {
-        public void Save<T>(T data, string key)
+        public void Save(PlayerData data, string key)
         {
             PlayerPrefs.SetString(key, JsonUtility.ToJson(data));
+            Debug.Log($"[Mobile Save System Strategy] Game saved");
         }
 
-        public T Load<T>(string key, T defaultValue)
+        public PlayerData Load(string key)
         {
             if (PlayerPrefs.HasKey(key))
             {
-                return JsonUtility.FromJson<T>(PlayerPrefs.GetString(key));
+                Debug.Log($"[Mobile Save System Strategy] Game saved");
+                return JsonUtility.FromJson<PlayerData>(PlayerPrefs.GetString(key));
             }
-            return defaultValue;
+            return new();
         }
 
         public void Delete(string key) => PlayerPrefs.DeleteKey(key);

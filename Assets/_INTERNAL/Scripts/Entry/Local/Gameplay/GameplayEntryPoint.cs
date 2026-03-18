@@ -7,6 +7,7 @@ using UI.GameplayMenu.ViewModels;
 using UI.GameplayMenu.Views;
 using UnityEngine;
 using Utils.DI;
+using YG;
 
 namespace Entry.Local.Gameplay
 {
@@ -72,6 +73,8 @@ namespace Entry.Local.Gameplay
             economyPlayerInfoView.BindAnimationService(clickAnimationsService);
 
             playerStatsView.BindViewModel(playerStatsViewModel);
+
+            YG2.GameplayStart();
         }
 
         private void CreateLocalRewardsSystem(in DIContainer container, in MainGameView mainGameView)
