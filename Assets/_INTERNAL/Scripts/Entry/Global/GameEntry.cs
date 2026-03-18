@@ -58,7 +58,9 @@ namespace Entry.Global
 
         private async UniTask Run()
         {
-            await _rootContainer.Resolve<GameWorldState>().StartAsyncTasks();
+            var gameWorldState = _rootContainer.Resolve<GameWorldState>();
+            await gameWorldState.InitPlayerState();
+            gameWorldState.StartAsyncOperations();
 
             _sceneNavigatorService.Start();
         }

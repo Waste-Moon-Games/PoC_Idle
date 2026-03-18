@@ -1,14 +1,14 @@
 {
-    "idSave": 30,
+    "idSave": 33,
     "PlayerData": {
-        "Coins": 5.0,
+        "Coins": 9.0,
         "Gems": 0.0,
         "PlayerClickAmount": 1.0,
         "PassiveIncomeAmount": 0.0,
         "TrippleClickChance": 0.009999999776482582,
         "Level": 0,
         "GainedExpPerClick": 1,
-        "CurrentExp": 5,
+        "CurrentExp": 9,
         "ExpToLevelUp": 100,
         "ShopsData": [
             {

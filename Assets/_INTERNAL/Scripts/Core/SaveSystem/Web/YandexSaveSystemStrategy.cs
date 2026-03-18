@@ -9,7 +9,7 @@ namespace Core.SaveSystem.Web
     {
         public void Save(PlayerData data, string key)
         {
-            YG2.saves.PlayerData = data;
+            YG2.saves.JsonData = JsonUtility.ToJson(data);
             YG2.SaveProgress();
 
             Debug.Log($"[Yandex Save System Strategy] Game saved");
@@ -18,7 +18,9 @@ namespace Core.SaveSystem.Web
         public PlayerData Load(string key)
         {
             Debug.Log($"[Yandex Save System Strategy] Game loaded");
-            return YG2.saves.PlayerData;
+
+            PlayerData result = JsonUtility.FromJson<PlayerData>(YG2.saves.JsonData);
+            return result;
         }
 
         public void Delete(string key)

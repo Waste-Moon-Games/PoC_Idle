@@ -5,6 +5,7 @@ using Entry.Local.Shop;
 using R3;
 using System;
 using UI.GameplayMenu.Models;
+using UnityEngine;
 using Utils.DI;
 using Utils.SceneLoader;
 using YG;
@@ -29,6 +30,7 @@ namespace Entry.Global
 
         public void Start()
         {
+            Debug.Log("[Scene Navigator Service] Game started");
             LoadScene(SceneNames.GAME);
             YG2.GameReadyAPI();
         }

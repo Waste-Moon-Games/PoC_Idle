@@ -1,5 +1,6 @@
 using Core.SaveSystemBase;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace Core.GlobalGameState
 {
@@ -14,9 +15,15 @@ namespace Core.GlobalGameState
             _playerState = new(saveSystemContext);
         }
 
-        public async UniTask StartAsyncTasks()
+        public async UniTask InitPlayerState()
         {
-            await _playerState.StartAsyncTasks();
+            await _playerState.InitializeAsync();
+            Debug.Log("[Game World State] Async tasks was completed");
+        }
+
+        public void StartAsyncOperations()
+        {
+            _playerState.StartAsyncOperations();
         }
 
         public void Dispose()

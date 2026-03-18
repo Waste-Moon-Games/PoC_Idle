@@ -19,6 +19,7 @@ namespace Core.GlobalGameState
     public class PlayerState
     {
         private readonly string _playerSaveDataKey = "Player_Data";
+
         private CancellationTokenSource _lifetimeCts = new();
 
         private PlayerEconomyService _playerEconomyService;
@@ -46,7 +47,6 @@ namespace Core.GlobalGameState
         {
 #if UNITY_WEBGL
             YG2.onGetSDKData += HandleSDKData;
-            Debug.Log("[Player State] Player state initialized");
 #endif
             _saveSystemContext = saveSystemContext;
 
@@ -56,21 +56,23 @@ namespace Core.GlobalGameState
             _cyclicRewardsConfig = Resources.Load<CyclicRewardsConfig>("Configs/Player/CyclicRewardsConfig");
         }
 
-        private async UniTask InitializeAsync()
+        public async UniTask InitializeAsync()
         {
             try
             {
 #if UNITY_WEBGL
-                await UniTask.WaitUntil(() => YG2.isSDKEnabled).AttachExternalCancellation(_lifetimeCts.Token);
+                await UniTask.WaitUntil(() => YG2.isSDKEnabled)
+                    .AttachExternalCancellation(_lifetimeCts.Token);
                 Debug.Log("[Player State] YG2 SDK Enabled. Checking saves...");
 #endif
 
                 bool hasSavedData = false;
 
 #if UNITY_WEBGL
-                hasSavedData = YG2.saves.PlayerData != null;
+                hasSavedData = !string.IsNullOrEmpty(YG2.saves.JsonData);
+                Debug.Log($"[Player State] Cloud player data: {YG2.saves.JsonData.GetType().Name}");
 #else
-            hasSavedData = PlayerPrefs.HasKey(_playerSaveDataKey);
+                hasSavedData = PlayerPrefs.HasKey(_playerSaveDataKey);
 #endif
 
 #if UNITY_EDITOR
@@ -92,8 +94,10 @@ namespace Core.GlobalGameState
 
                     Debug.Log("[Player State] New player data created");
                 }
-                else
-                    LoadPlayerState(_economyConfig, _playerConfig, _rewardsByLevelConfig, _cyclicRewardsConfig);
+//#if UNITY_EDITOR
+//                else
+//                    LoadPlayerState(_economyConfig, _playerConfig, _rewardsByLevelConfig, _cyclicRewardsConfig);
+//#endif
 
                 _isInitialized = true;
                 Debug.Log("[Player State] Player State fully initialized");
@@ -105,10 +109,8 @@ namespace Core.GlobalGameState
             }
         }
 
-        public async UniTask StartAsyncTasks()
+        public void StartAsyncOperations()
         {
-            await InitializeAsync();
-
             _playerEconomyService.StartAsyncTasks();
             _playerBonusesService.StartAsyncDecreaseTask();
         }
@@ -196,6 +198,10 @@ namespace Core.GlobalGameState
         private void HandleSDKData()
         {
             Debug.Log("SDK Data Enabled");
+            if (YG2.isSDKEnabled)
+            {
+                LoadPlayerState(_economyConfig, _playerConfig, _rewardsByLevelConfig, _cyclicRewardsConfig);
+            }
         }
 #endif
 
@@ -213,6 +219,7 @@ namespace Core.GlobalGameState
 #endif
             _lifetimeCts.Cancel();
             _lifetimeCts.Dispose();
+            _lifetimeCts = null;
 
             _playerEconomyService?.Dispose();
             _playerRewardsByLevelService?.Dispose();
