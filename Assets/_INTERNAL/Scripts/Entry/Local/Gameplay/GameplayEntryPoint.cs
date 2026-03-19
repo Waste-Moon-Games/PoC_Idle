@@ -1,13 +1,20 @@
 using Core.GlobalGameState;
+
 using R3;
+
 using SO.AnimationConfigs;
+
 using UI.GameplayMenu.Animations;
 using UI.GameplayMenu.Models;
 using UI.GameplayMenu.ViewModels;
 using UI.GameplayMenu.Views;
+
 using UnityEngine;
+
 using Utils.DI;
+#if UNITY_WEBGL
 using YG;
+#endif
 
 namespace Entry.Local.Gameplay
 {
@@ -74,7 +81,9 @@ namespace Entry.Local.Gameplay
 
             playerStatsView.BindViewModel(playerStatsViewModel);
 
+#if UNITY_WEBGL
             YG2.GameplayStart();
+#endif
         }
 
         private void CreateLocalRewardsSystem(in DIContainer container, in MainGameView mainGameView)

@@ -20,5 +20,6 @@ MonoBehaviour:
   <InitialMinTrippleClickChance>k__BackingField: 0.01
   <InitialCurrentTrippleClickChance>k__BackingField: 0.01
   <MaxTrippleClickChance>k__BackingField: 0.9
-  <InitialGemsClickRewardChance>k__BackingField: 0.9
-  <MaxGemsClickRewardChance>k__BackingField: 1
+  <InitialMinGemsClickRewardChance>k__BackingField: 0.01
+  <InitialGemsClickRewardChance>k__BackingField: 0.01
+  <MaxGemsClickRewardChance>k__BackingField: 0.5

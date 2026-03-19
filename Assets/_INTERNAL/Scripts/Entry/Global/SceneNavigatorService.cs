@@ -1,14 +1,22 @@
 ﻿using Core.Consts;
 using Core.Consts.Enums;
+
 using Entry.Local.Gameplay;
 using Entry.Local.Shop;
+
 using R3;
+
 using System;
+
 using UI.GameplayMenu.Models;
-using UnityEngine;
+
 using Utils.DI;
 using Utils.SceneLoader;
+
+#if UNITY_WEBGL
 using YG;
+#endif
+
 using Object = UnityEngine.Object;
 
 namespace Entry.Global
@@ -30,9 +38,10 @@ namespace Entry.Global
 
         public void Start()
         {
-            Debug.Log("[Scene Navigator Service] Game started");
             LoadScene(SceneNames.GAME);
+#if UNITY_WEBGL
             YG2.GameReadyAPI();
+#endif
         }
 
         public void Dispose() => _disposables.Clear();

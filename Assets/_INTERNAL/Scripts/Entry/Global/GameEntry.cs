@@ -1,12 +1,17 @@
 using Core.GlobalGameState;
 using Core.SaveSystemBase;
+
 using Cysharp.Threading.Tasks;
-using System.Threading.Tasks;
 using UI.Common;
+
 using UnityEngine;
+
 using Utils.DI;
 using Utils.SceneLoader;
+
+#if UNITY_WEBGL
 using YG;
+#endif
 
 namespace Entry.Global
 {
@@ -20,7 +25,7 @@ namespace Entry.Global
         private readonly UILoadingView _loadingView;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        public static async Task AutoStart()
+        public static async UniTask AutoStart()
         {
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -70,7 +75,10 @@ namespace Entry.Global
             _instance._rootContainer.Resolve<GameWorldState>().Dispose();
             _instance._sceneNavigatorService.Dispose();
             _instance._rootContainer.Dispose();
+
+#if UNITY_WEBGL
             YG2.GameplayStop();
+#endif
         }
     }
 }

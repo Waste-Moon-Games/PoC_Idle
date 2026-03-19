@@ -17,9 +17,9 @@ namespace Core.SaveSystem.Web
 
         public PlayerData Load(string key)
         {
+            PlayerData result = JsonUtility.FromJson<PlayerData>(YG2.saves.JsonData);
             Debug.Log($"[Yandex Save System Strategy] Game loaded");
 
-            PlayerData result = JsonUtility.FromJson<PlayerData>(YG2.saves.JsonData);
             return result;
         }
 

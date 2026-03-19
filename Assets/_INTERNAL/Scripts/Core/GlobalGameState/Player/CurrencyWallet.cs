@@ -1,6 +1,7 @@
 ﻿using Core.Common.Player;
 using R3;
 using System;
+using UnityEngine;
 
 namespace Core.GlobalGameState.Player
 {

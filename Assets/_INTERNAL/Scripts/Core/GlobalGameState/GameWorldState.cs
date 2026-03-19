@@ -18,7 +18,6 @@ namespace Core.GlobalGameState
         public async UniTask InitPlayerState()
         {
             await _playerState.InitializeAsync();
-            Debug.Log("[Game World State] Async tasks was completed");
         }
 
         public void StartAsyncOperations()

@@ -3,11 +3,14 @@ using Core.SaveSystemBase;
 using Core.SaveSystemBase.Data;
 
 using Cysharp.Threading.Tasks;
+using R3;
 
 using SO.PlayerConfigs;
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
+
 using UnityEngine;
 
 #if UNITY_WEBGL
@@ -19,8 +22,13 @@ namespace Core.GlobalGameState
     public class PlayerState
     {
         private readonly string _playerSaveDataKey = "Player_Data";
+        private readonly CompositeDisposable _disposables = new();
 
         private CancellationTokenSource _lifetimeCts = new();
+#if UNITY_WEBGL
+        private readonly UniTaskCompletionSource _sdkDataReadyTcs = new();
+#endif
+        private readonly AutoSaveService _autoSaveService;
 
         private PlayerEconomyService _playerEconomyService;
         private PlayerUpgradeService _playerUpgradeService;
@@ -54,27 +62,27 @@ namespace Core.GlobalGameState
             _playerConfig = Resources.Load<PlayerConfig>("Configs/Player/PlayerConfig");
             _rewardsByLevelConfig = Resources.Load<RewardsByLevelConfig>("Configs/Player/RewardsByLevelConfig");
             _cyclicRewardsConfig = Resources.Load<CyclicRewardsConfig>("Configs/Player/CyclicRewardsConfig");
+
+            var autoSaveToken = new CancellationTokenSource();
+            _autoSaveService = new(_playerConfig.AutoSaveDelay, autoSaveToken);
+            _autoSaveService.AutoSaveSignal.Subscribe(def => SavePlayerState()).AddTo(_disposables);
         }
 
         public async UniTask InitializeAsync()
         {
+            if (_isInitialized)
+            {
+                Debug.LogWarning("[Player State] InitiailzeAsync called more than once. Skipping repeated initialization.");
+                return;
+            }
+
             try
             {
 #if UNITY_WEBGL
                 await UniTask.WaitUntil(() => YG2.isSDKEnabled)
                     .AttachExternalCancellation(_lifetimeCts.Token);
-                Debug.Log("[Player State] YG2 SDK Enabled. Checking saves...");
 #endif
-
-                bool hasSavedData = false;
-
-#if UNITY_WEBGL
-                hasSavedData = !string.IsNullOrEmpty(YG2.saves.JsonData);
-                Debug.Log($"[Player State] Cloud player data: {YG2.saves.JsonData.GetType().Name}");
-#else
-                hasSavedData = PlayerPrefs.HasKey(_playerSaveDataKey);
-#endif
-
+                bool hasSavedData = HasSavedData();
 #if UNITY_EDITOR
                 if (_playerConfig.IsDebug)
                 {
@@ -83,24 +91,16 @@ namespace Core.GlobalGameState
                 }
 #endif
 
-                if (!hasSavedData)
+                if (hasSavedData)
                 {
-                    _playerBonusesService = new(_playerConfig);
-                    _playerEconomyService = new(_economyConfig, _playerBonusesService.BonusStateChanged, _playerConfig.BonusClickMultiplier);
-                    _playerUpgradeService = new(_playerEconomyService);
-                    _playerRewardsByLevelService = new(_rewardsByLevelConfig, _cyclicRewardsConfig, _playerBonusesService.LevelChanged, _playerEconomyService);
-
-                    _shopState = new(_playerUpgradeService);
-
-                    Debug.Log("[Player State] New player data created");
+                    LoadPlayerState(_economyConfig, _playerConfig, _rewardsByLevelConfig, _cyclicRewardsConfig);
                 }
-//#if UNITY_EDITOR
-//                else
-//                    LoadPlayerState(_economyConfig, _playerConfig, _rewardsByLevelConfig, _cyclicRewardsConfig);
-//#endif
+                else
+                {
+                    CreateNewPlayerState();
+                }
 
                 _isInitialized = true;
-                Debug.Log("[Player State] Player State fully initialized");
             }
             catch (OperationCanceledException)
             {
@@ -109,10 +109,21 @@ namespace Core.GlobalGameState
             }
         }
 
+        private void CreateNewPlayerState()
+        {
+            _playerBonusesService = new(_playerConfig);
+            _playerEconomyService = new(_economyConfig, _playerBonusesService.BonusStateChanged, _playerConfig.BonusClickMultiplier);
+            _playerUpgradeService = new(_playerEconomyService);
+            _playerRewardsByLevelService = new(_rewardsByLevelConfig, _cyclicRewardsConfig, _playerBonusesService.LevelChanged, _playerEconomyService);
+
+            _shopState = new(_playerUpgradeService);
+        }
+
         public void StartAsyncOperations()
         {
             _playerEconomyService.StartAsyncTasks();
             _playerBonusesService.StartAsyncDecreaseTask();
+            _autoSaveService.AsyncAutoSave().Forget();
         }
 
         private void LoadPlayerState(
@@ -122,6 +133,13 @@ namespace Core.GlobalGameState
             CyclicRewardsConfig cyclicRewardsConfig)
         {
             PlayerData loadedData = _saveSystemContext.Load(_playerSaveDataKey);
+
+            if (loadedData == null)
+            {
+                Debug.LogWarning("[Player State] Save data is missing or corrupted. Creating new player state.");
+                CreateNewPlayerState();
+                return;
+            }
 
             _playerBonusesService = new(playerConfig, loadedData);
             _playerEconomyService = new(economyConfig, _playerBonusesService.BonusStateChanged, playerConfig.BonusClickMultiplier, loadedData);
@@ -156,6 +174,17 @@ namespace Core.GlobalGameState
             };
 
             _saveSystemContext.Save(playerData, _playerSaveDataKey);
+        }
+
+        private bool HasSavedData()
+        {
+#if UNITY_WEBGL
+            string jsonData = YG2.saves?.JsonData;
+            Debug.Log($"[Player State] Cloud player data present: {!string.IsNullOrEmpty(jsonData)}");
+            return !string.IsNullOrEmpty(jsonData);
+#else
+            return PlayerPrefs.HasKey(_playerSaveDataKey);
+#endif
         }
 
         private List<RewardData> CreateRewardsData()
@@ -197,11 +226,7 @@ namespace Core.GlobalGameState
 #if UNITY_WEBGL
         private void HandleSDKData()
         {
-            Debug.Log("SDK Data Enabled");
-            if (YG2.isSDKEnabled)
-            {
-                LoadPlayerState(_economyConfig, _playerConfig, _rewardsByLevelConfig, _cyclicRewardsConfig);
-            }
+            _sdkDataReadyTcs.TrySetResult();
         }
 #endif
 
@@ -221,9 +246,12 @@ namespace Core.GlobalGameState
             _lifetimeCts.Dispose();
             _lifetimeCts = null;
 
+            _disposables.Dispose();
+
             _playerEconomyService?.Dispose();
             _playerRewardsByLevelService?.Dispose();
             _shopState?.Dispose();
+            _autoSaveService?.Dispose();
         }
     }
 }

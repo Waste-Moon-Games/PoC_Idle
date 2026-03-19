@@ -17,7 +17,13 @@ namespace Core.GlobalGameState.Services
 
         public PlayerUpgradeService(PlayerEconomyService playerEconomyService) => _playerEconomyService = playerEconomyService;
 
-        public void TryUpgradePlayer(float price, float amount, int itemId, ItemType itemType, CurrencyType currencyType, string shopId)
+        public void TryUpgradePlayer(
+            float price,
+            float amount,
+            int itemId,
+            ItemType itemType,
+            CurrencyType currencyType,
+            string shopId)
         {
             if (!_playerEconomyService.TryToSpend(currencyType, price))
             {
@@ -31,7 +37,10 @@ namespace Core.GlobalGameState.Services
                     _playerEconomyService.IncreasePlayerClick(amount);
                     break;
                 case ItemType.Chance:
-                    _playerEconomyService.IncreaseTrippleClickChance(amount);
+                    if (currencyType == CurrencyType.Coins)
+                        _playerEconomyService.IncreaseTrippleClickChance(amount);
+                    else
+                        _playerEconomyService.IncreaseGemsRewardClickChance(amount);
                     break;
                 case ItemType.Passive:
                     _playerEconomyService.IncreasePlayerPassiveIncome(amount);

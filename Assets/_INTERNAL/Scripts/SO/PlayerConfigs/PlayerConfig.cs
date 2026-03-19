@@ -17,5 +17,6 @@ namespace SO.PlayerConfigs
         [field: SerializeField] public float DecreaseActiveBonusGaugeDelay { get; private set; }
 
         [field: SerializeField] public bool IsDebug { get; private set; }
+        [field: SerializeField] public float AutoSaveDelay { get; private set; }
 	}
 }

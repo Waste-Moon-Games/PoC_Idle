@@ -80,6 +80,18 @@ namespace Core.GlobalGameState.Services
             }
         }
 
+        public float GemsClickRewardChance
+        {
+            get => _gemsRewardClickChance;
+            private set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(_gemsRewardClickChance));
+
+                _gemsRewardClickChance = value;
+            }
+        }
+
         public ICurrencyWallet CoinsWallet => _wallets[CurrencyType.Coins];
         public ICurrencyWallet GemsWallet => _wallets[CurrencyType.Gems];
 
@@ -100,8 +112,8 @@ namespace Core.GlobalGameState.Services
             _wallets[CurrencyType.Coins] = new CurrencyWallet("Coins_Wallet", loadedData?.Coins ?? config.InitialCoinsWalletAmount);
             _wallets[CurrencyType.Gems] = new CurrencyWallet("Gems_Wallet", loadedData?.Gems ?? config.InitialGemsWalletAmount);
 
-            _gemsRewardClickChance = config.InitialGemsClickRewardChance;
-            _minGemsRewardClickChance = config.InitialGemsClickRewardChance;
+            GemsClickRewardChance = config.InitialGemsClickRewardChance;
+            _minGemsRewardClickChance = config.InitialMinGemsClickRewardChance;
             _maxGemsRewardClickChance = config.MaxGemsClickRewardChance;
             _gemsClickRewardAmount = config.InitialGemsClickRewardAmount;
 
@@ -124,6 +136,7 @@ namespace Core.GlobalGameState.Services
 
         public void IncreasePlayerClick(float amount) => PlayerClickAmount += amount;
         public void IncreaseTrippleClickChance(float amount) => TrippleClickChance = MathF.Min(TrippleClickChance + amount, _maxTrippleClickChance);
+        public void IncreaseGemsRewardClickChance(float amount) => GemsClickRewardChance = MathF.Min(GemsClickRewardChance + amount, _maxGemsRewardClickChance);
         public void IncreasePlayerPassiveIncome(float amount) => PassiveIncomeAmount += amount;
 
         public void IncreasePlayerClickByLevel(float amount)
@@ -152,6 +165,7 @@ namespace Core.GlobalGameState.Services
             float clickReward = CalculateReward();
 
             CoinsWallet.Add(clickReward);
+
             if (TryAddGems())
             {
                 int clickGemsReward = CalculateGemsReward();
@@ -171,9 +185,6 @@ namespace Core.GlobalGameState.Services
 
         public bool HasEnough(CurrencyType currencyType, float amount)
             => amount >= 0 && _wallets.TryGetValue(currencyType, out var wallet) && wallet.Amount >= amount;
-
-        public bool TryToSpend(float amount) => TryToSpend(CurrencyType.Coins, amount);
-        public bool HasEnoughCoins(float amount) => HasEnough(CurrencyType.Coins, amount);
 
         public void StartAsyncTasks()
         {
@@ -200,7 +211,7 @@ namespace Core.GlobalGameState.Services
         private bool TryAddGems()
         {
             float randRoll = RandRoll(_minGemsRewardClickChance, _maxGemsRewardClickChance);
-            return randRoll < _gemsRewardClickChance;
+            return randRoll < GemsClickRewardChance;
         }
 
         private int CalculateGemsReward() => _gemsClickRewardAmount;

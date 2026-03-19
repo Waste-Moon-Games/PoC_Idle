@@ -20,6 +20,7 @@ namespace SO.PlayerConfigs
         [field: SerializeField, Range(0.01f, 0.85f)] public float InitialMinTrippleClickChance { get; private set; }
         [field: SerializeField, Range(0.01f, 0.9f)] public float InitialCurrentTrippleClickChance { get; private set; }
         [field: SerializeField, Range(0.01f, 0.9f)] public float MaxTrippleClickChance { get; private set; }
+        [field: SerializeField, Range(0.01f, 1f)] public float InitialMinGemsClickRewardChance { get; private set; }
         [field: SerializeField, Range(0.01f, 1f)] public float InitialGemsClickRewardChance { get; private set; }
         [field: SerializeField, Range(0.01f, 1f)] public float MaxGemsClickRewardChance { get; private set; }
         #endregion
