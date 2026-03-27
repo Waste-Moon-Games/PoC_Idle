@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efa747916aa66674d96ea40ca8a480b2, type: 3}
+  m_Script: {fileID: 0}
   m_Name: SettingsYG2
-  m_EditorClassIdentifier: Assembly-CSharp::YG.InfoYG
+  m_EditorClassIdentifier: Assembly-CSharp:YG:InfoYG
   Authorization:
     playerPhotoSize: 1
     authorized: 1
@@ -136,10 +136,10 @@ MonoBehaviour:
       de: 
       hi: 
   InterstitialAdv:
-    showFirstAdv: 1
+    showFirstAdv: 0
     interAdvInterval: 60
-    postponeCallByFail: 1
-    postponeCallTimer: 75
+    postponeCallByFail: 0
+    postponeCallTimer: 10
     labelAdvSimLabel: 0
   Localization:
     setLanguageMod: 1
@@ -190,11 +190,11 @@ MonoBehaviour:
     saveCloud: 1
     flush: 0
   Basic:
-    platform: {fileID: 11400000, guid: fabe82a4ab034324eb452cc7109f6d19, type: 2}
+    platform: {fileID: 0}
     autoApplySettings: 1
     autoPauseGame: 1
     editEventSystem: 1
-    autoGRA: 0
+    autoGRA: 1
     logInEditor: 1
     archivingBuild: 1
     autoDefineSymbols: 1
@@ -202,9 +202,9 @@ MonoBehaviour:
     loadSceneIfSDKLate: 0
     loadSceneIndex: 0
     initDelaySimulation: 0
-    buildNumber: 1
+    buildNumber: 0
   Simulation:
-    device: 1
+    device: 0
     language: ru
     advIntervalSimulation: 60
     durationAdv: 0.5
@@ -222,13 +222,13 @@ MonoBehaviour:
     progressBarSettigs:
       round: 1
       roundAngle: 10
-      width: 20
-      height: 16
+      width: 30
+      height: 24
       color1: {r: 0.25, g: 0.6392, b: 1, a: 1}
       color2: {r: 1, g: 0.831, b: 0.149, a: 0.7}
-    fixedAspectRatio: 1
-    aspectRatio: 9/16
-    disableForMobile: 0
+    fixedAspectRatio: 0
+    aspectRatio: 16/9
+    disableForMobile: 1
     fillBackground: 0
     imageBackground: 0
     imageName: background.jpg

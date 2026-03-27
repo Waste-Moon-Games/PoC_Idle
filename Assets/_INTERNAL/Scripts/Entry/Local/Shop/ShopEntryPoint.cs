@@ -20,6 +20,7 @@ using NavigationButtonsView = UI.ShopMenu.Views.NavigationButtonsView;
 using NavigationButtonsViewModel = UI.ShopMenu.ViewModels.NavigationButtonsViewModel;
 using NavigationButtonsModel = UI.ShopMenu.Models.NavigationButtonsModel;
 using System.Linq;
+using Core.AdsSystem;
 
 namespace Entry.Local.Shop
 {
@@ -43,6 +44,8 @@ namespace Entry.Local.Shop
 
         public Observable<ShopEvents> Run(DIContainer container)
         {
+            container.Resolve<AdsSystemContex>().ShowInterstitial();
+
             CreateScene(container, out NavigationButtonsModel navigationButtonsModel);
 
             return navigationButtonsModel.Actions.Where(action => action == ShopEvents.Exit);

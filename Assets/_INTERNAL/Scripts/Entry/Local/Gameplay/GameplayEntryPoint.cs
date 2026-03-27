@@ -1,3 +1,4 @@
+using Core.AdsSystem;
 using Core.GlobalGameState;
 
 using R3;
@@ -24,6 +25,8 @@ namespace Entry.Local.Gameplay
 
         public Observable<MainMenuEvents> Run(DIContainer container)
         {
+            container.Resolve<AdsSystemContex>().ShowInterstitial();
+
             _loader.LoadMainViews(out NavigationButtonsView navigationButtonsView);
 
             CreateScene(container, out NavigationButtonsModel navigationModel);

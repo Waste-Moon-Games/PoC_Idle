@@ -1,7 +1,9 @@
+using Core.AdsSystem;
 using Core.GlobalGameState;
 using Core.SaveSystemBase;
 
 using Cysharp.Threading.Tasks;
+using SO.AdsConfigs;
 using UI.Common;
 
 using UnityEngine;
@@ -50,12 +52,14 @@ namespace Entry.Global
 
         private void RegisterGlobalServices()
         {
+            var adRatesConfig = Resources.Load<AdRatesConfig>("Configs/Ads/AdRatesConfig");
             _rootContainer.RegisterInstance(_loadingView);
 
             var loadingScreen = _rootContainer.Resolve<UILoadingView>();
             _rootContainer.RegisterFactory(slc => new SceneLoaderService(loadingScreen)).AsSingle();
 
             _rootContainer.RegisterFactory(ssc => new SaveSystemContext(SaveSystemStrategyFactory.CreateStrategy())).AsSingle();
+            _rootContainer.RegisterFactory(ads => new AdsSystemContex(AdsStrategyFactory.CreateStrategy(), adRatesConfig.InterstitialAdShowChance)).AsSingle();
 
             var saveSystemContex = _rootContainer.Resolve<SaveSystemContext>();
             _rootContainer.RegisterFactory(gws => new GameWorldState(saveSystemContex)).AsSingle();
