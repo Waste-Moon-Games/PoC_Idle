@@ -100,7 +100,8 @@ namespace Entry.Local.Shop
             playerInfoModel = new();
 
             var economyModel = container.Resolve<GameWorldState>().PlayerState.EconomyService;
-            playerInfoModel.BindModel(economyModel);
+            var rewardedBonusesService = container.Resolve<GameWorldState>().PlayerState.PlayerRewardedBonusesService;
+            playerInfoModel.BindModel(economyModel, rewardedBonusesService);
         }
 
         private void CreateViewModels(out NavigationButtonsViewModel navigationViewModel,

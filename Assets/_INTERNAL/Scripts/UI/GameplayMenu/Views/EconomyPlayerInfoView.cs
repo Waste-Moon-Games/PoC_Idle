@@ -21,6 +21,9 @@ namespace UI.GameplayMenu.Views
         [Space(5), Header("Player Gems Info")]
         [SerializeField] private TextMeshProUGUI _currentGemsCount;
 
+        [Space(5), Header("Player Temporary Bonus Info")]
+        [SerializeField] private TemporaryBonusView _temporaryBonus;
+
         private EconomyPlayerInfoViewModel _viewModel;
         private NumberFormatter _formatter;
         private AnimationService _animationsService;
@@ -39,9 +42,15 @@ namespace UI.GameplayMenu.Views
 
             _viewModel.CoinsChanged.Subscribe(UpdateCoinsCount).AddTo(_disposables);
             _viewModel.GemsChanged.Subscribe(UpdateGemsCount).AddTo(_disposables);
-            _viewModel.CoinsPerClickChanged.Subscribe(UpdateCoinsPerClick).AddTo(_disposables);
+
             _viewModel.CoinsClickAd.Subscribe(UpdateAnimations).AddTo(_disposables);
+
+            _viewModel.CoinsPerClickChanged.Subscribe(UpdateCoinsPerClick).AddTo(_disposables);
             _viewModel.PassiveIncomeChanged.Subscribe(UpdateCurrentPassiveIncome).AddTo(_disposables);
+
+            _viewModel.TemporartyBonusTimerChanged.Take(1).Subscribe(HandleInitTemporaryBonusTimer).AddTo(_disposables);
+            _viewModel.TemporaryBonusStateChanged.Subscribe(HandleChangedTemporaryBonusState).AddTo(_disposables);
+            _viewModel.TemporartyBonusTimerChanged.Subscribe(UpdateTemporaryBonusTimer).AddTo(_disposables);
         }
 
         public void BindAnimationService(ClickAnimationsService animationService) => _animationsService = animationService;
@@ -54,5 +63,9 @@ namespace UI.GameplayMenu.Views
         private void UpdateAnimations(float amount) => _animationsService?.ClickAnimation(_formatter.FormatNumber(amount));
 
         private void UpdateCurrentPassiveIncome(float amount) => _currentPassiveIncome.text = $"<color=green>{_formatter.FormatNumber(amount)}</color>/Sec";
+
+        private void UpdateTemporaryBonusTimer(float time) => _temporaryBonus.UpdateProgress(time);
+        private void HandleInitTemporaryBonusTimer(float time) => _temporaryBonus.SetStartTime(time);
+        private void HandleChangedTemporaryBonusState(bool state) => _temporaryBonus.Toggle(state);
     }
 }

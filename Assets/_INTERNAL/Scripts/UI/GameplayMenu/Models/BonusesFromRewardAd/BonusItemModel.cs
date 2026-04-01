@@ -14,17 +14,19 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
 
         private readonly Subject<BonusItemModel> _itemChosenSignal = new();
         private readonly Subject<bool> _bonusInfoWindowStateChangedSignal = new();
+        private readonly Subject<bool> _bonusActiveStateChangedSignal = new();
 
         private bool _isOpened = false;
+        private bool _isActive = false;
 
         public BonusItemType Type => _type;
         public string Description => _description;
         public float Amount => _amount;
-        public float BonusDuration => _bonusDuration;
-        public bool IsOpened => _isOpened;
+        public bool IsActive => _isActive;
 
         public Observable<BonusItemModel> ItemChosenSignal => _itemChosenSignal.AsObservable();
         public Observable<bool> BonusInfoWindowStateChangedSignal => _bonusInfoWindowStateChangedSignal.AsObservable();
+        public Observable<bool> BonusActiveStateChanged => _bonusActiveStateChangedSignal.AsObservable();
 
         public BonusItemModel(BonusItemData sourceData, string desc)
         {
@@ -41,6 +43,12 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
 
             _itemChosenSignal.OnNext(this);
             _bonusInfoWindowStateChangedSignal.OnNext(_isOpened);
+        }
+
+        public void SetBonusState(bool state)
+        {
+            _isActive = state;
+            _bonusActiveStateChangedSignal.OnNext(_isActive);
         }
 
         public void CloseItemWindow()

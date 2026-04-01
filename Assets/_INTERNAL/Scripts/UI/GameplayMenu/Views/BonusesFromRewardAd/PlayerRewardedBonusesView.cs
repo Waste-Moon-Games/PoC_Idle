@@ -1,6 +1,7 @@
 ﻿using Common.MVVM;
 using R3;
 using System.Collections.Generic;
+using System.Linq;
 using UI.GameplayMenu.ViewModels.BonusesFromRewardAd;
 using UnityEngine;
 
@@ -25,7 +26,12 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
 
             _bonusInfoView.ShowAdButtonClickSingal.Subscribe(_ =>
             {
-                HandleShowAdButtonClicked();
+                HandleShowAdButtonClick();
+            }).AddTo(_disposables);
+
+            _bonusInfoView.CloseButtonClickSignal.Subscribe(_ =>
+            {
+                HandleCloseButtonClick();
             }).AddTo(_disposables);
         }
 
@@ -45,7 +51,7 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
                 var itemViewModel = _viewModel.BonusItemViewModels[i];
                 var itemView = _items[i];
 
-                itemView.BindViewModel(viewModel);
+                itemView.BindViewModel(itemViewModel);
             }
         }
 
@@ -55,7 +61,12 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
             _bonusInfoView.Open();
         }
 
-        private void HandleShowAdButtonClicked()
+        private void HandleCloseButtonClick()
+        {
+            _viewModel.CloseBonusInfoWindow();
+        }
+
+        private void HandleShowAdButtonClick()
         {
             _viewModel.ShowAd();
         }

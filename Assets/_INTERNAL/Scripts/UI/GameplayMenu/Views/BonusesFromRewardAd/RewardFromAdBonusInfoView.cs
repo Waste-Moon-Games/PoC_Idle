@@ -68,6 +68,10 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
             });
         }
 
-        private void HandleShowAdButtonClick() => _showAdButtonClickSignal.OnNext(Unit.Default);
+        private void HandleShowAdButtonClick()
+        {
+            Close();
+            _showAdButtonClickSignal.OnNext(Unit.Default);
+        }
     }
 }

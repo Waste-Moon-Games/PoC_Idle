@@ -29,7 +29,7 @@ namespace Core.GlobalGameState
         private readonly UniTaskCompletionSource _sdkDataReadyTcs = new();
 #endif
         private readonly AutoSaveService _autoSaveService;
-        private readonly PlayerRewardBonusesService _rewardBonuses;
+        private readonly PlayerRewardedBonusesService _rewardedBonusesService;
 
         private PlayerEconomyService _playerEconomyService;
         private PlayerUpgradeService _playerUpgradeService;
@@ -51,7 +51,7 @@ namespace Core.GlobalGameState
         public PlayerBonusesService BonusesService => _playerBonusesService;
         public PlayerRewardsByLevelService RewardsService => _playerRewardsByLevelService;
         public ShopState ShopState => _shopState;
-        public PlayerRewardBonusesService PlayerRewardBonusesService => _rewardBonuses;
+        public PlayerRewardedBonusesService PlayerRewardedBonusesService => _rewardedBonusesService;
 
         public PlayerState(SaveSystemContext saveSystemContext)
         {
@@ -70,14 +70,13 @@ namespace Core.GlobalGameState
             _autoSaveService = new(_playerConfig.AutoSaveDelay, autoSaveToken);
             _autoSaveService.AutoSaveSignal.Subscribe(def => SavePlayerState()).AddTo(_disposables);
 
-            _rewardBonuses = new(rewardAdsConfig.InitTemporaryBonusDurationInMinutes);
+            _rewardedBonusesService = new(rewardAdsConfig.InitTemporaryBonusDurationInMinutes);
         }
 
         public async UniTask InitializeAsync()
         {
             if (_isInitialized)
             {
-                Debug.LogWarning("[Player State] InitiailzeAsync called more than once. Skipping repeated initialization.");
                 return;
             }
 
@@ -97,19 +96,14 @@ namespace Core.GlobalGameState
 #endif
 
                 if (hasSavedData)
-                {
-                    LoadPlayerState(_economyConfig, _playerConfig, _rewardsByLevelConfig, _cyclicRewardsConfig);
-                }
+                    LoadPlayerState();
                 else
-                {
                     CreateNewPlayerState();
-                }
 
                 _isInitialized = true;
             }
             catch (OperationCanceledException)
             {
-                Debug.LogError("[Player State] Initialization cancelled");
                 throw;
             }
         }
@@ -117,9 +111,17 @@ namespace Core.GlobalGameState
         private void CreateNewPlayerState()
         {
             _playerBonusesService = new(_playerConfig);
-            _playerEconomyService = new(_economyConfig, _playerBonusesService.BonusStateChanged, _rewardBonuses.TemporaryBonusStateChanged, _playerConfig.BonusClickMultiplier);
+            _playerEconomyService = new(
+                _economyConfig,
+                _playerBonusesService.BonusStateChanged,
+                _rewardedBonusesService,
+                _playerConfig.BonusClickMultiplier);
             _playerUpgradeService = new(_playerEconomyService);
-            _playerRewardsByLevelService = new(_rewardsByLevelConfig, _cyclicRewardsConfig, _playerBonusesService.LevelChanged, _playerEconomyService);
+            _playerRewardsByLevelService = new(
+                _rewardsByLevelConfig,
+                _cyclicRewardsConfig,
+                _playerBonusesService.LevelChanged,
+                _playerEconomyService);
 
             _shopState = new(_playerUpgradeService);
         }
@@ -131,25 +133,28 @@ namespace Core.GlobalGameState
             _autoSaveService.AsyncAutoSave().Forget();
         }
 
-        private void LoadPlayerState(
-            MainEconomyConfig economyConfig,
-            PlayerConfig playerConfig,
-            RewardsByLevelConfig rewardsByLevelConfig,
-            CyclicRewardsConfig cyclicRewardsConfig)
+        private void LoadPlayerState()
         {
             PlayerData loadedData = _saveSystemContext.Load(_playerSaveDataKey);
 
             if (loadedData == null)
             {
-                Debug.LogWarning("[Player State] Save data is missing or corrupted. Creating new player state.");
                 CreateNewPlayerState();
                 return;
             }
 
-            _playerBonusesService = new(playerConfig, loadedData);
-            _playerEconomyService = new(economyConfig, _playerBonusesService.BonusStateChanged, _rewardBonuses.TemporaryBonusStateChanged, playerConfig.BonusClickMultiplier, loadedData);
+            _playerBonusesService = new(_playerConfig, loadedData);
+            _playerEconomyService = new(
+                _economyConfig,
+                _playerBonusesService.BonusStateChanged,
+                _rewardedBonusesService,
+                _playerConfig.BonusClickMultiplier,
+                loadedData);
             _playerUpgradeService = new(_playerEconomyService);
-            _playerRewardsByLevelService = new(rewardsByLevelConfig, cyclicRewardsConfig, _playerBonusesService.LevelChanged, _playerEconomyService);
+            _playerRewardsByLevelService = new(_rewardsByLevelConfig,
+                _cyclicRewardsConfig,
+                _playerBonusesService.LevelChanged,
+                _playerEconomyService);
             _shopState = new(_playerUpgradeService);
 
             _shopState.Restore(loadedData.ShopsData);
@@ -165,7 +170,7 @@ namespace Core.GlobalGameState
                 PlayerClickAmount = _playerEconomyService.PlayerClickAmount,
                 PassiveIncomeAmount = _playerEconomyService.PassiveIncomeAmount,
 
-                TrippleClickChance = _playerEconomyService.TrippleClickChance,
+                TrippleClickChance = _playerEconomyService.TripleClickChance,
 
                 Level = _playerBonusesService.Level,
                 CurrentExp = _playerBonusesService.CurrentExp,
@@ -185,7 +190,6 @@ namespace Core.GlobalGameState
         {
 #if UNITY_WEBGL
             string jsonData = YG2.saves?.JsonData;
-            Debug.Log($"[Player State] Cloud player data present: {!string.IsNullOrEmpty(jsonData)}");
             return !string.IsNullOrEmpty(jsonData);
 #else
             return PlayerPrefs.HasKey(_playerSaveDataKey);

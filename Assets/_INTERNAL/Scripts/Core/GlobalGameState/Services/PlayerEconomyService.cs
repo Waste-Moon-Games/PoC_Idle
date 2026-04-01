@@ -7,6 +7,7 @@ using SO.PlayerConfigs;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Core.GlobalGameState.Services
@@ -30,8 +31,8 @@ namespace Core.GlobalGameState.Services
         private readonly float _maxGemsRewardClickChance;
 
         private float _trippleClickChance;
-        private readonly float _minTrippleClickChance;
-        private readonly float _maxTrippleClickChance;
+        private readonly float _minTripleClickChance;
+        private readonly float _maxTripleClickChance;
 
         private float _playerClickAmount;
         private float _playerClickBonusAmount = 1f;
@@ -39,10 +40,11 @@ namespace Core.GlobalGameState.Services
         private float _passiveIncomeBonusAmount = 1f;
 
         private bool _bonusState;
-        private bool _rewardBonusState;
+        private bool _rewardedBonusState;
 
         private readonly float _bonusClickMultiplier;
         private readonly float _defaultClickMultiplier = 1f;
+        private readonly float _rewardedBonusClickMultiplier;
 
         public float PlayerClickAmount
         {
@@ -70,7 +72,7 @@ namespace Core.GlobalGameState.Services
             }
         }
 
-        public float TrippleClickChance
+        public float TripleClickChance
         {
             get => _trippleClickChance;
             private set
@@ -104,12 +106,12 @@ namespace Core.GlobalGameState.Services
         public Observable<float> CoinsClickAd => _coinsClickAdSignal.AsObservable();
         public Observable<float> PassiveIncomeChanged => _passiveIncomeAmountChangedSignal.AsObservable();
 
-        public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged, Observable<bool> rewardBonusStateChanged, float bonusClickMultiplier)
-            : this(config, bonusStateChaged, rewardBonusStateChanged, bonusClickMultiplier, null)
+        public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged, PlayerRewardedBonusesService playerRewardedBonusesService, float bonusClickMultiplier)
+            : this(config, bonusStateChaged, playerRewardedBonusesService, bonusClickMultiplier, null)
         {
         }
 
-        public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged, Observable<bool> rewardBonusStateChanged, float bonusClickMultiplier, PlayerData loadedData)
+        public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged, PlayerRewardedBonusesService playerRewardedBonusesService, float bonusClickMultiplier, PlayerData loadedData)
         {
             _wallets[CurrencyType.Coins] = new CurrencyWallet("Coins_Wallet", loadedData?.Coins ?? config.InitialCoinsWalletAmount);
             _wallets[CurrencyType.Gems] = new CurrencyWallet("Gems_Wallet", loadedData?.Gems ?? config.InitialGemsWalletAmount);
@@ -126,20 +128,23 @@ namespace Core.GlobalGameState.Services
             PassiveIncomeAmount = loadedData?.PassiveIncomeAmount ?? 0f;
             _passiveIncomeDelay = config.PassiveIncomeDelay;
 
-            TrippleClickChance = loadedData?.TrippleClickChance ?? config.InitialCurrentTrippleClickChance;
-            _minTrippleClickChance = config.InitialMinTrippleClickChance;
-            _maxTrippleClickChance = config.MaxTrippleClickChance;
+            TripleClickChance = loadedData?.TrippleClickChance ?? config.InitialCurrentTrippleClickChance;
+            _minTripleClickChance = config.InitialMinTrippleClickChance;
+            _maxTripleClickChance = config.MaxTrippleClickChance;
 
             bonusStateChaged.Subscribe(HandleChangedBonusState).AddTo(_disposables);
-            rewardBonusStateChanged.Subscribe(HandleChangedStateRewardBonus).AddTo(_disposables);
+
+            playerRewardedBonusesService.TemporaryBonusStateChanged.Subscribe(HandleChangedStateRewardBonus).AddTo(_disposables);
+            playerRewardedBonusesService.CurrencyBonusGiven.Subscribe(HandleGivenCurrencyBonus).AddTo(_disposables);
 
             _bonusClickMultiplier = bonusClickMultiplier;
+            _rewardedBonusClickMultiplier = bonusClickMultiplier;
 
             _passiveIncomeAmountChangedSignal.AddTo(_disposables);
         }
 
         public void IncreasePlayerClick(float amount) => PlayerClickAmount += amount;
-        public void IncreaseTrippleClickChance(float amount) => TrippleClickChance = MathF.Min(TrippleClickChance + amount, _maxTrippleClickChance);
+        public void IncreaseTrippleClickChance(float amount) => TripleClickChance = MathF.Min(TripleClickChance + amount, _maxTripleClickChance);
         public void IncreaseGemsRewardClickChance(float amount) => GemsClickRewardChance = MathF.Min(GemsClickRewardChance + amount, _maxGemsRewardClickChance);
         public void IncreasePlayerPassiveIncome(float amount) => PassiveIncomeAmount += amount;
 
@@ -220,15 +225,15 @@ namespace Core.GlobalGameState.Services
 
         private float CalculateReward()
         {
-            float randRoll = RandRoll(_minTrippleClickChance, _maxTrippleClickChance);
-            float rewardMultiplier = randRoll < TrippleClickChance ? _bonusClickMultiplier : _defaultClickMultiplier;
+            float randRoll = RandRoll(_minTripleClickChance, _maxTripleClickChance);
+            float rewardMultiplier = randRoll < TripleClickChance ? _bonusClickMultiplier : _defaultClickMultiplier;
 
-            float result = PlayerClickAmount * rewardMultiplier * _bonusClickMultiplier;
+            if (_bonusState)
+                rewardMultiplier *= _bonusClickMultiplier;
+            if (_rewardedBonusState)
+                rewardMultiplier *= _rewardedBonusClickMultiplier;
 
-            if (!_bonusState)
-                return result * rewardMultiplier;
-            if (_rewardBonusState)
-                return result * _bonusClickMultiplier;
+            float result = PlayerClickAmount * rewardMultiplier;
 
             return result;
         }
@@ -239,7 +244,7 @@ namespace Core.GlobalGameState.Services
         {
             float result = PassiveIncomeAmount;
 
-            if(_rewardBonusState)
+            if(_rewardedBonusState)
                 result = PassiveIncomeAmount * _bonusClickMultiplier;
 
             return result;
@@ -264,6 +269,7 @@ namespace Core.GlobalGameState.Services
         }
 
         private void HandleChangedBonusState(bool state) => _bonusState = state;
-        private void HandleChangedStateRewardBonus(bool state) => _rewardBonusState = state;
+        private void HandleChangedStateRewardBonus(bool state) => _rewardedBonusState = state;
+        private void HandleGivenCurrencyBonus(float amount) => GemsWallet.Add(amount);
     }
 }

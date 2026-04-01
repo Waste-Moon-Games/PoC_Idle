@@ -29,6 +29,7 @@ namespace UI.GameplayMenu.Views
             if(_openRewardsPanelButton == null || _closeRewardsPanelButton == null)
                 return;
 
+            transform.SetAsLastSibling();
             _openRewardsPanelButton.onClick.AddListener(OpenRewardsPanel);
             _closeRewardsPanelButton.onClick.AddListener(CloseRewardsPanel);
         }

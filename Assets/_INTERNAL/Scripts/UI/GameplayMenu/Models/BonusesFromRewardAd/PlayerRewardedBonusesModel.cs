@@ -1,6 +1,7 @@
 ﻿using Common.MVVM;
 using Core.AdsSystem;
 using Core.Common.Data;
+using Core.Enums;
 using Core.GlobalGameState.Services;
 using R3;
 using System.Collections.Generic;
@@ -13,11 +14,13 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
         private readonly CompositeDisposable _disposables = new();
 
         private readonly AdsSystemContex _adsSystem;
-        private readonly PlayerRewardBonusesService _rewardAdsBonusesService;
+        private readonly PlayerRewardedBonusesService _rewardAdsBonusesService;
 
         private readonly Subject<string> _bonusSelectedSignal = new();
 
         private readonly List<BonusItemModel> _items = new();
+
+        private BonusItemModel _selectedBonus;
 
         public IReadOnlyList<BonusItemModel> BonusItemModels => _items.AsReadOnly();
 
@@ -25,10 +28,12 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
 
         public PlayerRewardedBonusesModel(
             AdsSystemContex adsSystem,
-            PlayerRewardBonusesService playerRewardBonusesService)
+            PlayerRewardedBonusesService playerRewardBonusesService)
         {
             _adsSystem = adsSystem;
             _rewardAdsBonusesService = playerRewardBonusesService;
+
+            _rewardAdsBonusesService.TemporaryBonusStateChanged.Subscribe(HandleChangedTemporaryBonusState).AddTo(_disposables);
         }
 
         public void CreateBonusItemModels(List<BonusItemData> bonusItemDatas, bool ruLang)
@@ -49,6 +54,7 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
                     desc = sourceItemData.EnDescription;
 
                 var itemModel = new BonusItemModel(sourceItemData, desc);
+                itemModel.ItemChosenSignal.Subscribe(HandleSelectedBonusItem).AddTo(_disposables);
 
                 _items.Add(itemModel);
             }
@@ -60,10 +66,30 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
         {
             _adsSystem.ShowRewarded(() =>
             {
-                _rewardAdsBonusesService.ActiveTemporaryBonus();
+                if (_selectedBonus.Type == BonusItemType.TemporaryBonus)
+                {
+                    _rewardAdsBonusesService.ActiveTemporaryBonus();
+                }
+                else if (_selectedBonus.Type == BonusItemType.GetCurrencyBonus)
+                    _rewardAdsBonusesService.GiveCurrencyBonus(_selectedBonus.Amount);
             });
         }
 
-        private void HandleSelectedBonusItem(BonusItemModel item) => _bonusSelectedSignal.OnNext(item.Description);
+        public void CloseBonusInfoWindow()
+        {
+            _selectedBonus.CloseItemWindow();
+        }
+
+        private void HandleChangedTemporaryBonusState(bool state)
+        {
+            if (_selectedBonus.Type == BonusItemType.TemporaryBonus)
+                _selectedBonus.SetBonusState(state);
+        }
+
+        private void HandleSelectedBonusItem(BonusItemModel item)
+        {
+            _selectedBonus = item;
+            _bonusSelectedSignal.OnNext(item.Description);
+        }
     }
 }

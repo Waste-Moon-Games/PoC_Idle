@@ -8,7 +8,10 @@ namespace UI.GameplayMenu.ViewModels.BonusesFromRewardAd
     {
         private BonusItemModel _model;
 
+        public bool IsActive => _model.IsActive;
+
         public Observable<bool> BonusInfoWindowStateChanged => _model.BonusInfoWindowStateChangedSignal;
+        public Observable<bool> BonusActiveStateChanged => _model.BonusActiveStateChanged;
 
         public void BindModel(IModel model)
         {

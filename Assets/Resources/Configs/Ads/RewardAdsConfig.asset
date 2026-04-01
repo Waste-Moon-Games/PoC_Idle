@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab905034d8ffb154ba2ec977d78a3dcc, type: 3}
   m_Name: RewardAdsConfig
   m_EditorClassIdentifier: Assembly-CSharp::SO.AdsConfigs.RewardAdsConfig
-  <InitTemporaryBonusDurationInMinutes>k__BackingField: 10
+  <InitTemporaryBonusDurationInMinutes>k__BackingField: 0.5
   <Items>k__BackingField:
   - Type: 0
     RuDescription: "\u0423\u0432\u0435\u043B\u0438\u0447\u044C\u0442\u0435 \u0412\u0415\u0421\u042C
@@ -20,7 +20,7 @@ MonoBehaviour:
       \u043D\u0430 10 \u043C\u0438\u043D\u0443\u0442!"
     EnDescription: Double YOUR TOTAL income for 10 minutes!
     Amount: 2
-    BonusDuration: 600
+    BonusDuration: 0.5
   - Type: 1
     RuDescription: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u0435 \u043F\u0440\u044F\u043C\u043E
       \u0441\u0435\u0439\u0447\u0430\u0441 20 \u0433\u0435\u043C\u043E\u0432!"

@@ -30,6 +30,7 @@ namespace UI.GameplayMenu.ViewModels.BonusesFromRewardAd
         }
 
         public void ShowAd() => _model.ShowAd();
+        public void CloseBonusInfoWindow() => _model.CloseBonusInfoWindow();
 
         public void Dispose() => _model.Dispose();
     }
