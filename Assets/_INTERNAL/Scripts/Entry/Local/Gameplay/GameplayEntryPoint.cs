@@ -7,9 +7,11 @@ using SO.AnimationConfigs;
 
 using UI.GameplayMenu.Animations;
 using UI.GameplayMenu.Models;
+using UI.GameplayMenu.Models.BonusesFromRewardAd;
 using UI.GameplayMenu.ViewModels;
+using UI.GameplayMenu.ViewModels.BonusesFromRewardAd;
 using UI.GameplayMenu.Views;
-
+using UI.GameplayMenu.Views.BonusesFromRewardAd;
 using UnityEngine;
 
 using Utils.DI;
@@ -60,6 +62,7 @@ namespace Entry.Local.Gameplay
                 out PlayerStatsView playerStatsView);
 
             CreateLocalRewardsSystem(container, mainGameView);
+            CreateLocalRewardedAdsSystem(container, mainGameView);
 
             topRootView.AttachView(economyPlayerInfoView.transform);
             topRootView.AttachView(playerStatsView.transform);
@@ -100,6 +103,25 @@ namespace Entry.Local.Gameplay
             viewModel.BindModel(model);
 
             RewardsSystemView view = _loader.LoadRewardSystemView();
+            view.BindViewModel(viewModel);
+
+            mainGameView.AttachView(view.gameObject);
+        }
+
+        private void CreateLocalRewardedAdsSystem(in DIContainer container, in MainGameView mainGameView)
+        {
+            var adsSystem = container.Resolve<AdsSystemContex>();
+            var bonusesService = container.Resolve<GameWorldState>().PlayerState.PlayerRewardBonusesService;
+            var languageState = container.Resolve<GameWorldState>().IsRuLanguage;
+            var rewardedBonusesConfig = _loader.LoadRewardedBonusesConfig();
+
+            PlayerRewardedBonusesModel model = new(adsSystem, bonusesService);
+            model.CreateBonusItemModels(rewardedBonusesConfig.Items, languageState);
+
+            PlayerRewardedBonusesViewModel viewModel = new();
+            viewModel.BindModel(model);
+
+            PlayerRewardedBonusesView view = _loader.LoadPlayerRewardedBonusesService();
             view.BindViewModel(viewModel);
 
             mainGameView.AttachView(view.gameObject);

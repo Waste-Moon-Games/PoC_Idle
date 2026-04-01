@@ -153,7 +153,7 @@ PlayerSettings:
   vrSettings:
     enable360StereoCapture: 0
   isWsaHolographicRemotingEnabled: 0
-  enableFrameTimingStats: 0
+  enableFrameTimingStats: 1
   enableOpenGLProfilerGPURecorders: 1
   allowHDRDisplaySupport: 0
   useHDRDisplay: 0
@@ -286,7 +286,7 @@ PlayerSettings:
   AndroidEnableTango: 0
   androidEnableBanner: 1
   androidUseLowAccuracyLocation: 0
-  androidUseCustomKeystore: 1
+  androidUseCustomKeystore: 0
   m_AndroidBanners:
   - width: 320
     height: 180
@@ -843,10 +843,12 @@ PlayerSettings:
     tvOS: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Localization_yg;Payments_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;YandexGamesPlatform_yg
   additionalCompilerArguments: {}
   platformArchitecture: {}
-  scriptingBackend: {}
+  scriptingBackend:
+    Android: 1
   il2cppCompilerConfiguration:
     WebGL: 1
   il2cppCodeGeneration:
+    Android: 0
     WebGL: 1
   il2cppStacktraceInformation: {}
   managedStrippingLevel:

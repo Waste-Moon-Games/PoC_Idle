@@ -37,7 +37,9 @@ namespace Core.GlobalGameState.Services
         private float _playerClickBonusAmount = 1f;
         private float _passiveIncomeAmount;
         private float _passiveIncomeBonusAmount = 1f;
+
         private bool _bonusState;
+        private bool _rewardBonusState;
 
         private readonly float _bonusClickMultiplier;
         private readonly float _defaultClickMultiplier = 1f;
@@ -102,12 +104,12 @@ namespace Core.GlobalGameState.Services
         public Observable<float> CoinsClickAd => _coinsClickAdSignal.AsObservable();
         public Observable<float> PassiveIncomeChanged => _passiveIncomeAmountChangedSignal.AsObservable();
 
-        public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged, float bonusClickMultiplier)
-            : this(config, bonusStateChaged, bonusClickMultiplier, null)
+        public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged, Observable<bool> rewardBonusStateChanged, float bonusClickMultiplier)
+            : this(config, bonusStateChaged, rewardBonusStateChanged, bonusClickMultiplier, null)
         {
         }
 
-        public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged, float bonusClickMultiplier, PlayerData loadedData)
+        public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged, Observable<bool> rewardBonusStateChanged, float bonusClickMultiplier, PlayerData loadedData)
         {
             _wallets[CurrencyType.Coins] = new CurrencyWallet("Coins_Wallet", loadedData?.Coins ?? config.InitialCoinsWalletAmount);
             _wallets[CurrencyType.Gems] = new CurrencyWallet("Gems_Wallet", loadedData?.Gems ?? config.InitialGemsWalletAmount);
@@ -129,6 +131,8 @@ namespace Core.GlobalGameState.Services
             _maxTrippleClickChance = config.MaxTrippleClickChance;
 
             bonusStateChaged.Subscribe(HandleChangedBonusState).AddTo(_disposables);
+            rewardBonusStateChanged.Subscribe(HandleChangedStateRewardBonus).AddTo(_disposables);
+
             _bonusClickMultiplier = bonusClickMultiplier;
 
             _passiveIncomeAmountChangedSignal.AddTo(_disposables);
@@ -206,8 +210,6 @@ namespace Core.GlobalGameState.Services
                 (wallet as IDisposable)?.Dispose();
         }
 
-        private void HandleChangedBonusState(bool state) => _bonusState = state;
-
         private bool TryAddGems()
         {
             float randRoll = RandRoll(_minGemsRewardClickChance, _maxGemsRewardClickChance);
@@ -221,15 +223,27 @@ namespace Core.GlobalGameState.Services
             float randRoll = RandRoll(_minTrippleClickChance, _maxTrippleClickChance);
             float rewardMultiplier = randRoll < TrippleClickChance ? _bonusClickMultiplier : _defaultClickMultiplier;
 
-            if (!_bonusState)
-                return PlayerClickAmount * rewardMultiplier;
+            float result = PlayerClickAmount * rewardMultiplier * _bonusClickMultiplier;
 
-            return PlayerClickAmount * rewardMultiplier * _bonusClickMultiplier;
+            if (!_bonusState)
+                return result * rewardMultiplier;
+            if (_rewardBonusState)
+                return result * _bonusClickMultiplier;
+
+            return result;
         }
 
         private float RandRoll(float minValue, float maxValue) => Random.Range(minValue, maxValue);
 
-        private float CalculatePassiveIncomeTick() => PassiveIncomeAmount;
+        private float CalculatePassiveIncomeTick()
+        {
+            float result = PassiveIncomeAmount;
+
+            if(_rewardBonusState)
+                result = PassiveIncomeAmount * _bonusClickMultiplier;
+
+            return result;
+        }
 
         private void ApplyPassiveIncome()
         {
@@ -248,5 +262,8 @@ namespace Core.GlobalGameState.Services
                 await UniTask.Delay(TimeSpan.FromSeconds(_passiveIncomeDelay), ignoreTimeScale: true, cancellationToken: token);
             }
         }
+
+        private void HandleChangedBonusState(bool state) => _bonusState = state;
+        private void HandleChangedStateRewardBonus(bool state) => _rewardBonusState = state;
     }
 }

@@ -4,7 +4,7 @@ using Core.SaveSystemBase.Data;
 
 using Cysharp.Threading.Tasks;
 using R3;
-
+using SO.AdsConfigs;
 using SO.PlayerConfigs;
 
 using System;
@@ -29,6 +29,7 @@ namespace Core.GlobalGameState
         private readonly UniTaskCompletionSource _sdkDataReadyTcs = new();
 #endif
         private readonly AutoSaveService _autoSaveService;
+        private readonly PlayerRewardBonusesService _rewardBonuses;
 
         private PlayerEconomyService _playerEconomyService;
         private PlayerUpgradeService _playerUpgradeService;
@@ -50,6 +51,7 @@ namespace Core.GlobalGameState
         public PlayerBonusesService BonusesService => _playerBonusesService;
         public PlayerRewardsByLevelService RewardsService => _playerRewardsByLevelService;
         public ShopState ShopState => _shopState;
+        public PlayerRewardBonusesService PlayerRewardBonusesService => _rewardBonuses;
 
         public PlayerState(SaveSystemContext saveSystemContext)
         {
@@ -62,10 +64,13 @@ namespace Core.GlobalGameState
             _playerConfig = Resources.Load<PlayerConfig>("Configs/Player/PlayerConfig");
             _rewardsByLevelConfig = Resources.Load<RewardsByLevelConfig>("Configs/Player/RewardsByLevelConfig");
             _cyclicRewardsConfig = Resources.Load<CyclicRewardsConfig>("Configs/Player/CyclicRewardsConfig");
+            var rewardAdsConfig = Resources.Load<RewardAdsConfig>("Configs/Ads/RewardAdsConfig");
 
             var autoSaveToken = new CancellationTokenSource();
             _autoSaveService = new(_playerConfig.AutoSaveDelay, autoSaveToken);
             _autoSaveService.AutoSaveSignal.Subscribe(def => SavePlayerState()).AddTo(_disposables);
+
+            _rewardBonuses = new(rewardAdsConfig.InitTemporaryBonusDurationInMinutes);
         }
 
         public async UniTask InitializeAsync()
@@ -112,7 +117,7 @@ namespace Core.GlobalGameState
         private void CreateNewPlayerState()
         {
             _playerBonusesService = new(_playerConfig);
-            _playerEconomyService = new(_economyConfig, _playerBonusesService.BonusStateChanged, _playerConfig.BonusClickMultiplier);
+            _playerEconomyService = new(_economyConfig, _playerBonusesService.BonusStateChanged, _rewardBonuses.TemporaryBonusStateChanged, _playerConfig.BonusClickMultiplier);
             _playerUpgradeService = new(_playerEconomyService);
             _playerRewardsByLevelService = new(_rewardsByLevelConfig, _cyclicRewardsConfig, _playerBonusesService.LevelChanged, _playerEconomyService);
 
@@ -142,7 +147,7 @@ namespace Core.GlobalGameState
             }
 
             _playerBonusesService = new(playerConfig, loadedData);
-            _playerEconomyService = new(economyConfig, _playerBonusesService.BonusStateChanged, playerConfig.BonusClickMultiplier, loadedData);
+            _playerEconomyService = new(economyConfig, _playerBonusesService.BonusStateChanged, _rewardBonuses.TemporaryBonusStateChanged, playerConfig.BonusClickMultiplier, loadedData);
             _playerUpgradeService = new(_playerEconomyService);
             _playerRewardsByLevelService = new(rewardsByLevelConfig, cyclicRewardsConfig, _playerBonusesService.LevelChanged, _playerEconomyService);
             _shopState = new(_playerUpgradeService);

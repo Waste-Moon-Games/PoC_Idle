@@ -26,9 +26,6 @@ namespace Entry.Local.Shop
 {
     public class ShopEntryPoint : MonoBehaviour
     {
-        [SerializeField] private List<string> _shopConfigPaths = new();
-        [SerializeField] private List<string> _shopRateConfigPaths = new();
-
         private readonly ShopResourceLoader _loader = new();
         private readonly List<ShopModel> _shopModels = new();
 

@@ -5,11 +5,11 @@ apply from: '../shared/keepUnitySymbols.gradle'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
-    implementation 'androidx.lifecycle:lifecycle-process:2.4.1' // Assets/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:12
-    implementation 'com.yandex.ads.mediation:mobileads-mytarget:5.27.4.1' // Assets/AdPlugins/YandexMobileAds/Editor/MobileadsMytargetMediationDependencies.xml:7
-    implementation 'com.yandex.ads.mediation:mobileads-unityads:4.16.4.0' // Assets/AdPlugins/YandexMobileAds/Editor/MobileadsUnityAdsMediationDependencies.xml:7
-    implementation 'com.yandex.android:mobileads:7.18.2' // Assets/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:7
-    implementation 'io.appmetrica.analytics:analytics:7.14.0' // Assets/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:17
+    implementation 'androidx.lifecycle:lifecycle-process:2.4.1' // Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:12
+    implementation 'com.yandex.ads.mediation:mobileads-mytarget:5.27.4.1' // Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/MobileadsMytargetMediationDependencies.xml:7
+    implementation 'com.yandex.ads.mediation:mobileads-unityads:4.16.4.0' // Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/MobileadsUnityAdsMediationDependencies.xml:7
+    implementation 'com.yandex.android:mobileads:7.18.2' // Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:7
+    implementation 'io.appmetrica.analytics:analytics:7.14.0' // Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:17
 // Android Resolver Dependencies End
 **DEPS**}
 

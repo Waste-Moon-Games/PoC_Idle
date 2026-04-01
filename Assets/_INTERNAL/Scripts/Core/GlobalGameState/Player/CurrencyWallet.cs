@@ -20,7 +20,7 @@ namespace Core.GlobalGameState.Player
             private set
             {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(_amount), "Amount cannot be a negative!");
+                    throw new ArgumentOutOfRangeException(nameof(_amount), "_amount cannot be a negative!");
 
                 _amount = value;
                 _amountChangedSignal.OnNext(_amount);

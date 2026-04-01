@@ -19,7 +19,7 @@ dependencyResolutionManagement {
 // Android Resolver Repos Start
         def unityProjectPath = $/file:///**DIR_UNITYPROJECT**/$.replace("\\", "/")
         maven {
-            url "https://maven.google.com/" // Assets/AdPlugins/YandexMobileAds/Editor/MobileadsMytargetMediationDependencies.xml:7, Assets/AdPlugins/YandexMobileAds/Editor/MobileadsUnityAdsMediationDependencies.xml:7, Assets/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:7, Assets/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:12, Assets/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:17
+            url "https://maven.google.com/" // Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/MobileadsMytargetMediationDependencies.xml:7, Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/MobileadsUnityAdsMediationDependencies.xml:7, Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:7, Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:12, Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:17
         }
         mavenLocal()
 // Android Resolver Repos End

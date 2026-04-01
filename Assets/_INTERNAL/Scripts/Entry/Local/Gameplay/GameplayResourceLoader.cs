@@ -1,5 +1,6 @@
-﻿using UI.GameplayMenu.Animations;
+﻿using SO.AdsConfigs;
 using UI.GameplayMenu.Views;
+using UI.GameplayMenu.Views.BonusesFromRewardAd;
 using UnityEngine;
 
 namespace Entry.Local.Gameplay
@@ -27,6 +28,13 @@ namespace Entry.Local.Gameplay
             return Object.Instantiate(rewardSystemViewPrefab);
         }
 
+        public PlayerRewardedBonusesView LoadPlayerRewardedBonusesService()
+        {
+            var rewardedBonusesViewPrefab = Resources.Load<PlayerRewardedBonusesView>("UI/GameplayMenu/UIBlocks/RewardedBonusesViewHolder");
+            
+            return Object.Instantiate(rewardedBonusesViewPrefab);
+        }
+
         public void LoadPlayableViews(out MainGameView mainGameView, out EconomyPlayerInfoView economyPlayerInfoView, out PlayerStatsView playerStatsView)
         {
             var mainGameViewPrefab = Resources.Load<MainGameView>("UI/GameplayMenu/UIBlocks/UIRootView");
@@ -36,6 +44,12 @@ namespace Entry.Local.Gameplay
             mainGameView = Object.Instantiate(mainGameViewPrefab);
             economyPlayerInfoView = Object.Instantiate(economyPlayerInfoViewPrefab);
             playerStatsView = Object.Instantiate(playerStatsViewPrefab);
+        }
+
+        public RewardAdsConfig LoadRewardedBonusesConfig()
+        {
+            var result = Resources.Load<RewardAdsConfig>("Configs/Ads/RewardAdsConfig");
+            return result;
         }
     }
 }
