@@ -190,7 +190,7 @@ MonoBehaviour:
     saveCloud: 1
     flush: 0
   Basic:
-    platform: {fileID: 0}
+    platform: {fileID: 11400000, guid: fabe82a4ab034324eb452cc7109f6d19, type: 2}
     autoApplySettings: 0
     autoPauseGame: 1
     editEventSystem: 1
@@ -205,7 +205,7 @@ MonoBehaviour:
     buildNumber: 11
   Simulation:
     device: 1
-    language: ru
+    language: en
     advIntervalSimulation: 60
     durationAdv: 0.5
     loadAdv: 0

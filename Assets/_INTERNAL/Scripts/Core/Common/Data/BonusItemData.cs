@@ -1,4 +1,5 @@
 ﻿using Core.Enums;
+using Utils.Localization;
 
 namespace Core.Common.Data
 {
@@ -6,8 +7,7 @@ namespace Core.Common.Data
     public class BonusItemData
     {
         public BonusItemType Type;
-        public string RuDescription;
-        public string EnDescription;
+        public LocalizedText Descriptions;
         public float Amount;
         public float BonusDuration;
     }

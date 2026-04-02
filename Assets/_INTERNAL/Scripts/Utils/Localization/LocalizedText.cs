@@ -1,55 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Utils.Localization
 {
-    public sealed class LocalizedText : IEquatable<LocalizedText>
+    [Serializable]
+    public sealed class LocalizedText : ISerializationCallbackReceiver
     {
-        private readonly IReadOnlyDictionary<SystemLanguage, string> _texts;
-
-        public LocalizedText(Dictionary<SystemLanguage, string> texts)
+        [Serializable]
+        private struct Entry
         {
-            if (texts == null || texts.Count == 0)
-                throw new ArgumentException("[Localized Text] Localized Text cannot be empty");
-
-            _texts = new Dictionary<SystemLanguage, string>(texts);
+            public SystemLanguage Language;
+            [TextArea] public string Text;
         }
+
+        [SerializeField] private List<Entry> _entries = new();
+
+        private Dictionary<SystemLanguage, string> _cache;
 
         public string Get(SystemLanguage language)
         {
-            if (_texts.TryGetValue(language, out var text))
+            EnsureCache();
+
+            if (_cache.TryGetValue(language, out var text))
                 return text;
 
-            return _texts.Values.First();
+            if (_cache.TryGetValue(SystemLanguage.English, out var en))
+                return en;
+
+            foreach (var pair in _cache)
+                return pair.Value;
+
+            return string.Empty;
         }
 
-        public bool Equals(LocalizedText other)
-        {
-            if (other == null)
-                return false;
-            if (_texts.Count != other._texts.Count)
-                return false;
+        public void OnBeforeSerialize() { }
 
-            return !_texts.Except(other._texts).Any();
+        public void OnAfterDeserialize()
+        {
+            RebuildCache();
         }
 
-        public override bool Equals(object obj) => Equals(obj as LocalizedText);
-
-        public override int GetHashCode()
+        private void EnsureCache()
         {
-            unchecked
+            if (_cache == null)
+                RebuildCache();
+        }
+
+        private void RebuildCache()
+        {
+            _cache = new Dictionary<SystemLanguage, string>();
+
+            for (int i = 0; i < _entries.Count; i++)
             {
-                int hash = 17;
+                var e = _entries[i];
+                if (string.IsNullOrWhiteSpace(e.Text))
+                    continue;
 
-                foreach (var pair in _texts.OrderBy(x => x.Key))
-                {
-                    hash = hash * 31 + pair.Key.GetHashCode();
-                    hash = hash * 31 + pair.Value.GetHashCode();
-                }
-
-                return hash;
+                if (!_cache.ContainsKey(e.Language))
+                    _cache.Add(e.Language, e.Text);
             }
         }
     }

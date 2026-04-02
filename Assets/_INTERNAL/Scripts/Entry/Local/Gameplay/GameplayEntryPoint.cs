@@ -112,16 +112,11 @@ namespace Entry.Local.Gameplay
         {
             var adsSystem = container.Resolve<AdsSystemContex>();
             var bonusesService = container.Resolve<GameWorldState>().PlayerState.PlayerRewardedBonusesService;
-#if UNITY_WEBGL
-            var languageState = container.Resolve<GameWorldState>().IsRuLanguage;
-#endif
+            var localizationService = container.Resolve<GameWorldState>().LocalizationService;
             var rewardedBonusesConfig = _loader.LoadRewardedBonusesConfig();
 
             PlayerRewardedBonusesModel model = new(adsSystem, bonusesService);
-#if UNITY_WEBGL
-            model.CreateBonusItemModels(rewardedBonusesConfig.Items, languageState);
-#endif
-            model.CreateBonusItemModels(rewardedBonusesConfig.Items);
+            model.CreateBonusItemModels(rewardedBonusesConfig.Items, localizationService.CurrentLanguage);
 
             PlayerRewardedBonusesViewModel viewModel = new();
             viewModel.BindModel(model);

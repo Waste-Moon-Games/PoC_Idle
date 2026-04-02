@@ -6,6 +6,7 @@ using Core.GlobalGameState.Services;
 using R3;
 using System.Collections.Generic;
 using UnityEngine;
+using Utils.Localization;
 
 namespace UI.GameplayMenu.Models.BonusesFromRewardAd
 {
@@ -36,7 +37,7 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
             _rewardAdsBonusesService.TemporaryBonusStateChanged.Subscribe(HandleChangedTemporaryBonusState).AddTo(_disposables);
         }
 
-        public void CreateBonusItemModels(List<BonusItemData> bonusItemDatas, bool ruLang = true)
+        public void CreateBonusItemModels(List<BonusItemData> bonusItemDatas, SystemLanguage currentLanguage)
         {
             if(bonusItemDatas.Count == 0)
             {
@@ -46,12 +47,8 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
 
             foreach (BonusItemData sourceItemData in bonusItemDatas)
             {
-                string desc;
-
-                if (ruLang)
-                    desc = sourceItemData.RuDescription;
-                else
-                    desc = sourceItemData.EnDescription;
+                var localizedText = sourceItemData.Descriptions;
+                string desc = localizedText.Get(currentLanguage);
 
                 var itemModel = new BonusItemModel(sourceItemData, desc);
                 itemModel.ItemChosenSignal.Subscribe(HandleSelectedBonusItem).AddTo(_disposables);

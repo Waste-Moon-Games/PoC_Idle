@@ -28,7 +28,7 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
         public Observable<bool> BonusInfoWindowStateChangedSignal => _bonusInfoWindowStateChangedSignal.AsObservable();
         public Observable<bool> BonusActiveStateChanged => _bonusActiveStateChangedSignal.AsObservable();
 
-        public BonusItemModel(BonusItemData sourceData, string desc)
+        public BonusItemModel(BonusItemData sourceData, string desc = null)
         {
             _type = sourceData.Type;
             _amount = sourceData.Amount;
