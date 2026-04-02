@@ -95,6 +95,54 @@ namespace Core.Shop.Models
             _itemsInitializedSignal.OnNext(_itemsDict.Values.OrderBy(i => i.Id).ToList());
         }
 
+        public void SyncWithSave(ShopStateData savedShop)
+        {
+            bool hasSavedData = savedShop != null;
+            _state = hasSavedData ? savedShop.IsOpened : _itemsConfig.OpenedByDefault;
+
+            var savedItems = hasSavedData ? (savedShop.Items ?? new List<ItemUpgradeData>())
+                .Where(item => item != null)
+                .GroupBy(item => item.ID)
+                .ToDictionary(group => group.Key, group => group.Last())
+                : new Dictionary<int, ItemUpgradeData>();
+
+            _itemsDisposables.Dispose();
+            _itemsDisposables = new();
+            _itemsDict.Clear();
+
+            int syncedItemsCount = 0;
+            int addedItemsCount = 0;
+
+            foreach (var itemConfig in _itemsConfig.Items)
+            {
+                if (itemConfig == null)
+                    continue;
+
+                ItemModel model;
+                if(savedItems.TryGetValue(itemConfig.ID, out var savedItem))
+                {
+                    model = new(itemConfig, savedItem);
+                    syncedItemsCount++;
+                }
+                else
+                {
+                    model = new(itemConfig);
+                    addedItemsCount++;
+                }
+
+                _itemsDict[model.Id] = model;
+            }
+
+            SubscribeOnItems();
+
+            _itemsInitializedSignal.OnNext(_itemsDict.Values.OrderBy(i => i.Id).ToList());
+
+            if (hasSavedData)
+            {
+                Debug.Log($"[Shop Sync] Shop '{_sId}': synced {syncedItemsCount} saved item(s), added {addedItemsCount} new item(s) from config.");
+            }
+        }
+
         public void RequestState() => _stateChangedSignal.OnNext(_state);
 
         public void Open()

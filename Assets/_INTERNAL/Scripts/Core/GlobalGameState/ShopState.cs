@@ -40,7 +40,10 @@ namespace Core.GlobalGameState
                 if (shopConfig == null || string.IsNullOrWhiteSpace(shopConfig.ShopID))
                     continue;
 
-                var shopModel = new ShopModel(_playerUpgradeService.SuccessfulPurchase, _playerUpgradeService.FailedPurchase, shopConfig);
+                var shopModel = new ShopModel(
+                    _playerUpgradeService.SuccessfulPurchase,
+                    _playerUpgradeService.FailedPurchase,
+                    shopConfig);
                 _shopsDict[shopModel.ShopId] = shopModel;
                 shopModel.PurchaseSignal.Subscribe(s => HandleBuyItem(s.Item1, s.Item2)).AddTo(_disposables);
             }
@@ -64,17 +67,20 @@ namespace Core.GlobalGameState
             if (datas == null || datas.Count == 0)
             {
                 foreach (var shop in _shopsDict.Values)
-                    shop.InitializeItemsFromConfig();
+                    shop.SyncWithSave(null);
                 return;
             }
 
-            var saveById = datas.ToDictionary(d => d.ShopID, d => d);
+            var saveById = datas
+                .Where(d => d != null && !string.IsNullOrWhiteSpace(d.ShopID))
+                .GroupBy(d => d.ShopID)
+                .ToDictionary(group => group.Key, group => group.Last());
 
             foreach (var shop in _shopsDict.Values)
             {
                 if (!saveById.TryGetValue(shop.ShopId, out var savedShop))
                 {
-                    shop.InitializeItemsFromConfig();
+                    shop.SyncWithSave(null);
                     continue;
                 }
 
@@ -82,7 +88,7 @@ namespace Core.GlobalGameState
                     .Where(item => item != null)
                     .ToDictionary(item => item.ID, item => item);
 
-                shop.InitializeItemsFromSave(itemsById);
+                shop.SyncWithSave(savedShop);
             }
         }
 

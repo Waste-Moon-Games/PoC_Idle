@@ -81,7 +81,7 @@ namespace UI.ShopMenu.Views
                 ItemType.Click => "улучшению клика",
                 ItemType.Chance => "увеличению шанса",
                 ItemType.Passive => "увеличению оффлайн дохода",
-                ItemType.Prestige => "что-то про престиж",
+                ItemType.Bonus => "что-то про престиж",
                 _ => "Invalid _type",
             };
         }

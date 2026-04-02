@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc77f705fd1414e4a84db90f1861572b, type: 3}
   m_Name: PrestigeItemsConfig
   m_EditorClassIdentifier: SO.ShopConfigs::SO.ShopConfigs.ShopItemsConfig
-  _ratesConfig: {fileID: 11400000, guid: 3f6fa918b98152e4b867b26461c349e5, type: 2}
   <ShopID>k__BackingField: prestige_upgrades_shop
   <OpenedByDefault>k__BackingField: 0
   <Items>k__BackingField:
   - {fileID: 11400000, guid: 92ff7217c684e594388ac43ce47eb392, type: 2}
+  - {fileID: 11400000, guid: 300127eff94d7a342abbc6d69c7499d7, type: 2}
