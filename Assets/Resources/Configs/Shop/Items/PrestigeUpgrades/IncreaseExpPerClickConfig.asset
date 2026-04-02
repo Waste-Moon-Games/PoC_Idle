@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54369d851686d424db244b4403266e3a, type: 3}
   m_Name: IncreaseExpPerClickConfig
   m_EditorClassIdentifier: Assembly-CSharp::Core.Shop.Base.ItemModelConfig
-  <ID>k__BackingField: 0
+  <ID>k__BackingField: 1
   <Name>k__BackingField: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0442\u044C
     \u043F\u043E\u043B\u0443\u0447\u0430\u0435\u043C\u044B\u0439 \u043E\u043F\u044B\u0442"
   <Icon>k__BackingField: {fileID: 0}

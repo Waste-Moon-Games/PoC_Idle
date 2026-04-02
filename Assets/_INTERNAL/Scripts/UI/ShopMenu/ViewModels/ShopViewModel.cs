@@ -15,13 +15,14 @@ namespace UI.ShopMenu.ViewModels
         private bool _state;
         private ShopModel _model;
 
+        public string ShopID => _model.ShopId;
+
         public Observable<List<ItemViewModel>> RequestedItems => _requestedItemsSignal.AsObservable();
         public Observable<bool> StateChanged => _stateChangeSignal.AsObservable();
 
         public void BindModel(IModel model)
         {
             _model = model as ShopModel;
-
 
             _model.RequestedAvailableItems.Subscribe(HandleRequestedItems);
             _model.StateChange.Subscribe(HandleChangedState);

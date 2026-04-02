@@ -37,6 +37,7 @@ namespace UI.ShopMenu.Views
             {
                 var itemView = Instantiate(_prefab, _container);
                 itemView.BindViewModel(itemViewModel);
+                Debug.Log($"[Shop View] Shop ID {_viewModel.ShopID}, item: {itemViewModel.ItemName}");
                 _items.Add(itemView);
             }
         }

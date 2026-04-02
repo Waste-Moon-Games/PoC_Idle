@@ -54,10 +54,10 @@ namespace Core.GlobalGameState.Services
             _bonusGauge = 0f;
             _bonusPerClick = config.InitPlayerBonusPerClick;
 
-            _level = loadedData.Level;
-            _currentExp = loadedData.CurrentExp;
-            _expToLevelUp = loadedData.ExpToLevelUp;
-            _gainedExpPerClick = loadedData.GainedExpPerClick;
+            _level = loadedData?.Level ?? config.InitPlayerLevel;
+            _currentExp = loadedData?.CurrentExp ?? 0;
+            _expToLevelUp = loadedData?.ExpToLevelUp ?? config.InitExpToLevelUp;
+            _gainedExpPerClick = loadedData?.GainedExpPerClick ?? config.InitGainedPlayerExpPerClick;
             _expIncreaseMultiplier = config.ExpIncreaseMultiplier;
 
             _decreaseBonusGaugeDelay = config.DecreaseBonusGaugeDelay;

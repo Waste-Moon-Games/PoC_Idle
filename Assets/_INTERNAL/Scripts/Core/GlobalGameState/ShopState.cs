@@ -67,7 +67,7 @@ namespace Core.GlobalGameState
             if (datas == null || datas.Count == 0)
             {
                 foreach (var shop in _shopsDict.Values)
-                    shop.SyncWithSave(null);
+                    shop.SyncWithSave();
                 return;
             }
 
@@ -80,13 +80,9 @@ namespace Core.GlobalGameState
             {
                 if (!saveById.TryGetValue(shop.ShopId, out var savedShop))
                 {
-                    shop.SyncWithSave(null);
+                    shop.SyncWithSave();
                     continue;
                 }
-
-                var itemsById = (savedShop.Items ?? new List<ItemUpgradeData>())
-                    .Where(item => item != null)
-                    .ToDictionary(item => item.ID, item => item);
 
                 shop.SyncWithSave(savedShop);
             }

@@ -32,6 +32,7 @@ namespace UI.ShopMenu.ViewModels
         private ItemModel _model;
 
         public ItemType ItemType => _type;
+        public string ItemName => _model.Name;
 
         public Observable<string> RequestedName => _requestNameSignal.AsObservable();
         public Observable<Sprite> RequestedIcon => _requestIconSignal.AsObservable();

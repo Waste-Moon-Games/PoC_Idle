@@ -106,12 +106,21 @@ namespace Core.GlobalGameState.Services
         public Observable<float> CoinsClickAd => _coinsClickAdSignal.AsObservable();
         public Observable<float> PassiveIncomeChanged => _passiveIncomeAmountChangedSignal.AsObservable();
 
-        public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged, PlayerRewardedBonusesService playerRewardedBonusesService, float bonusClickMultiplier)
+        public PlayerEconomyService(
+            MainEconomyConfig config,
+            Observable<bool> bonusStateChaged,
+            PlayerRewardedBonusesService playerRewardedBonusesService,
+            float bonusClickMultiplier)
             : this(config, bonusStateChaged, playerRewardedBonusesService, bonusClickMultiplier, null)
         {
         }
 
-        public PlayerEconomyService(MainEconomyConfig config, Observable<bool> bonusStateChaged, PlayerRewardedBonusesService playerRewardedBonusesService, float bonusClickMultiplier, PlayerData loadedData)
+        public PlayerEconomyService(
+            MainEconomyConfig config,
+            Observable<bool> bonusStateChaged,
+            PlayerRewardedBonusesService playerRewardedBonusesService,
+            float bonusClickMultiplier,
+            PlayerData loadedData)
         {
             _wallets[CurrencyType.Coins] = new CurrencyWallet("Coins_Wallet", loadedData?.Coins ?? config.InitialCoinsWalletAmount);
             _wallets[CurrencyType.Gems] = new CurrencyWallet("Gems_Wallet", loadedData?.Gems ?? config.InitialGemsWalletAmount);

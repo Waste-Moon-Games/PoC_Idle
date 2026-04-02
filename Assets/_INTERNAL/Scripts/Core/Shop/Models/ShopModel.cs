@@ -95,7 +95,7 @@ namespace Core.Shop.Models
             _itemsInitializedSignal.OnNext(_itemsDict.Values.OrderBy(i => i.Id).ToList());
         }
 
-        public void SyncWithSave(ShopStateData savedShop)
+        public void SyncWithSave(ShopStateData savedShop = null)
         {
             bool hasSavedData = savedShop != null;
             _state = hasSavedData ? savedShop.IsOpened : _itemsConfig.OpenedByDefault;
