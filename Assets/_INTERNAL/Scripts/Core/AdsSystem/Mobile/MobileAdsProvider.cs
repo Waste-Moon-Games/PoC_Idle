@@ -1,4 +1,4 @@
-﻿#if !UNITY_WEBGL
+﻿#if UNITY_ANDROID
 using System;
 using UnityEngine;
 using YandexMobileAds;
@@ -74,6 +74,8 @@ namespace Core.AdsSystem.Mobile
             string adUnitId = "demo-rewarded-yandex";
             AdRequestConfiguration adRequestConfiguration = new AdRequestConfiguration.Builder(adUnitId).Build();
             _rewardedLoader.LoadAd(adRequestConfiguration);
+
+            Debug.Log("[Mobile Ads Provider] Rewarded requested");
         }
 
         private void RequestInterstitial()
@@ -143,6 +145,8 @@ namespace Core.AdsSystem.Mobile
         {
             DestroyRewarded();
             RequestRewarded();
+
+            _onComplete = null;
         }
 
         private void HandleInterstitialFailedToLoad(object sender, AdFailedToLoadEventArgs e)
@@ -160,11 +164,6 @@ namespace Core.AdsSystem.Mobile
         private void HandleRewardedAdShown(object sender, EventArgs e)
         {
             Debug.Log($"YandexAds: ad shown {e}");
-            _onComplete?.Invoke();
-            _onComplete = null;
-
-            DestroyRewarded();
-            RequestRewarded();
         }
 
         private void HandleRewarded(object sender, Reward e)

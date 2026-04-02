@@ -36,7 +36,7 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
             _rewardAdsBonusesService.TemporaryBonusStateChanged.Subscribe(HandleChangedTemporaryBonusState).AddTo(_disposables);
         }
 
-        public void CreateBonusItemModels(List<BonusItemData> bonusItemDatas, bool ruLang)
+        public void CreateBonusItemModels(List<BonusItemData> bonusItemDatas, bool ruLang = true)
         {
             if(bonusItemDatas.Count == 0)
             {

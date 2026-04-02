@@ -44,20 +44,8 @@ namespace Core.GlobalGameState.Services
         public Observable<int> CurrentExpChanged => _currentExpChangedSignal.AsObservable();
         public Observable<int> ExpToLevelUpChanged => _expToLevelUpChangedSignal.AsObservable();
 
-        public PlayerBonusesService(PlayerConfig config)
+        public PlayerBonusesService(PlayerConfig config) : this(config, null)
         {
-            _maxBonusGauge = config.PlayerBonusGauge;
-            _bonusGauge = 0f;
-            _bonusPerClick = config.InitPlayerBonusPerClick;
-
-            _level = config.InitPlayerLevel;
-            _currentExp = 0;
-            _expToLevelUp = config.InitExpToLevelUp;
-            _gainedExpPerClick = config.InitGainedPlayerExpPerClick;
-            _expIncreaseMultiplier = config.ExpIncreaseMultiplier;
-
-            _decreaseBonusGaugeDelay = config.DecreaseBonusGaugeDelay;
-            _decreaseActiveBonusGaugeDelay = config.DecreaseActiveBonusGaugeDelay;
         }
 
         public PlayerBonusesService(PlayerConfig config, PlayerData loadedData)

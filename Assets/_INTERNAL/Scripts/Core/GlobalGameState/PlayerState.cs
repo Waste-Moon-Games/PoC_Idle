@@ -86,6 +86,9 @@ namespace Core.GlobalGameState
                 await UniTask.WaitUntil(() => YG2.isSDKEnabled)
                     .AttachExternalCancellation(_lifetimeCts.Token);
 #endif
+#if UNITY_ANDROID
+                await UniTask.Delay(TimeSpan.FromSeconds(1f));
+#endif
                 bool hasSavedData = HasSavedData();
 #if UNITY_EDITOR
                 if (_playerConfig.IsDebug)
@@ -116,7 +119,7 @@ namespace Core.GlobalGameState
                 _playerBonusesService.BonusStateChanged,
                 _rewardedBonusesService,
                 _playerConfig.BonusClickMultiplier);
-            _playerUpgradeService = new(_playerEconomyService);
+            _playerUpgradeService = new(_playerEconomyService, _playerBonusesService);
             _playerRewardsByLevelService = new(
                 _rewardsByLevelConfig,
                 _cyclicRewardsConfig,
@@ -150,7 +153,7 @@ namespace Core.GlobalGameState
                 _rewardedBonusesService,
                 _playerConfig.BonusClickMultiplier,
                 loadedData);
-            _playerUpgradeService = new(_playerEconomyService);
+            _playerUpgradeService = new(_playerEconomyService, _playerBonusesService);
             _playerRewardsByLevelService = new(_rewardsByLevelConfig,
                 _cyclicRewardsConfig,
                 _playerBonusesService.LevelChanged,

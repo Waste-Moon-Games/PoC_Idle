@@ -144,7 +144,7 @@ namespace Core.GlobalGameState.Services
         }
 
         public void IncreasePlayerClick(float amount) => PlayerClickAmount += amount;
-        public void IncreaseTrippleClickChance(float amount) => TripleClickChance = MathF.Min(TripleClickChance + amount, _maxTripleClickChance);
+        public void IncreaseTripleClickChance(float amount) => TripleClickChance = MathF.Min(TripleClickChance + amount, _maxTripleClickChance);
         public void IncreaseGemsRewardClickChance(float amount) => GemsClickRewardChance = MathF.Min(GemsClickRewardChance + amount, _maxGemsRewardClickChance);
         public void IncreasePlayerPassiveIncome(float amount) => PassiveIncomeAmount += amount;
 
