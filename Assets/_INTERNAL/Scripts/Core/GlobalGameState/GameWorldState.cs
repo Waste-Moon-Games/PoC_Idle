@@ -14,8 +14,8 @@ namespace Core.GlobalGameState
 
         public GameWorldState(SaveSystemContext saveSystemContext)
         {
-            _playerState = new(saveSystemContext);
             _localizationService = new LocalizationService();
+            _playerState = new(saveSystemContext, _localizationService.CurrentLanguage);
         }
 
         public async UniTask InitPlayerState()

@@ -23,6 +23,7 @@ namespace Core.GlobalGameState
     {
         private readonly string _playerSaveDataKey = "Player_Data";
         private readonly CompositeDisposable _disposables = new();
+        private readonly SystemLanguage _currentLanguage;
 
         private CancellationTokenSource _lifetimeCts = new();
 #if UNITY_WEBGL
@@ -53,12 +54,13 @@ namespace Core.GlobalGameState
         public ShopState ShopState => _shopState;
         public PlayerRewardedBonusesService PlayerRewardedBonusesService => _rewardedBonusesService;
 
-        public PlayerState(SaveSystemContext saveSystemContext)
+        public PlayerState(SaveSystemContext saveSystemContext, SystemLanguage currentLanguage)
         {
 #if UNITY_WEBGL
             YG2.onGetSDKData += HandleSDKData;
 #endif
             _saveSystemContext = saveSystemContext;
+            _currentLanguage = currentLanguage;
 
             _economyConfig = Resources.Load<MainEconomyConfig>("Configs/Economy/MainEconomyConfig");
             _playerConfig = Resources.Load<PlayerConfig>("Configs/Player/PlayerConfig");
@@ -126,7 +128,7 @@ namespace Core.GlobalGameState
                 _playerBonusesService.LevelChanged,
                 _playerEconomyService);
 
-            _shopState = new(_playerUpgradeService);
+            _shopState = new(_playerUpgradeService, _currentLanguage);
         }
 
         public void StartAsyncOperations()
@@ -158,7 +160,7 @@ namespace Core.GlobalGameState
                 _cyclicRewardsConfig,
                 _playerBonusesService.LevelChanged,
                 _playerEconomyService);
-            _shopState = new(_playerUpgradeService);
+            _shopState = new(_playerUpgradeService, _currentLanguage);
 
             _shopState.Restore(loadedData.ShopsData);
         }

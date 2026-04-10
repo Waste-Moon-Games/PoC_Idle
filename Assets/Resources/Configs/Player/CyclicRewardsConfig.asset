@@ -15,7 +15,7 @@ MonoBehaviour:
   <CyclicRewards>k__BackingField:
   - ID: bonus_click_15
     RequiredLevel: 15
-    Amount: 1.1
+    Amount: 1.05
     Type: 2
     State: 1
   - ID: bonus_passive_20

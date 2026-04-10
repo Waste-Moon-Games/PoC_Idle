@@ -1,5 +1,4 @@
 ﻿using Common.MVVM;
-using Core.Shop.Base;
 using R3;
 using TMPro;
 using UI.ShopMenu.ViewModels;
@@ -13,6 +12,7 @@ namespace UI.ShopMenu.Views
         private readonly CompositeDisposable _disposables = new();
 
         [SerializeField] private Image _icon;
+        [SerializeField] private Image _currencyIcon;
         [SerializeField] private TextMeshProUGUI _nameText;
         [SerializeField] private TextMeshProUGUI _priceText;
         [SerializeField] private TextMeshProUGUI _upgradeAmountText;
@@ -52,6 +52,7 @@ namespace UI.ShopMenu.Views
 
             _viewModel.RequestedIcon.Subscribe(HandleRequestedIcon).AddTo(_disposables);
             _viewModel.RequestedName.Subscribe(HandleRequestedName).AddTo(_disposables);
+            _viewModel.RequestedCurrencyIcon.Subscribe(HandleRequestedCurrencyIcon).AddTo(_disposables);
 
             _viewModel.PriceChanged.Subscribe(HandleChangedPrice).AddTo(_disposables);
             _viewModel.UpgradeAmountChanged.Subscribe(HandleChangedUpgradeAmount).AddTo(_disposables);
@@ -64,27 +65,13 @@ namespace UI.ShopMenu.Views
 
         private void HandleRequestedIcon(Sprite icon) => _icon.sprite = icon;
 
+        private void HandleRequestedCurrencyIcon(Sprite icon) => _currencyIcon.sprite = icon;
+
         private void HandleRequestedName(string name) => _nameText.text = $"<color=black>{name}</color>";
 
         private void HandleChangedPrice(string price) => _priceText.text = $"<color=yellow>{price}</color>";
 
-        private void HandleChangedUpgradeAmount(string amount)
-        {
-            var tempDesc = TypeSelfCheck();
-            _upgradeAmountText.text = $"+<color=#FFD600>{amount}</color> к {tempDesc}.";
-        }
-
-        private string TypeSelfCheck()
-        {
-            return _viewModel.ItemType switch
-            {
-                ItemType.Click => "улучшению клика",
-                ItemType.Chance => "увеличению шанса",
-                ItemType.Passive => "увеличению оффлайн дохода",
-                ItemType.Bonus => "что-то про престиж",
-                _ => "Invalid _type",
-            };
-        }
+        private void HandleChangedUpgradeAmount(string finishedDesc) => _upgradeAmountText.text = finishedDesc;
 
         private void HandleChangedLevel(int level) => _levelText.text = $"<color=green>{level}</color> lvl";
 

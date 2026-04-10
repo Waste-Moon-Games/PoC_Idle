@@ -24,7 +24,7 @@ namespace UI.ShopMenu.Views
             _viewModel = viewModel as ShopViewModel;
 
             _viewModel.RequestedItems.Subscribe(HandleRequestedItems).AddTo(_disposables);
-            _viewModel.StateChanged.Subscribe(HandleChangedState);
+            _viewModel.StateChanged.Subscribe(HandleChangedState).AddTo(_disposables);
             _viewModel.RequestItems();
             _viewModel.RequestState();
         }
@@ -37,7 +37,6 @@ namespace UI.ShopMenu.Views
             {
                 var itemView = Instantiate(_prefab, _container);
                 itemView.BindViewModel(itemViewModel);
-                Debug.Log($"[Shop View] Shop ID {_viewModel.ShopID}, item: {itemViewModel.ItemName}");
                 _items.Add(itemView);
             }
         }

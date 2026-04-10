@@ -24,7 +24,7 @@ MonoBehaviour:
     languages:
       ru: 1
       en: 1
-      tr: 1
+      tr: 0
       az: 0
       be: 0
       he: 0
@@ -190,9 +190,10 @@ MonoBehaviour:
     saveCloud: 1
     flush: 0
   Basic:
-    platform: {fileID: 11400000, guid: fabe82a4ab034324eb452cc7109f6d19, type: 2}
+    platform: {fileID: 0}
     autoApplySettings: 0
     autoPauseGame: 1
+    editTimeScale: 1
     editEventSystem: 1
     autoGRA: 0
     logInEditor: 1
@@ -206,10 +207,12 @@ MonoBehaviour:
   Simulation:
     device: 1
     language: en
+    enableInterAdv: 1
     advIntervalSimulation: 60
     durationAdv: 0.5
     loadAdv: 0
     testFailAds: 0
+    pauseOnFocusGame: 0
   Templates:
     logoImageFormat: 0
     backgroundImgFormat: 0

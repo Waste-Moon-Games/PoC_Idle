@@ -17,6 +17,8 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private Button _openRewardsPanelButton;
         [SerializeField] private Button _closeRewardsPanelButton;
         [SerializeField] private GameObject _rewardsPanel;
+        [SerializeField] private Sprite _availableRewardsChestSprite;
+        [SerializeField] private Sprite _defaultChestSprite;
 
         private readonly CompositeDisposable _disposables = new();
 

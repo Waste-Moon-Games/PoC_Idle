@@ -23,6 +23,8 @@ namespace Core.Shop.Models
         private readonly Dictionary<int, ItemModel> _itemsDict = new();
         private readonly ShopItemsConfig _itemsConfig;
 
+        private readonly SystemLanguage _currentLanguage;
+
         private bool _state;
 
         public string ShopId => _sId;
@@ -37,11 +39,12 @@ namespace Core.Shop.Models
         public ShopModel(
             Observable<(int, string)> successfulPurchase,
             Observable<(int, string)> failedPurchase,
-            ShopItemsConfig itemsConfig)
+            ShopItemsConfig itemsConfig, SystemLanguage currentLanguage)
         {
             _sId = itemsConfig.ShopID;
             _itemsConfig = itemsConfig;
             _state = itemsConfig.OpenedByDefault;
+            _currentLanguage = currentLanguage;
 
             successfulPurchase
                 .Where(info => info.Item2 == _sId)
@@ -75,26 +78,6 @@ namespace Core.Shop.Models
             _itemsInitializedSignal.OnNext(_itemsDict.Values.OrderBy(i => i.Id).ToList());
         }
 
-        public void InitializeItemsFromSave(Dictionary<int, ItemUpgradeData> savedItems)
-        {
-            _itemsDisposables.Dispose();
-            _itemsDisposables = new CompositeDisposable();
-            _itemsDict.Clear();
-
-            foreach (var itemConfig in _itemsConfig.Items)
-            {
-                if (itemConfig == null)
-                    continue;
-
-                savedItems.TryGetValue(itemConfig.ID, out var savedItem);
-                var model = savedItem != null ? new ItemModel(itemConfig, savedItem) : new ItemModel(itemConfig);
-                _itemsDict[model.Id] = model;
-            }
-
-            SubscribeOnItems();
-            _itemsInitializedSignal.OnNext(_itemsDict.Values.OrderBy(i => i.Id).ToList());
-        }
-
         public void SyncWithSave(ShopStateData savedShop = null)
         {
             bool hasSavedData = savedShop != null;
@@ -118,15 +101,17 @@ namespace Core.Shop.Models
                 if (itemConfig == null)
                     continue;
 
+                var localizedText = itemConfig.Descriptions;
+                var desc = localizedText.Get(_currentLanguage);
                 ItemModel model;
                 if(savedItems.TryGetValue(itemConfig.ID, out var savedItem))
                 {
-                    model = new(itemConfig, savedItem);
+                    model = new(itemConfig, savedItem, desc);
                     syncedItemsCount++;
                 }
                 else
                 {
-                    model = new(itemConfig);
+                    model = new(itemConfig, desc);
                     addedItemsCount++;
                 }
 

@@ -17,11 +17,14 @@ namespace Core.GlobalGameState
         private readonly Dictionary<string, ShopModel> _shopsDict = new();
         private readonly PlayerUpgradeService _playerUpgradeService;
 
+        private readonly SystemLanguage _currentLanguage;
+
         public IReadOnlyDictionary<string, ShopModel> ShopModels => _shopsDict;
 
-        public ShopState(PlayerUpgradeService playerUpgradeService)
+        public ShopState(PlayerUpgradeService playerUpgradeService, SystemLanguage currentLanguage)
         {
             _playerUpgradeService = playerUpgradeService;
+            _currentLanguage = currentLanguage;
 
             var configsDatabase = Resources.Load<ShopConfigsDatabase>("Configs/Shop/Shops/ShopConfigsDatabase");
             if (configsDatabase == null)
@@ -43,7 +46,8 @@ namespace Core.GlobalGameState
                 var shopModel = new ShopModel(
                     _playerUpgradeService.SuccessfulPurchase,
                     _playerUpgradeService.FailedPurchase,
-                    shopConfig);
+                    shopConfig,
+                    _currentLanguage);
                 _shopsDict[shopModel.ShopId] = shopModel;
                 shopModel.PurchaseSignal.Subscribe(s => HandleBuyItem(s.Item1, s.Item2)).AddTo(_disposables);
             }
@@ -84,7 +88,7 @@ namespace Core.GlobalGameState
                     continue;
                 }
 
-                shop.SyncWithSave(savedShop);
+                shop.SyncWithSave(savedShop: savedShop);
             }
         }
 

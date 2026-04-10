@@ -30,6 +30,7 @@ namespace Core.GlobalGameState.Services
 #endif
         }
 
+#if UNITY_WEBGL
         private void OnYgLangChanged(string code)
         {
             var mapped = Map(code);
@@ -39,11 +40,13 @@ namespace Core.GlobalGameState.Services
             _languageChangedSignal.OnNext(CurrentLanguage);
         }
 
+
         private static SystemLanguage Map(string code) => code?.ToLower() switch
         {
             "ru" => SystemLanguage.Russian,
             "en" => SystemLanguage.English,
             _ => SystemLanguage.Russian
         };
+#endif
     }
 }

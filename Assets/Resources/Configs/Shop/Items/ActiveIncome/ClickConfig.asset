@@ -15,8 +15,17 @@ MonoBehaviour:
   <ID>k__BackingField: 0
   <Name>k__BackingField: "\u041A\u043B\u0438\u043A"
   <Icon>k__BackingField: {fileID: 0}
+  <CommonCurrencyIcon>k__BackingField: {fileID: -6122061090170777107, guid: 4ec5c2ae979b22740be929506510dde3, type: 3}
+  <GemsCurrencyIcon>k__BackingField: {fileID: 3483158521792860677, guid: f5e588c8185eea64eae03d64c6866589, type: 3}
   <Type>k__BackingField: 0
   <CurrencyType>k__BackingField: 0
+  <Descriptions>k__BackingField:
+    _entries:
+    - Language: 10
+      Text: Give +<color=yellow>{amount} </color> for your click!
+    - Language: 30
+      Text: "\u0414\u0430\u0451\u0442 +<color=yellow>{amount} </color> \u043A \u0432\u0430\u0448\u0435\u043C\u0443
+        \u043A\u043B\u0438\u043A\u0443!"
   <StartPrice>k__BackingField: 20
   <StartUpgradeAmount>k__BackingField: 1
   <StartLevel>k__BackingField: 1

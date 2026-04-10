@@ -1,8 +1,8 @@
-Authorization v1.022
-AutoTranslateLangs v1.002
-InterstitialAdv v1.01
+Authorization v1.023
+AutoTranslateLangs v1.003
+InterstitialAdv v1.02
 Localization v1.02
-Payments v1.01
+Payments v1.02
 RewardedAdv v1.011
 ServerTime v1.02
 Storage v1.021

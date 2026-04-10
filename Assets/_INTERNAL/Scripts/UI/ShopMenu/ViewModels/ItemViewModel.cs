@@ -13,6 +13,7 @@ namespace UI.ShopMenu.ViewModels
 
         private readonly Subject<string> _requestNameSignal = new();
         private readonly Subject<Sprite> _requestIconSignal = new();
+        private readonly Subject<Sprite> _requestedCurrencyIconSignal = new();
 
         private readonly Subject<string> _priceChangeSignal = new();
         private readonly Subject<string> _upgradeAmountChangeSignal = new();
@@ -21,8 +22,10 @@ namespace UI.ShopMenu.ViewModels
 
         private int _id;
         private Sprite _icon;
+        private Sprite _currencyIcon;
         private string _name;
         private ItemType _type;
+        private string _finalDescription;
 
         private bool _isOpened;
         private string _price;
@@ -36,6 +39,7 @@ namespace UI.ShopMenu.ViewModels
 
         public Observable<string> RequestedName => _requestNameSignal.AsObservable();
         public Observable<Sprite> RequestedIcon => _requestIconSignal.AsObservable();
+        public Observable<Sprite> RequestedCurrencyIcon => _requestedCurrencyIconSignal.AsObservable();
 
         public Observable<string> PriceChanged => _priceChangeSignal.AsObservable();
         public Observable<string> UpgradeAmountChanged => _upgradeAmountChangeSignal.AsObservable();
@@ -50,6 +54,8 @@ namespace UI.ShopMenu.ViewModels
             _model.RequestedName.Subscribe(HandleRequestedName).AddTo(_disposables);
             _model.RequestedIcon.Subscribe(HandleRequestedIcon).AddTo(_disposables);
             _model.RequestedItemType.Subscribe(HandleRequestedItemType).AddTo(_disposables);
+            _model.RequestedCurrencyIconSignal.Subscribe(HandleRequestedCurrencyIcon).AddTo(_disposables);
+            _model.FinalDescriptionSignal.Subscribe(HandleFinalDescription).AddTo(_disposables);
 
             _model.PriceChanged.Subscribe(HandlePriceChanged).AddTo(_disposables);
             _model.LevelChanged.Subscribe(HandleLevelChanged).AddTo(_disposables);
@@ -66,6 +72,12 @@ namespace UI.ShopMenu.ViewModels
         public void RequestGeneralInfo() => _model.RequestGeneralInfo();
 
         private void HandleRequestedId(int id) => _id = id;
+
+        private void HandleRequestedCurrencyIcon(Sprite icon)
+        {
+            _currencyIcon = icon;
+            _requestedCurrencyIconSignal.OnNext(_currencyIcon);
+        }
 
         private void HandleRequestedName(string name)
         {
@@ -99,10 +111,20 @@ namespace UI.ShopMenu.ViewModels
             _statusChangeSignal.OnNext(_isOpened);
         }
 
+        private void HandleFinalDescription(string desc)
+        {
+            _finalDescription = desc.Replace("{amount}", _upgradeAmount);
+            _upgradeAmountChangeSignal.OnNext(_finalDescription);
+        }
+
         private void HandleUpgradeAmountChanged(float amount)
         {
+            string oldValue = _upgradeAmount;
             _upgradeAmount = _formatter.FormatNumber(amount);
-            _upgradeAmountChangeSignal.OnNext(_upgradeAmount);
+
+            _finalDescription = _finalDescription.Replace(oldValue, _upgradeAmount);
+
+            _upgradeAmountChangeSignal.OnNext(_finalDescription);
         }
     }
 }
