@@ -31,9 +31,13 @@ namespace Core.LevelingSystem
 
         public RewardByLevelRuntime(RewardData source)
         {
-            base.ID = source.RequiredLevel.ToString();
+            base.ID = string.IsNullOrWhiteSpace(source.ID)
+                ? source.RequiredLevel.ToString()
+                : source.ID;
             base.RequiredLevel = source.RequiredLevel;
             base.Amount = source.RewardAmount;
+            base.Type = source.Type;
+            base.State = source.Received ? RewardState.Received : source.State;
         }
     }
 }

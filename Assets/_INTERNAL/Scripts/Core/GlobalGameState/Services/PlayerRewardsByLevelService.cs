@@ -3,6 +3,7 @@ using Core.LevelingSystem;
 using Core.SaveSystemBase.Data;
 using R3;
 using SO.PlayerConfigs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -36,27 +37,9 @@ namespace Core.GlobalGameState.Services
             RewardsByLevelConfig rewardsByLevelConfig,
             CyclicRewardsConfig cyclicRewardsConfig,
             Observable<int> levelChangedSignal,
-            PlayerEconomyService economyService)
-        {
-            _rewardsByLevelConfig = rewardsByLevelConfig;
-            _cyclicRewardsConfig = cyclicRewardsConfig;
-
-            _economyService = economyService;
-
-            _rewardsDict = RewardFactory
-                .CreateRewardsByLevelList(rewardsByLevelConfig.RewardsByLevel)
-                .ToDictionary(r => r.RewardRequiredLevel, r => r);
-            _cyclicRewardsDict = RewardFactory
-                .CreateCyclicRewardsList(cyclicRewardsConfig.CyclicRewards)
-                .ToDictionary(c => c.RewardRequiredLevel, c => c);
-
-            _maxRewardsLevel = _rewardsDict.Keys.Max();
-
-            _cyclicRewardLevelIncreaseStep = _cyclicRewardsConfig.CyclicRewardRequiredLevelIncreaseStep;
-            _cyclicRewardAmountIncreaseStep = _cyclicRewardsConfig.CyclicRewardAmountIncreaseStep;
-
-            levelChangedSignal.Subscribe(HandleChangedLevel).AddTo(_disposables);
-        }
+            PlayerEconomyService economyService) : 
+            this(rewardsByLevelConfig, cyclicRewardsConfig, levelChangedSignal, economyService, null)
+        { }
 
         public PlayerRewardsByLevelService(
             RewardsByLevelConfig rewardsByLevelConfig,
@@ -70,18 +53,8 @@ namespace Core.GlobalGameState.Services
 
             _economyService = economyService;
 
-            bool hasLoadedRewards = loadedData.ReceivedRewards is { Count: > 0 };
-            bool hasLoadedCyclicRewards = loadedData.CyclicRewards is { Count: > 0 };
-
-            _rewardsDict = (hasLoadedRewards
-                ? RewardFactory.CreateRewardsByLevelList(loadedData.ReceivedRewards)
-                : RewardFactory.CreateRewardsByLevelList(rewardsByLevelConfig.RewardsByLevel))
-                .ToDictionary(r => r.RewardRequiredLevel, r => r);
-
-            _cyclicRewardsDict = (hasLoadedCyclicRewards
-                ? RewardFactory.CreateCyclicRewardsList(loadedData.CyclicRewards)
-                : RewardFactory.CreateCyclicRewardsList(cyclicRewardsConfig.CyclicRewards))
-                .ToDictionary(c => c.RewardRequiredLevel, c => c);
+            _rewardsDict = BuildRewardsByLevelDictionary(loadedData);
+            _cyclicRewardsDict = BuildCyclicRewardsDictionary(loadedData);
 
             _maxRewardsLevel = _rewardsDict.Keys.Max();
 
@@ -89,6 +62,94 @@ namespace Core.GlobalGameState.Services
             _cyclicRewardAmountIncreaseStep = _cyclicRewardsConfig.CyclicRewardAmountIncreaseStep;
 
             levelChangedSignal.Subscribe(HandleChangedLevel).AddTo(_disposables);
+        }
+
+        private Dictionary<int, RewardByLevelRuntime> BuildRewardsByLevelDictionary(PlayerData loadedData)
+        {
+            var result = RewardFactory
+                .CreateRewardsByLevelList(_rewardsByLevelConfig.RewardsByLevel)
+                .ToDictionary(r => r.RewardRequiredLevel, r => r);
+
+            if (loadedData?.ReceivedRewards is not { Count: > 0 })
+                return result;
+
+            foreach (var savedData in loadedData.ReceivedRewards)
+            {
+                int requiredLevel = TryResolveRewardLevel(savedData);
+                if (requiredLevel <= 0 || !result.TryGetValue(requiredLevel, out var runtimeReward))
+                    continue;
+
+                if(ResolveRewardState(savedData) == RewardState.Received)
+                {
+                    runtimeReward.TryToUnlock();
+                    runtimeReward.TryToReceive();
+                }
+            }
+
+            return result;
+        }
+
+        private Dictionary<int, CyclicRewardRuntime> BuildCyclicRewardsDictionary(PlayerData loadedData)
+        {
+            var defaultDictionary = RewardFactory
+                .CreateCyclicRewardsList(_cyclicRewardsConfig.CyclicRewards)
+                .ToDictionary(c => c.RewardRequiredLevel, c => c);
+
+            if (loadedData?.CyclicRewards is not { Count: > 0 })
+                return defaultDictionary;
+
+            var preparedRewards = new List<RewardData>(loadedData.CyclicRewards.Count);
+            foreach (var reward in loadedData.CyclicRewards)
+            {
+                int requiredLevel = TryResolveRewardLevel(reward);
+                if (requiredLevel <= 0)
+                    continue;
+
+                preparedRewards.Add(new RewardData
+                {
+                    ID = reward.ID,
+                    RequiredLevel = requiredLevel,
+                    RewardAmount = reward.RewardAmount,
+                    Type = reward.Type,
+                    State = reward.State,
+                    Received = reward.Received
+                });
+            }
+
+            if (preparedRewards.Count == 0)
+                return defaultDictionary;
+
+            return RewardFactory
+                .CreateCyclicRewardsList(preparedRewards)
+                .GroupBy(c => c.RewardRequiredLevel)
+                .ToDictionary(g => g.Key, g => g.Last());
+        }
+
+        private int TryResolveRewardLevel(RewardData rewardData)
+        {
+            if (rewardData == null)
+                return 0;
+
+            if(rewardData.RequiredLevel > 0)
+                return rewardData.RequiredLevel;
+
+            if (string.IsNullOrWhiteSpace(rewardData.ID))
+                return 0;
+
+            return 0;
+        }
+
+        private RewardState ResolveRewardState(RewardData rewardData)
+        {
+            if (rewardData == null)
+                return RewardState.Locked;
+
+            if(rewardData.State == RewardState.Received)
+                return RewardState.Received;
+
+            return Enum.IsDefined(typeof(RewardState), rewardData.State)
+                ? rewardData.State
+                : RewardState.Locked;
         }
 
         private void TryToAutoReceiveRewardByLevel(int level)

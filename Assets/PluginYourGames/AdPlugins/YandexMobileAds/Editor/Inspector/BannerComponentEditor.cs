@@ -50,7 +50,7 @@ public class BannerComponentEditor : Editor
         serializedObject.Update();
 
         EditorGUILayout.LabelField("Banner", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(bannerName, new GUIContent("Banner Name"));
+        EditorGUILayout.PropertyField(bannerName, new GUIContent("Banner Names"));
         EditorGUILayout.PropertyField(bannerType, new GUIContent("Banner Type"));
 
         EditorGUILayout.Space();

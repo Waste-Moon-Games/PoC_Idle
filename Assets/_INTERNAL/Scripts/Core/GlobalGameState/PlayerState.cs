@@ -159,7 +159,8 @@ namespace Core.GlobalGameState
             _playerRewardsByLevelService = new(_rewardsByLevelConfig,
                 _cyclicRewardsConfig,
                 _playerBonusesService.LevelChanged,
-                _playerEconomyService);
+                _playerEconomyService,
+                loadedData);
             _shopState = new(_playerUpgradeService, _currentLanguage);
 
             _shopState.Restore(loadedData.ShopsData);
@@ -210,6 +211,9 @@ namespace Core.GlobalGameState
                 RewardData rewardData = new()
                 {
                     ID = reward.RewardID,
+                    RequiredLevel = reward.RewardRequiredLevel,
+                    State = reward.RewardState,
+                    Type = reward.RewardType,
                     Received = reward.IsReceived
                 };
                 receivedRewardsData.Add(rewardData);
@@ -227,6 +231,7 @@ namespace Core.GlobalGameState
                 RewardData rewardData = new()
                 {
                     ID = reward.RewardID,
+                    RequiredLevel= reward.RewardRequiredLevel,
                     Received = reward.IsReceived
                 };
                 cyclicRewardsData.Add(rewardData);

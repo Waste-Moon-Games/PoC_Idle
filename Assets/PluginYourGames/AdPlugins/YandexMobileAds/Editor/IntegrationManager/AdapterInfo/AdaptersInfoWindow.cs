@@ -76,7 +76,7 @@ namespace YandexAdsEditor
 
             GUILayout.Space(10);
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Adapter Name", GUILayout.Width(300));
+            GUILayout.Label("Adapter Names", GUILayout.Width(300));
             GUILayout.Label("Android Version", GUILayout.Width(150));
             GUILayout.Label("iOS Version", GUILayout.Width(150));
             GUILayout.Label("", GUILayout.Width(100));

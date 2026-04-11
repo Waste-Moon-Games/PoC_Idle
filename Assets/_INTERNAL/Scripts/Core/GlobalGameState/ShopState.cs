@@ -88,7 +88,7 @@ namespace Core.GlobalGameState
                     continue;
                 }
 
-                shop.SyncWithSave(savedShop: savedShop);
+                shop.SyncWithSave(savedShop);
             }
         }
 

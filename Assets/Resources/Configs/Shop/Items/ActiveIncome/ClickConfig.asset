@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: ClickConfig
   m_EditorClassIdentifier: Core.Shop.Base::Core.Shop.Base.ItemModelConfig
   <ID>k__BackingField: 0
-  <Name>k__BackingField: "\u041A\u043B\u0438\u043A"
+  <Names>k__BackingField:
+    _entries:
+    - Language: 10
+      Text: Click'UP
+    - Language: 30
+      Text: "\u041A\u043B\u0438\u043A'UP"
   <Icon>k__BackingField: {fileID: 0}
   <CommonCurrencyIcon>k__BackingField: {fileID: -6122061090170777107, guid: 4ec5c2ae979b22740be929506510dde3, type: 3}
   <GemsCurrencyIcon>k__BackingField: {fileID: 3483158521792860677, guid: f5e588c8185eea64eae03d64c6866589, type: 3}

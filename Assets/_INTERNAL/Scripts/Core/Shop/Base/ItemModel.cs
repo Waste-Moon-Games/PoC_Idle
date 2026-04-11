@@ -20,10 +20,11 @@ namespace Core.Shop.Base
         private readonly Subject<Sprite> _requestIconSignal = new();
         private readonly Subject<ItemModel> _tryPurchaseSignal = new();
         private readonly Subject<ItemType> _requestItemTypeSignal = new();
-        private readonly Subject<Sprite> _requestedCurrencyIconSignal;
+        private readonly Subject<Sprite> _requestedCurrencyIconSignal = new();
 
         private readonly ItemModelConfig _config;
         private readonly string _description;
+        private readonly string _name;
 
         private bool _isOpened;
         private float _price;
@@ -31,7 +32,7 @@ namespace Core.Shop.Base
         private int _level;
         private Sprite _currencyIcon;
 
-        public string Name => _config.Name;
+        public string Name => _name;
         public Sprite CurrencyIcon => _currencyIcon;
         public int Id => _config.ID;
         public ItemType Type => _config.Type;
@@ -101,10 +102,11 @@ namespace Core.Shop.Base
         public Observable<ItemType> RequestedItemType => _requestItemTypeSignal.AsObservable();
         public Observable<Sprite> RequestedCurrencyIconSignal => _requestedCurrencyIconSignal.AsObservable();
 
-        public ItemModel(ItemModelConfig config, string desc = null)
+        public ItemModel(ItemModelConfig config, string desc = null, string name = null)
         {
             _config = config;
             _description = desc;
+            _name = name;
             _finalDescriptionSignal = new(desc);
 
             IsOpened = config.IsOpenedByDefault;
@@ -112,14 +114,16 @@ namespace Core.Shop.Base
             UpgradeAmount = config.StartUpgradeAmount;
             Level = config.StartLevel;
 
-            //if (config.CurrencyType == CurrencyType.Gems)
-            //    _currencyIcon = config.GemsCurrencyIcon;
+            _currencyIcon = config.CommonCurrencyIcon;
+
+            if (config.CurrencyType == CurrencyType.Gems)
+                _currencyIcon = config.GemsCurrencyIcon;
 
             if (config.ID == 0)
                 ChangeStatus(true);
         }
 
-        public ItemModel(ItemModelConfig config, ItemUpgradeData loadedData, string desc = null) : this(config, desc)
+        public ItemModel(ItemModelConfig config, ItemUpgradeData loadedData, string desc = null, string name = null) : this(config, desc, name)
         {
             Restore(loadedData);
         }

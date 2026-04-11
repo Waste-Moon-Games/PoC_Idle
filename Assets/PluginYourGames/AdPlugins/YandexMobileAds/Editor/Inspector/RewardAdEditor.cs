@@ -45,7 +45,7 @@ public class RewardedAdComponentEditor : Editor
         serializedObject.Update();
 
         EditorGUILayout.LabelField("Rewarded", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(adName, new GUIContent("Ad Name"));
+        EditorGUILayout.PropertyField(adName, new GUIContent("Ad Names"));
 
         EditorGUILayout.PropertyField(adUnitIdAndroid, new GUIContent("Ad Unit ID (Android)"));
         EditorGUILayout.PropertyField(adUnitIdiOS, new GUIContent("Ad Unit ID (iOS)"));

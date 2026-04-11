@@ -48,7 +48,7 @@ public class AppOpenAdComponentEditor : Editor
         serializedObject.Update();
 
         EditorGUILayout.LabelField("App open ad", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(adName, new GUIContent("Ad Name", "Name of the ad for identification."));
+        EditorGUILayout.PropertyField(adName, new GUIContent("Ad Names", "Names of the ad for identification."));
         EditorGUILayout.PropertyField(adUnitIdAndroid, new GUIContent("Ad Unit ID (Android)", "Ad Unit ID for Android."));
         EditorGUILayout.PropertyField(adUnitIdiOS, new GUIContent("Ad Unit ID (iOS)", "Ad Unit ID for iOS."));
 

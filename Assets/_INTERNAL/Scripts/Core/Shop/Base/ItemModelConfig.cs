@@ -9,7 +9,7 @@ namespace Core.Shop.Base
     {
         [field: Header("View Setup")]
         [field: SerializeField] public int ID { get; private set; }
-        [field: SerializeField] public string Name { get; private set; }
+        [field: SerializeField] public LocalizedText Names { get; private set; }
         [field: SerializeField] public Sprite Icon { get; private set; }
         [field: SerializeField] public Sprite CommonCurrencyIcon { get; private set; }
         [field: SerializeField] public Sprite GemsCurrencyIcon { get; private set; }

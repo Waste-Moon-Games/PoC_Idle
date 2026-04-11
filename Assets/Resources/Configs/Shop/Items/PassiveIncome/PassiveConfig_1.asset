@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: PassiveConfig_1
   m_EditorClassIdentifier: Core.Shop.Base::Core.Shop.Base.ItemModelConfig
   <ID>k__BackingField: 1
-  <Name>k__BackingField: "\u0412\u0442\u043E\u0440\u043E\u0439"
+  <Names>k__BackingField:
+    _entries:
+    - Language: 10
+      Text: S-passive
+    - Language: 30
+      Text: "\u0412-\u043F\u0430\u0441\u0441\u0438\u0432"
   <Icon>k__BackingField: {fileID: 0}
   <CommonCurrencyIcon>k__BackingField: {fileID: -6122061090170777107, guid: 4ec5c2ae979b22740be929506510dde3, type: 3}
   <GemsCurrencyIcon>k__BackingField: {fileID: 3483158521792860677, guid: f5e588c8185eea64eae03d64c6866589, type: 3}
