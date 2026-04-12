@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SO.AdsConfigs.RewardAdsConfig
   <InitTemporaryBonusDurationInMinutes>k__BackingField: 0.5
   <Items>k__BackingField:
-  - Type: 0
+  - ItemID: double_icnome_bonus
+    Type: 0
     Descriptions:
       _entries:
       - Language: 30
@@ -26,7 +27,8 @@ MonoBehaviour:
           minutes!
     Amount: 2
     BonusDuration: 0.5
-  - Type: 1
+  - ItemID: get_gems_bonus
+    Type: 1
     Descriptions:
       _entries:
       - Language: 30

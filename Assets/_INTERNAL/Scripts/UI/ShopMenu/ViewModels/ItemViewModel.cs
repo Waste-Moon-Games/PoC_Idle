@@ -1,4 +1,5 @@
 ﻿using Common.MVVM;
+using Core.Common.Player;
 using Core.Shop.Base;
 using R3;
 using UnityEngine;
@@ -19,12 +20,13 @@ namespace UI.ShopMenu.ViewModels
         private readonly Subject<string> _upgradeAmountChangeSignal = new();
         private readonly Subject<int> _levelChangeSignal = new();
         private readonly Subject<bool> _statusChangeSignal = new();
+        private BehaviorSubject<string> _finalDescSignal;
 
         private int _id;
         private Sprite _icon;
         private Sprite _currencyIcon;
-        private string _name;
         private ItemType _type;
+        private string _name;
         private string _finalDescription;
 
         private bool _isOpened;
@@ -34,8 +36,7 @@ namespace UI.ShopMenu.ViewModels
 
         private ItemModel _model;
 
-        public ItemType ItemType => _type;
-        public string ItemName => _model.Name;
+        public CurrencyType CurrencyType => _model.CurrencyType;
 
         public Observable<string> RequestedName => _requestNameSignal.AsObservable();
         public Observable<Sprite> RequestedIcon => _requestIconSignal.AsObservable();
@@ -45,6 +46,7 @@ namespace UI.ShopMenu.ViewModels
         public Observable<string> UpgradeAmountChanged => _upgradeAmountChangeSignal.AsObservable();
         public Observable<int> LevelChanged => _levelChangeSignal.AsObservable();
         public Observable<bool> StatusChanged => _statusChangeSignal.AsObservable();
+        public Observable<string> FinalDescSignal => _finalDescSignal.AsObservable();
 
         public void BindModel(IModel model)
         {
@@ -61,6 +63,8 @@ namespace UI.ShopMenu.ViewModels
             _model.LevelChanged.Subscribe(HandleLevelChanged).AddTo(_disposables);
             _model.UpgradeAmountChanged.Subscribe(HandleUpgradeAmountChanged).AddTo(_disposables);
             _model.StatusChanged.Subscribe(HandleStatusChanged).AddTo(_disposables);
+
+            _finalDescSignal = new(_model.Description);
         }
 
         public void Dispose() => _disposables.Dispose();
@@ -114,6 +118,7 @@ namespace UI.ShopMenu.ViewModels
         private void HandleFinalDescription(string desc)
         {
             _finalDescription = desc.Replace("{amount}", _upgradeAmount);
+            _finalDescSignal.OnNext(_finalDescription);
             _upgradeAmountChangeSignal.OnNext(_finalDescription);
         }
 

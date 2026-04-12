@@ -75,7 +75,7 @@ namespace Entry.Global
         private void CreateGameScene()
         {
             var container = _cachedContainer = new(_rootContainer);
-            var entryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
+            var entryPoint = Object.FindAnyObjectByType<GameplayEntryPoint>();
 
             entryPoint.Run(container).Subscribe(action =>
             {
@@ -91,7 +91,7 @@ namespace Entry.Global
         private void CreateShopScene()
         {
             var container = _cachedContainer = new(_rootContainer);
-            var entryPoint = Object.FindFirstObjectByType<ShopEntryPoint>();
+            var entryPoint = Object.FindAnyObjectByType<ShopEntryPoint>();
 
             entryPoint.Run(container)
                 .Where(action => action == ShopEvents.Exit)

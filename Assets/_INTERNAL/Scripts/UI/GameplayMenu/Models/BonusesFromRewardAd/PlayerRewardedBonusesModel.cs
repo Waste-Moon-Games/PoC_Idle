@@ -85,6 +85,8 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
 
         private void HandleSelectedBonusItem(BonusItemModel item)
         {
+            _selectedBonus?.CloseItemWindow();
+
             _selectedBonus = item;
             _bonusSelectedSignal.OnNext(item.Description);
         }

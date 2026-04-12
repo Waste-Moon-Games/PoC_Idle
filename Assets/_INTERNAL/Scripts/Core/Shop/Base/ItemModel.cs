@@ -33,6 +33,7 @@ namespace Core.Shop.Base
         private Sprite _currencyIcon;
 
         public string Name => _name;
+        public string Description => _description;
         public Sprite CurrencyIcon => _currencyIcon;
         public int Id => _config.ID;
         public ItemType Type => _config.Type;
@@ -156,6 +157,7 @@ namespace Core.Shop.Base
             _requestIconSignal.OnNext(_config.Icon);
             _requestItemTypeSignal.OnNext(Type);
             _requestedCurrencyIconSignal.OnNext(CurrencyIcon);
+            _finalDescriptionSignal.OnNext(Description);
         }
 
         public void RequestGeneralInfo()

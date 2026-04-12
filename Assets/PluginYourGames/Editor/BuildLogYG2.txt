@@ -1,3 +1,3 @@
-﻿Build path: D:/Unity/Projects/Poc Idle/PoC_Idle_0.9.2a.apk
-Build number: 13
-PluginYG version: 2.008
+﻿Build path: D:/Unity/Projects/Poc Idle/PoC_Idle_0.9.5.1a.apk
+Build number: 16
+PluginYG version: 2.009

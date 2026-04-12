@@ -70,7 +70,24 @@ namespace Core.Shop.Models
                 if (itemConfig == null)
                     continue;
 
-                var model = new ItemModel(itemConfig);
+                var localizedDescriptions = itemConfig.Descriptions;
+                var localizedNames = itemConfig.Names;
+                if (localizedNames == null)
+                {
+                    Debug.LogError($"[Shop Model] ID: '{_sId}'.\n Item Confid ID/Names: '{itemConfig.ID}/{itemConfig.Names}'. Names are empty!");
+                    return;
+                }
+
+                if (localizedDescriptions == null)
+                {
+                    Debug.LogError($"[Shop Model] ID: '{_sId}'.\n Item Confid ID/Names: '{itemConfig.ID}/{itemConfig.Names}'. Descriptions are empty!");
+                    return;
+                }
+
+                var desc = localizedDescriptions.Get(_currentLanguage);
+                var name = localizedNames.Get(_currentLanguage);
+
+                var model = new ItemModel(itemConfig, desc, name);
                 _itemsDict[model.Id] = model;
             }
 

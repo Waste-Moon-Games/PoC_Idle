@@ -7,6 +7,7 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
 {
     public class BonusItemModel : IModel
     {
+        private readonly string _itemID;
         private readonly BonusItemType _type;
         private readonly string _description;
         private readonly float _amount;
@@ -19,6 +20,7 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
         private bool _isOpened = false;
         private bool _isActive = false;
 
+        public string ItemID => _itemID;
         public BonusItemType Type => _type;
         public string Description => _description;
         public float Amount => _amount;
@@ -30,6 +32,8 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
 
         public BonusItemModel(BonusItemData sourceData, string desc = null)
         {
+            _itemID = sourceData.ItemID;
+
             _type = sourceData.Type;
             _amount = sourceData.Amount;
             _bonusDuration = sourceData.BonusDuration;

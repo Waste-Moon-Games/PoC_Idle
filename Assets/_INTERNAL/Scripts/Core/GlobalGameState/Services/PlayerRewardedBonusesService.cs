@@ -59,7 +59,7 @@ namespace Core.GlobalGameState.Services
             _temporaryBonusCts.Dispose();
             _temporaryBonusCts = null;
 
-            _temporaryBonusDuration = _initialTemporaryBonusDuration;
+            _temporaryBonusDuration = _initialTemporaryBonusDuration * 60f;
             _temporaryBonusTimerChangedSignal.OnNext(_temporaryBonusDuration);
         }
 

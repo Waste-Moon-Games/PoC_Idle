@@ -1,4 +1,5 @@
 ﻿using Common.MVVM;
+using Core.Common.Player;
 using R3;
 using TMPro;
 using UI.ShopMenu.ViewModels;
@@ -58,10 +59,13 @@ namespace UI.ShopMenu.Views
             _viewModel.UpgradeAmountChanged.Subscribe(HandleChangedUpgradeAmount).AddTo(_disposables);
             _viewModel.LevelChanged.Subscribe(HandleChangedLevel).AddTo(_disposables);
             _viewModel.StatusChanged.Subscribe(HandleChangedStatus).AddTo(_disposables);
+            _viewModel.FinalDescSignal.Subscribe(HandleFinalDesc).AddTo(_disposables);
 
             _viewModel.RequestBaseInfo();
             _viewModel.RequestGeneralInfo();
         }
+
+        private void HandleFinalDesc(string desc) => _upgradeAmountText.text = desc;
 
         private void HandleRequestedIcon(Sprite icon) => _icon.sprite = icon;
 
@@ -69,9 +73,18 @@ namespace UI.ShopMenu.Views
 
         private void HandleRequestedName(string name) => _nameText.text = $"<color=black>{name}</color>";
 
-        private void HandleChangedPrice(string price) => _priceText.text = $"<color=yellow>{price}</color>";
+        private void HandleChangedPrice(string price)
+        {
+            if (_viewModel.CurrencyType == CurrencyType.Gems)
+            {
+                _priceText.text = $"<color=red>{price}</color>";
+                return;
+            } 
 
-        private void HandleChangedUpgradeAmount(string finishedDesc) => _upgradeAmountText.text = finishedDesc;
+            _priceText.text = $"<color=yellow>{price}</color>";
+        }
+
+        private void HandleChangedUpgradeAmount(string finalDesc) => _upgradeAmountText.text = finalDesc;
 
         private void HandleChangedLevel(int level) => _levelText.text = $"<color=green>{level}</color> lvl";
 
