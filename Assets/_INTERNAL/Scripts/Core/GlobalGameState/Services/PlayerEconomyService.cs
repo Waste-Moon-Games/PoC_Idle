@@ -1,13 +1,16 @@
 using Core.Common.Player;
 using Core.GlobalGameState.Player;
 using Core.SaveSystemBase.Data;
+
 using Cysharp.Threading.Tasks;
 using R3;
+
 using SO.PlayerConfigs;
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using UnityEngine;
+
 using Random = UnityEngine.Random;
 
 namespace Core.GlobalGameState.Services
@@ -18,8 +21,8 @@ namespace Core.GlobalGameState.Services
         private readonly CompositeDisposable _disposables = new();
 
         private readonly BehaviorSubject<float> _playerClickAmountChangedSignal;
-        private readonly Subject<float> _coinsClickAdSignal = new();
         private readonly BehaviorSubject<float> _passiveIncomeAmountChangedSignal;
+        private readonly Subject<float> _coinsClickAdSignal = new();
 
         private readonly Dictionary<CurrencyType, ICurrencyWallet> _wallets = new();
 
@@ -175,7 +178,7 @@ namespace Core.GlobalGameState.Services
             PassiveIncomeAmount *= _passiveIncomeBonusAmount;
         }
 
-        public void AddCoinsRewardByLevel(float amount) => CoinsWallet.Add(amount);
+        public void AddCoinsByOtherIcnome(float amount) => CoinsWallet.Add(amount);
         public void AddGemsRewardByLevel(float amount) => GemsWallet.Add(amount);
 
         public void AddCoins()

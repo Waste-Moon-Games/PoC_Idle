@@ -234,7 +234,7 @@ namespace Core.GlobalGameState.Services
                 switch (reward.RewardType)
                 {
                     case RewardType.Coins:
-                        _economyService.AddCoinsRewardByLevel(reward.RewardAmount);
+                        _economyService.AddCoinsByOtherIcnome(reward.RewardAmount);
                         break;
                     case RewardType.Gems:
                         _economyService.AddGemsRewardByLevel(reward.RewardAmount);

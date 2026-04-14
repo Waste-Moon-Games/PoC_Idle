@@ -18,6 +18,8 @@ namespace Core.SaveSystemBase.Data
         public int CurrentExp = 0;
         public int ExpToLevelUp = 100;
 
+        public long LastOnlineTime;
+
         public List<ShopStateData> ShopsData = new();
         public List<RewardData> ReceivedRewards = new();
         public List<RewardData> CyclicRewards = new();

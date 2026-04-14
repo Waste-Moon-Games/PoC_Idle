@@ -36,6 +36,7 @@ namespace Core.GlobalGameState
         private PlayerUpgradeService _playerUpgradeService;
         private PlayerBonusesService _playerBonusesService;
         private PlayerRewardsByLevelService _playerRewardsByLevelService;
+        private PlayerOfflineIncomeCalculatorService _playerOfflineCalculator;
         private ShopState _shopState;
 
         private bool _isInitialized = false;
@@ -46,13 +47,15 @@ namespace Core.GlobalGameState
         private readonly RewardsByLevelConfig _rewardsByLevelConfig;
         private readonly CyclicRewardsConfig _cyclicRewardsConfig;
         private readonly PlayerConfig _playerConfig;
+        private readonly PlayerOfflineConfig _playerOfflineConfig;
 
         public PlayerEconomyService EconomyService => _playerEconomyService;
         public PlayerUpgradeService UpgradeService => _playerUpgradeService;
         public PlayerBonusesService BonusesService => _playerBonusesService;
         public PlayerRewardsByLevelService RewardsService => _playerRewardsByLevelService;
-        public ShopState ShopState => _shopState;
         public PlayerRewardedBonusesService PlayerRewardedBonusesService => _rewardedBonusesService;
+        public PlayerOfflineIncomeCalculatorService PlayerOfflineCalculator => _playerOfflineCalculator;
+        public ShopState ShopState => _shopState;
 
         public PlayerState(SaveSystemContext saveSystemContext, SystemLanguage currentLanguage)
         {
@@ -66,6 +69,7 @@ namespace Core.GlobalGameState
             _playerConfig = Resources.Load<PlayerConfig>("Configs/Player/PlayerConfig");
             _rewardsByLevelConfig = Resources.Load<RewardsByLevelConfig>("Configs/Player/RewardsByLevelConfig");
             _cyclicRewardsConfig = Resources.Load<CyclicRewardsConfig>("Configs/Player/CyclicRewardsConfig");
+            _playerOfflineConfig = Resources.Load<PlayerOfflineConfig>("Configs/Player/PlayerOfflineConfig");
             var rewardAdsConfig = Resources.Load<RewardAdsConfig>("Configs/Ads/RewardAdsConfig");
 
             var autoSaveToken = new CancellationTokenSource();
@@ -127,6 +131,7 @@ namespace Core.GlobalGameState
                 _cyclicRewardsConfig,
                 _playerBonusesService.LevelChanged,
                 _playerEconomyService);
+            _playerOfflineCalculator = new(maxOfflineSeconds: _playerOfflineConfig.MaxOfflineSeconds);
 
             _shopState = new(_playerUpgradeService, _currentLanguage);
         }
@@ -162,6 +167,7 @@ namespace Core.GlobalGameState
                 _playerEconomyService,
                 loadedData);
             _shopState = new(_playerUpgradeService, _currentLanguage);
+            _playerOfflineCalculator = new(_playerOfflineConfig.MaxOfflineSeconds, loadedData.LastOnlineTime);
 
             _shopState.Restore(loadedData.ShopsData);
         }
@@ -183,6 +189,12 @@ namespace Core.GlobalGameState
 
                 GainedExpPerClick = _playerBonusesService.GainedExpPerClick,
                 ExpToLevelUp = _playerBonusesService.ExpToLevelUp,
+
+#if UNITY_WEBGL
+                LastOnlineTime = YG2.ServerTime(),
+#elif UNITY_ANDROID
+                LastOnlineTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+#endif
 
                 ShopsData = CreateShopsData(),
                 ReceivedRewards = CreateRewardsData(),
