@@ -131,7 +131,7 @@ namespace Core.GlobalGameState
                 _cyclicRewardsConfig,
                 _playerBonusesService.LevelChanged,
                 _playerEconomyService);
-            _playerOfflineCalculator = new(maxOfflineSeconds: _playerOfflineConfig.MaxOfflineSeconds);
+            _playerOfflineCalculator = new(maxOfflineHours: _playerOfflineConfig.MaxOfflineHours);
 
             _shopState = new(_playerUpgradeService, _currentLanguage);
         }
@@ -167,7 +167,7 @@ namespace Core.GlobalGameState
                 _playerEconomyService,
                 loadedData);
             _shopState = new(_playerUpgradeService, _currentLanguage);
-            _playerOfflineCalculator = new(_playerOfflineConfig.MaxOfflineSeconds, loadedData.LastOnlineTime);
+            _playerOfflineCalculator = new(_playerOfflineConfig.MaxOfflineHours, loadedData.LastOnlineTime);
 
             _shopState.Restore(loadedData.ShopsData);
         }

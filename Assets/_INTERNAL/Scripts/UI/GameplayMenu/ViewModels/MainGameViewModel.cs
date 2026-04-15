@@ -18,7 +18,7 @@ namespace UI.GameplayMenu.ViewModels
         {
             _model = model as MainGameModel;
 
-            _model.BonusGaugeChange.Subscribe(HangleChangedBonusGauge).AddTo(_disposables);
+            _model.BonusGaugeChange.Subscribe(HandleChangedBonusGauge).AddTo(_disposables);
         }
 
         /// <summary>
@@ -37,6 +37,6 @@ namespace UI.GameplayMenu.ViewModels
             _model.Click();
         }
 
-        private void HangleChangedBonusGauge(float amount) => _bonusGaugeChangedSignal.OnNext(amount);
+        private void HandleChangedBonusGauge(float amount) => _bonusGaugeChangedSignal.OnNext(amount);
     }
 }

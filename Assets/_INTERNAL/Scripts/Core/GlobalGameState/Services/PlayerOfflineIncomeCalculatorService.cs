@@ -12,14 +12,14 @@ namespace Core.GlobalGameState.Services
         private readonly long _lastOnlineTime;
         private readonly int _maxOfflineSeconds;
 
-        public PlayerOfflineIncomeCalculatorService(int maxOfflineSeconds, long lastOnlineTime = 0)
+        public PlayerOfflineIncomeCalculatorService(int maxOfflineHours, long lastOnlineTime = 0)
         {
 #if UNITY_WEBGL
             _lastOnlineTime = lastOnlineTime;
 #elif UNITY_ANDROID
             _lastOnlineTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 #endif
-            _maxOfflineSeconds = maxOfflineSeconds;
+            _maxOfflineSeconds = maxOfflineHours * 60 * 60;
         }
 
         public OfflineIncomeResult CalculateOfflineIcnome(float incomePerSec)

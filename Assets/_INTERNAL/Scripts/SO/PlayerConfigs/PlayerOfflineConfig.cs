@@ -2,9 +2,9 @@
 
 namespace SO.PlayerConfigs
 {
-    [CreateAssetMenu(menuName = "Configs/Player/Player Offline Config", fileName = "Player Offline Config")]
+    [CreateAssetMenu(menuName = "Configs/Player/Player Offline Config", fileName = "PlayerOfflineConfig")]
     public class PlayerOfflineConfig : ScriptableObject
     {
-        [field: SerializeField] public int MaxOfflineSeconds { get; private set; }
+        [field: SerializeField] public int MaxOfflineHours { get; private set; }
     }
 }
