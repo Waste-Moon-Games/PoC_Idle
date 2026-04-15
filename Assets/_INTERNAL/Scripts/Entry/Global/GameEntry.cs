@@ -59,10 +59,11 @@ namespace Entry.Global
             _rootContainer.RegisterFactory(slc => new SceneLoaderService(loadingScreen)).AsSingle();
 
             _rootContainer.RegisterFactory(ssc => new SaveSystemContext(SaveSystemStrategyFactory.CreateStrategy())).AsSingle();
-            _rootContainer.RegisterFactory(ads => new AdsSystemContex(AdsStrategyFactory.CreateStrategy(), adRatesConfig.InterstitialAdShowChance)).AsSingle();
+            _rootContainer.RegisterFactory(ads => new AdsSystemContext(AdsStrategyFactory.CreateStrategy(), adRatesConfig.InterstitialAdShowChance)).AsSingle();
 
-            var saveSystemContex = _rootContainer.Resolve<SaveSystemContext>();
-            _rootContainer.RegisterFactory(gws => new GameWorldState(saveSystemContex)).AsSingle();
+            var saveSystemContext = _rootContainer.Resolve<SaveSystemContext>();
+            var adsSystemContext = _rootContainer.Resolve<AdsSystemContext>();
+            _rootContainer.RegisterFactory(gws => new GameWorldState(saveSystemContext, adsSystemContext)).AsSingle();
         }
 
         private async UniTask Run()

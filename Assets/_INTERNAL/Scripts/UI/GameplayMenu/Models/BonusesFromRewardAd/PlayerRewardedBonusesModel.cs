@@ -14,7 +14,7 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
     {
         private readonly CompositeDisposable _disposables = new();
 
-        private readonly AdsSystemContex _adsSystem;
+        private readonly AdsSystemContext _adsSystem;
         private readonly PlayerRewardedBonusesService _rewardAdsBonusesService;
 
         private readonly Subject<string> _bonusSelectedSignal = new();
@@ -28,7 +28,7 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
         public Observable<string> BonusSelectedSignal => _bonusSelectedSignal.AsObservable();
 
         public PlayerRewardedBonusesModel(
-            AdsSystemContex adsSystem,
+            AdsSystemContext adsSystem,
             PlayerRewardedBonusesService playerRewardBonusesService)
         {
             _adsSystem = adsSystem;

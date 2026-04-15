@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0593b748e6a41f49b20c547df5e67dd, type: 3}
   m_Name: MainEconomyConfig
   m_EditorClassIdentifier: SO.EconomyConfigs::SO.EconomyConfigs.MainEconomyConfig
-  <InitialCoinsWalletAmount>k__BackingField: 0
-  <InitialGemsWalletAmount>k__BackingField: 0
+  <InitialCoinsWalletAmount>k__BackingField: 1000
+  <InitialGemsWalletAmount>k__BackingField: 100
   <InitialPlayerClickAmount>k__BackingField: 1
   <InitialGemsClickRewardAmount>k__BackingField: 1
   <PassiveIncomeDelay>k__BackingField: 1

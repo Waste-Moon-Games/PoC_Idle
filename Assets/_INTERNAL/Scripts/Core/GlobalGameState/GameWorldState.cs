@@ -1,3 +1,4 @@
+using Core.AdsSystem;
 using Core.GlobalGameState.Services;
 using Core.SaveSystemBase;
 using Cysharp.Threading.Tasks;
@@ -12,10 +13,10 @@ namespace Core.GlobalGameState
         public PlayerState PlayerState => _playerState;
         public LocalizationService LocalizationService => _localizationService;
 
-        public GameWorldState(SaveSystemContext saveSystemContext)
+        public GameWorldState(SaveSystemContext saveSystemContext, AdsSystemContext adsSystemContext)
         {
             _localizationService = new LocalizationService();
-            _playerState = new(saveSystemContext, _localizationService.CurrentLanguage);
+            _playerState = new(saveSystemContext, adsSystemContext, _localizationService.CurrentLanguage);
         }
 
         public async UniTask InitPlayerState()

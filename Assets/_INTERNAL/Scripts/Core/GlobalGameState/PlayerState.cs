@@ -1,3 +1,4 @@
+using Core.AdsSystem;
 using Core.GlobalGameState.Services;
 using Core.SaveSystemBase;
 using Core.SaveSystemBase.Data;
@@ -31,12 +32,14 @@ namespace Core.GlobalGameState
 #endif
         private readonly AutoSaveService _autoSaveService;
         private readonly PlayerRewardedBonusesService _rewardedBonusesService;
+        private readonly AdsSystemContext _adsSystemContext;
 
         private PlayerEconomyService _playerEconomyService;
         private PlayerUpgradeService _playerUpgradeService;
         private PlayerBonusesService _playerBonusesService;
         private PlayerRewardsByLevelService _playerRewardsByLevelService;
         private PlayerOfflineIncomeCalculatorService _playerOfflineCalculator;
+        private OfflineIncomeReceiveService _offlineIncomeReceiveService;
         private ShopState _shopState;
 
         private bool _isInitialized = false;
@@ -55,9 +58,10 @@ namespace Core.GlobalGameState
         public PlayerRewardsByLevelService RewardsService => _playerRewardsByLevelService;
         public PlayerRewardedBonusesService PlayerRewardedBonusesService => _rewardedBonusesService;
         public PlayerOfflineIncomeCalculatorService PlayerOfflineCalculator => _playerOfflineCalculator;
+        public OfflineIncomeReceiveService OfflineIncomeReceiveService => _offlineIncomeReceiveService;
         public ShopState ShopState => _shopState;
 
-        public PlayerState(SaveSystemContext saveSystemContext, SystemLanguage currentLanguage)
+        public PlayerState(SaveSystemContext saveSystemContext, AdsSystemContext adsSystemContext, SystemLanguage currentLanguage)
         {
 #if UNITY_WEBGL
             YG2.onGetSDKData += HandleSDKData;
@@ -77,6 +81,7 @@ namespace Core.GlobalGameState
             _autoSaveService.AutoSaveSignal.Subscribe(def => SavePlayerState()).AddTo(_disposables);
 
             _rewardedBonusesService = new(rewardAdsConfig.InitTemporaryBonusDurationInMinutes);
+            _adsSystemContext = adsSystemContext;
         }
 
         public async UniTask InitializeAsync()
@@ -132,6 +137,7 @@ namespace Core.GlobalGameState
                 _playerBonusesService.LevelChanged,
                 _playerEconomyService);
             _playerOfflineCalculator = new(maxOfflineHours: _playerOfflineConfig.MaxOfflineHours);
+            _offlineIncomeReceiveService = new(_playerEconomyService, _playerOfflineCalculator, _adsSystemContext, true);
 
             _shopState = new(_playerUpgradeService, _currentLanguage);
         }
@@ -168,8 +174,10 @@ namespace Core.GlobalGameState
                 loadedData);
             _shopState = new(_playerUpgradeService, _currentLanguage);
             _playerOfflineCalculator = new(_playerOfflineConfig.MaxOfflineHours, loadedData.LastOnlineTime);
+            _offlineIncomeReceiveService = new(_playerEconomyService, _playerOfflineCalculator, _adsSystemContext);
 
             _shopState.Restore(loadedData.ShopsData);
+            _offlineIncomeReceiveService.PrepareOfflineIncome();
         }
 
         private void SavePlayerState()
@@ -193,7 +201,7 @@ namespace Core.GlobalGameState
 #if UNITY_WEBGL
                 LastOnlineTime = YG2.ServerTime(),
 #elif UNITY_ANDROID
-                LastOnlineTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                LastOnlineTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
 #endif
 
                 ShopsData = CreateShopsData(),

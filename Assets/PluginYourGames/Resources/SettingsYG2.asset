@@ -24,7 +24,7 @@ MonoBehaviour:
     languages:
       ru: 1
       en: 1
-      tr: 1
+      tr: 0
       az: 0
       be: 0
       he: 0
@@ -207,7 +207,7 @@ MonoBehaviour:
   Simulation:
     device: 1
     language: ru
-    enableInterAdv: 1
+    enableInterAdv: 0
     advIntervalSimulation: 60
     durationAdv: 0.5
     loadAdv: 0

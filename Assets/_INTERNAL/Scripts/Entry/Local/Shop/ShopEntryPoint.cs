@@ -41,7 +41,7 @@ namespace Entry.Local.Shop
 
         public Observable<ShopEvents> Run(DIContainer container)
         {
-            container.Resolve<AdsSystemContex>().ShowInterstitial();
+            container.Resolve<AdsSystemContext>().ShowInterstitial();
 
             CreateScene(container, out NavigationButtonsModel navigationButtonsModel);
 

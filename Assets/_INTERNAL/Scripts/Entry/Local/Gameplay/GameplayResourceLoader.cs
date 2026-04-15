@@ -46,6 +46,20 @@ namespace Entry.Local.Gameplay
             playerStatsView = Object.Instantiate(playerStatsViewPrefab);
         }
 
+        public OfflineIncomeView LoadOfflineIncomeView()
+        {
+            var prefab = Resources.Load<OfflineIncomeView>("UI/GameplayMenu/SmallPrefabs/OfflineIncomeView");
+            if(prefab == null)
+            {
+                Debug.LogWarning("[Gameplay Resource Loader] Offline Income View is null!");
+                return null;
+            }
+
+            var offlineIncomeView = Object.Instantiate(prefab);
+
+            return offlineIncomeView;
+        }
+
         public RewardAdsConfig LoadRewardedBonusesConfig()
         {
             var result = Resources.Load<RewardAdsConfig>("Configs/Ads/RewardAdsConfig");
