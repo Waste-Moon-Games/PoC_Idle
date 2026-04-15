@@ -29,7 +29,6 @@ namespace UI.GameplayMenu.Views
 
         public void Toggle(bool state)
         {
-            Debug.Log($"[Temporary Bonus View] Bonus state: {state}");
             _isActive = state;
             _contentContainer.SetActive(state);
 
@@ -41,6 +40,10 @@ namespace UI.GameplayMenu.Views
         {
             _startTime = startTime;
             _bonusTimer.maxValue = startTime;
+
+            if (_isActive)
+                return;
+
             _bonusTimer.value = startTime;
         }
 

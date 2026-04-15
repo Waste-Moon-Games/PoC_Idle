@@ -91,7 +91,6 @@ namespace Entry.Local.Gameplay
             offlineIncomeView.BindViewModel(offlineIncomeViewModel);
 
             mainGameView.AttachView(offlineIncomeView.gameObject);
-            Debug.Log("[Gameplay Entry Point] Gameplay Scene created");
 
 #if UNITY_WEBGL
             YG2.GameplayStart();

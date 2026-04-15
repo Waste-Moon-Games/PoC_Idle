@@ -9,18 +9,6 @@ namespace Core.AdsSystem.Web
     {
         private Action _pendingCallback;
 
-        public WebAdsProvider()
-        {
-            try
-            {
-                YG2.onRewardAdv += OnYGReward;
-            }
-            catch
-            {
-                Debug.LogWarning("YG2 SDK event not found. Make sure YG2 is present in WebGL build.");
-            }
-        }
-
         public void SetupLoaders() { }
 
         public void ShowInterstitial()
@@ -41,7 +29,11 @@ namespace Core.AdsSystem.Web
 
             try
             {
-                YG2.RewardedAdvShow("");
+                YG2.RewardedAdvShow("", () =>
+                {
+                    _pendingCallback?.Invoke();
+                    _pendingCallback = null;
+                });
             }
             catch (Exception)
             {
@@ -49,12 +41,6 @@ namespace Core.AdsSystem.Web
                 _pendingCallback?.Invoke();
                 _pendingCallback = null;
             }
-        }
-
-        private void OnYGReward(string id)
-        {
-            _pendingCallback?.Invoke();
-            _pendingCallback = null;
         }
     }
 }

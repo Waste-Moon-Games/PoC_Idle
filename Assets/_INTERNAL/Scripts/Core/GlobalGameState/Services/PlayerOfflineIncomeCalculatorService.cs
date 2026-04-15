@@ -21,6 +21,9 @@ namespace Core.GlobalGameState.Services
 
         public PlayerOfflineIncomeCalculatorService(int maxOfflineHours, long lastOnlineTime = 0)
         {
+            _offlineIcnomeCalculatedSignal = new(0f);
+            _offlineHoursCalculatedSignal = new(0f);
+
 #if UNITY_WEBGL
             _lastOnlineTime = lastOnlineTime;
 #elif UNITY_ANDROID
@@ -40,8 +43,8 @@ namespace Core.GlobalGameState.Services
 
             float offlineHours = offlineSeconds / 3600f;
 
-            _offlineIcnomeCalculatedSignal = new(income);
-            _offlineHoursCalculatedSignal = new(offlineHours);
+            _offlineIcnomeCalculatedSignal.OnNext(income);
+            _offlineHoursCalculatedSignal.OnNext(offlineHours);
 
             return new OfflineIncomeResult(offlineSeconds, income);
         }

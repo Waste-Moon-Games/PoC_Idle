@@ -22,6 +22,8 @@ namespace Core.GlobalGameState.Services
 
         private bool _temporaryBonusState = false;
 
+        public float InitialTemporaryBonusDuration => _initialTemporaryBonusDuration;
+
         public Observable<bool> TemporaryBonusStateChanged => _temporaryBonusStateChangedSignal.AsObservable();
         public Observable<float> CurrencyBonusGiven => _giveCurrencyBonusSignal.AsObservable();
         public Observable<float> TemporaryBonusTimerChanged => _temporaryBonusTimerChangedSignal.AsObservable();
@@ -38,6 +40,9 @@ namespace Core.GlobalGameState.Services
 
         public void ActiveTemporaryBonus()
         {
+            if (_temporaryBonusState)
+                return;
+
             _temporaryBonusState = true;
             _temporaryBonusStateChangedSignal.OnNext(_temporaryBonusState);
 
@@ -70,9 +75,13 @@ namespace Core.GlobalGameState.Services
             while (!token.IsCancellationRequested)
             {
                 if (timer < 0f)
+                {
                     DeactivateTemporaryBonus();
+                    return;
+                }
 
-                timer -= Time.deltaTime;
+                timer -= 1f;
+                _temporaryBonusDuration = Mathf.Max(timer, 0f);
                 _temporaryBonusTimerChangedSignal.OnNext(timer);
 
                 await UniTask.Delay(TimeSpan.FromSeconds(1f), ignoreTimeScale: true, cancellationToken: token);

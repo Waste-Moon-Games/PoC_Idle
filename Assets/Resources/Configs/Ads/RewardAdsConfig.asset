@@ -26,7 +26,7 @@ MonoBehaviour:
         Text: Increase YOUR ENTIRE income by <color=green>2</color> times by <color=yellow>10</color>
           minutes!
     Amount: 2
-    BonusDuration: 0.5
+    BonusDurationMinutes: 0.5
   - ItemID: get_gems_bonus
     Type: 1
     Descriptions:
@@ -38,4 +38,4 @@ MonoBehaviour:
       - Language: 10
         Text: Get FREE right now <color=red>20</color> gems!
     Amount: 20
-    BonusDuration: 0
+    BonusDurationMinutes: 0

@@ -21,8 +21,23 @@ namespace UI.GameplayMenu.Models
 
         public Observable<bool> OfflineIncomeReceivedSignal => _service.OfflineIncomeReceivedSignal;
 
-        public Observable<float> OfflineIncomeChangedSignal => _offlineIcnomeChangedSignal.AsObservable();
-        public Observable<float> OfflineHoursChangedSignal => _offlineHoursChangedSignal.AsObservable();
+        public Observable<float> OfflineIncomeChangedSignal
+        {
+            get
+            {
+                _offlineIcnomeChangedSignal ??= new(_offlineIncome);
+                return _offlineIcnomeChangedSignal.AsObservable();
+            }
+        }
+
+        public Observable<float> OfflineHoursChangedSignal
+        {
+            get
+            {
+                _offlineHoursChangedSignal ??= new(_offlineHours);
+                return _offlineHoursChangedSignal.AsObservable();
+            }
+        }
 
         public OfflineIncomeModel(
             Observable<float> offlineIncomeSignal,
@@ -33,8 +48,6 @@ namespace UI.GameplayMenu.Models
 
             offlineIncomeSignal.Subscribe(HandleOfflineIncomeChanged).AddTo(_disposables);
             offlineHoursSignal.Subscribe(HandleOfflineHoursChanged).AddTo(_disposables);
-
-            Debug.Log("[Offline Income Model] Created");
         }
 
         public void ReceiveOfflineIncome() => _service.ReceiveOfflineIncome();

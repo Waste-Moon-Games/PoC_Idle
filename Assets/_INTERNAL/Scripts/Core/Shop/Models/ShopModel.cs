@@ -154,11 +154,6 @@ namespace Core.Shop.Models
             SubscribeOnItems();
 
             _itemsInitializedSignal.OnNext(_itemsDict.Values.OrderBy(i => i.Id).ToList());
-
-            if (hasSavedData)
-            {
-                Debug.Log($"[Shop Sync] Shop '{_sId}': synced {syncedItemsCount} saved item(s), added {addedItemsCount} new item(s) from config.");
-            }
         }
 
         public void RequestState() => _stateChangedSignal.OnNext(_state);

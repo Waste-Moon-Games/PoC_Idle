@@ -27,11 +27,15 @@ namespace UI.GameplayMenu.Views
 
         private OfflineIncomeViewModel _viewModel;
 
+        private bool _isCanBeOpened;
+
         private RectTransform _rectTransform;
+
+        private void Awake() => _rectTransform = GetComponent<RectTransform>();
 
         private void Start()
         {
-            _rectTransform = GetComponent<RectTransform>();
+            
 
             if(_receiveIncome == null || _receiveDoubleIncome == null)
             {
@@ -59,22 +63,24 @@ namespace UI.GameplayMenu.Views
             _viewModel.OfflineIncomeReceivedSignal.Subscribe(HandleReceivedOfflineIncome).AddTo(_disposables);
             _viewModel.OfflineHoursChangedSignal.Subscribe(HandleOfflineHoursChanged).AddTo(_disposables);
             _viewModel.OfflineIncomeChangedSignal.Subscribe(HandleOfflineIncomeChanged).AddTo(_disposables);
+            _viewModel.CanBeOpenedSignal.Subscribe(HandleCanBeOpenedState).AddTo(_disposables);
 
-            if (_viewModel.IsNewGame)
+            if (_viewModel.IsNewGame || !_isCanBeOpened)
+            {
+                Debug.Log("[Offline Income View] Can't be opened");
                 return;
+            }
 
             OpenWindow();
         }
 
         private void OpenWindow()
         {
+            gameObject.SetActive(true);
+
             _rectTransform
                 .DOScale(_defaultScale, _openCloseAnimDuration)
-                .SetEase(Ease.InCubic)
-                .OnComplete(() =>
-            {
-                gameObject.SetActive(true);
-            }).Kill();
+                .SetEase(Ease.InCubic);
         }
 
         private void HandleReceivedOfflineIncome(bool state)
@@ -83,9 +89,19 @@ namespace UI.GameplayMenu.Views
                 .DOScale(_receivedScale, _openCloseAnimDuration)
                 .SetEase(Ease.InCubic)
                 .OnComplete(() =>
-            {
-                gameObject.SetActive(state);
-            }).Kill();
+                {
+                    gameObject.SetActive(!state);
+                });
+        }
+
+        private void HandleCanBeOpenedState(bool state)
+        {
+            _isCanBeOpened = state;
+
+            if (!_isCanBeOpened || _viewModel == null || _viewModel.IsNewGame || gameObject.activeSelf)
+                return;
+
+            OpenWindow();
         }
 
         private void HandleOfflineIncomeChanged(string value) => _offlineIncome.text = _offlineIncome.text.Replace("{income}", $"<color=yellow>{value}</color>");

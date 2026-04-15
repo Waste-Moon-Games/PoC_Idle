@@ -2,7 +2,6 @@
 using R3;
 using System.Globalization;
 using UI.GameplayMenu.Models;
-using UnityEngine;
 using Utils.Formatter;
 
 namespace UI.GameplayMenu.ViewModels
@@ -11,6 +10,7 @@ namespace UI.GameplayMenu.ViewModels
     {
         private readonly CompositeDisposable _disposables = new();
 
+        private readonly BehaviorSubject<bool> _canBeOpenedSignal;
         private readonly BehaviorSubject<string> _offlineIncomeChangedSignal;
         private readonly BehaviorSubject<string> _offlineHoursChangedSignal;
 
@@ -27,15 +27,16 @@ namespace UI.GameplayMenu.ViewModels
 
         public Observable<string> OfflineIncomeChangedSignal => _offlineIncomeChangedSignal.AsObservable();
         public Observable<string> OfflineHoursChangedSignal => _offlineHoursChangedSignal.AsObservable();
+        public Observable<bool> CanBeOpenedSignal => _canBeOpenedSignal.AsObservable();
 
         public OfflineIncomeViewModel(NumberFormatter formatter)
         {
             _formatter = formatter;
 
+            _canBeOpenedSignal = new(false);
+
             _offlineIncomeChangedSignal = new(string.Empty);
             _offlineHoursChangedSignal = new(string.Empty);
-
-            Debug.Log("[Offline Income View Model] Created");
         }
 
         public void BindModel(IModel model)
@@ -57,6 +58,8 @@ namespace UI.GameplayMenu.ViewModels
 
         private void HandleChangedOfflineIncome(float amount)
         {
+            _canBeOpenedSignal.OnNext(amount > 0f);
+
             _offlineIncome = _formatter?.FormatNumber(amount);
             _offlineIncomeChangedSignal.OnNext(_offlineIncome);
         }

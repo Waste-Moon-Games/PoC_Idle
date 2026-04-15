@@ -36,7 +36,7 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
 
             _type = sourceData.Type;
             _amount = sourceData.Amount;
-            _bonusDuration = sourceData.BonusDuration;
+            _bonusDuration = sourceData.BonusDurationMinutes;
 
             _description = desc;
         }

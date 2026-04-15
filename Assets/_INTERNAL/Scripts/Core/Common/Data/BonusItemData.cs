@@ -10,6 +10,6 @@ namespace Core.Common.Data
         public BonusItemType Type;
         public LocalizedText Descriptions;
         public float Amount;
-        public float BonusDuration;
+        public float BonusDurationMinutes;
     }
 }
