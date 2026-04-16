@@ -85,6 +85,9 @@ namespace UI.GameplayMenu.Views
 
         private void HandleReceivedOfflineIncome(bool state)
         {
+            if (!state)
+                _isCanBeOpened = !state;
+
             _rectTransform
                 .DOScale(_receivedScale, _openCloseAnimDuration)
                 .SetEase(Ease.InCubic)

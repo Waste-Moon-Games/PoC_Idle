@@ -16,6 +16,7 @@ namespace Core.GlobalGameState.Services
         private readonly Subject<RewardByLevelRuntime> _requestRewardStateSignal = new();
         private readonly Subject<RewardByLevelRuntime> _rewardUnlockSignal = new();
         private readonly Subject<BaseReward> _rewardReceiveSignal = new();
+        private readonly Subject<bool> _hasAvailableRewardsSignal = new();
 
         private readonly RewardsByLevelConfig _rewardsByLevelConfig;
         private readonly CyclicRewardsConfig _cyclicRewardsConfig;
@@ -29,9 +30,11 @@ namespace Core.GlobalGameState.Services
 
         public IReadOnlyDictionary<int, RewardByLevelRuntime> RewardsDict => _rewardsDict;
         public IReadOnlyDictionary<int, CyclicRewardRuntime> CyclicRewardsDict => _cyclicRewardsDict;
+
         public Observable<RewardByLevelRuntime> RewardUnlocked => _rewardUnlockSignal.AsObservable();
         public Observable<BaseReward> RewardReceived => _rewardReceiveSignal.AsObservable();
         public Observable<RewardByLevelRuntime> RequestedRewardState => _requestRewardStateSignal.AsObservable();
+        public Observable<bool> HasAvailableRewardsSignal => _hasAvailableRewardsSignal.AsObservable();
 
         public PlayerRewardsByLevelService(
             RewardsByLevelConfig rewardsByLevelConfig,
@@ -203,9 +206,10 @@ namespace Core.GlobalGameState.Services
             {
                 reward.TryToUnlock();
                 _rewardUnlockSignal.OnNext(reward);
+                _hasAvailableRewardsSignal.OnNext(true);
                 return true;
             }
-            
+
             return false;
         }        
 
@@ -230,7 +234,10 @@ namespace Core.GlobalGameState.Services
             if(reward is not null && reward.CanBeReceived())
             {
                 reward.TryToReceive();
+
                 _rewardReceiveSignal.OnNext(reward);
+                _hasAvailableRewardsSignal.OnNext(false);
+
                 switch (reward.RewardType)
                 {
                     case RewardType.Coins:

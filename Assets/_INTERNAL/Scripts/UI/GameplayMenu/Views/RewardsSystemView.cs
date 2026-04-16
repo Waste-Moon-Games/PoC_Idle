@@ -15,6 +15,7 @@ namespace UI.GameplayMenu.Views
 
         [Space(10), Header("Other")]
         [SerializeField] private Button _openRewardsPanelButton;
+        [SerializeField] private Image _chestIcon;
         [SerializeField] private Button _closeRewardsPanelButton;
         [SerializeField] private GameObject _rewardsPanel;
         [SerializeField] private Sprite _availableRewardsChestSprite;
@@ -44,6 +45,7 @@ namespace UI.GameplayMenu.Views
             _openRewardsPanelButton.onClick.RemoveListener(OpenRewardsPanel);
             _closeRewardsPanelButton.onClick.RemoveListener(CloseRewardsPanel);
 
+            _viewModel.Dispose();
             _disposables.Dispose();
         }
 
@@ -52,6 +54,7 @@ namespace UI.GameplayMenu.Views
             _viewModel = viewModel as RewardsSystemViewModel;
 
             _viewModel.RequestedRewardViewModels.Subscribe(HandleRequestedRewardModels).AddTo(_disposables);
+            _viewModel.HasAvailableRewardsSignal.Subscribe(HandleAvailableRewardsSignal).AddTo(_disposables);
 
             _viewModel.RequestedRewardModels();
         }
@@ -66,6 +69,14 @@ namespace UI.GameplayMenu.Views
         {
             if(_rewardsPanel.activeSelf)
                 _rewardsPanel.SetActive(false);
+        }
+
+        private void HandleAvailableRewardsSignal(bool value)
+        {
+            if (value)
+                _chestIcon.sprite = _availableRewardsChestSprite;
+            else
+                _chestIcon.sprite = _defaultChestSprite;
         }
 
         private void HandleRequestedRewardModels(List<RewardViewModel> rewardViewModels)

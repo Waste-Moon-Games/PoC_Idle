@@ -10,8 +10,9 @@ namespace Core.GlobalGameState.Services
 {
     public class PlayerOfflineIncomeCalculatorService
     {
-        private BehaviorSubject<float> _offlineIcnomeCalculatedSignal;
-        private BehaviorSubject<float> _offlineHoursCalculatedSignal;
+        private readonly BehaviorSubject<bool> _incomeReceivedSignal;
+        private readonly BehaviorSubject<float> _offlineIcnomeCalculatedSignal;
+        private readonly BehaviorSubject<float> _offlineHoursCalculatedSignal;
 
         private readonly long _lastOnlineTime;
         private readonly long _maxOfflineSeconds;

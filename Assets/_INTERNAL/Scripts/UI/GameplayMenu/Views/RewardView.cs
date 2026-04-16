@@ -33,8 +33,8 @@ namespace UI.GameplayMenu.Views
             _disposables.Dispose();
         }
 
-        private void HandleReciveButtonClick() => _viewModel.TryToReciveThisReward();
-        private void HandleRequestedRewardAmount(float amount) => _amountText.text = $"{_formatter.FormatNumber(amount)}";
+        private void HandleReciveButtonClick() => _viewModel.TryToReceiveThisReward();
+        private void HandleRequestedRewardAmount(float amount) => _amountText.text = $"<color=yellow>{_formatter.FormatNumber(amount)}</color>";
         
         private void HandleRewardState(RewardState state)
         {
@@ -85,9 +85,9 @@ namespace UI.GameplayMenu.Views
         {
             _viewModel = viewModel as RewardViewModel;
 
-            _viewModel.RequestedRewardState.Subscribe(HandleRewardState).AddTo(_disposables);
+            _viewModel.RequestedRewardStateSignal.Subscribe(HandleRewardState).AddTo(_disposables);
             _viewModel.RewardAmountSignal.Subscribe(HandleRequestedRewardAmount).AddTo(_disposables);
-            _viewModel.RewardRequierdLevelSignal.Subscribe(HandleRewardRequiredLevel).AddTo(_disposables);
+            _viewModel.RewardRequiredLevelSignal.Subscribe(HandleRewardRequiredLevel).AddTo(_disposables);
             _viewModel.ConnectorStateSignal.Subscribe(HandleConnectorState).AddTo(_disposables);
 
             _viewModel.RequestRewardState();

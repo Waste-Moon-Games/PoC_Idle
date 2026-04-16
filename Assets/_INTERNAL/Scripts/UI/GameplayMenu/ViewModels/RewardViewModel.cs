@@ -15,9 +15,9 @@ namespace UI.GameplayMenu.ViewModels
 
         private RewardModel _model;
 
-        public Observable<RewardState> RequestedRewardState => _requestedRewardStateSignal.AsObservable();
+        public Observable<RewardState> RequestedRewardStateSignal => _requestedRewardStateSignal.AsObservable();
         public Observable<float> RewardAmountSignal => _model.RewardAmountSignal.AsObservable();
-        public Observable<int> RewardRequierdLevelSignal => _model.RewardRequiredLevelSignal.AsObservable();
+        public Observable<int> RewardRequiredLevelSignal => _model.RewardRequiredLevelSignal.AsObservable();
         public Observable<bool> ConnectorStateSignal => _model.ConnectorStateSignal.AsObservable();
 
         private void HandleRequestedRewardState(RewardState state)
@@ -40,6 +40,6 @@ namespace UI.GameplayMenu.ViewModels
         }
 
         public void RequestRewardState() => _model.RequestRewardState();
-        public void TryToReciveThisReward() => _model.TryToReceiveThisReward();
+        public void TryToReceiveThisReward() => _model.TryToReceiveThisReward();
     }
 }

@@ -14,6 +14,7 @@ namespace Core.GlobalGameState.Services
 
         private float _offlineIncome;
 
+        private bool _offlineIncomeReceived = false;
         private readonly bool _isNewGame = false;
 
         public bool IsNewGame => _isNewGame;
@@ -42,7 +43,8 @@ namespace Core.GlobalGameState.Services
         {
             float totalIncome = _offlineIncome * multiplier;
             _playerEconomyService.AddCoinsByOtherIcnome(totalIncome);
-            _offlineIncomeReceivedSignal.OnNext(true);
+            _offlineIncomeReceived = true;
+            _offlineIncomeReceivedSignal.OnNext(_offlineIncomeReceived);
         }
 
         public void ReceiveDoubleOfflineIncome()
@@ -50,7 +52,8 @@ namespace Core.GlobalGameState.Services
             _adsContext.ShowRewarded(() =>
             {
                 ReceiveOfflineIncome(2f);
-                _offlineIncomeReceivedSignal.OnNext(true);
+                _offlineIncomeReceived = true;
+                _offlineIncomeReceivedSignal.OnNext(_offlineIncomeReceived);
             });
         }
     }
