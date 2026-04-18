@@ -21,13 +21,15 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private Button _receiveDoubleIncome;
 
         [Space(5), Header("Animation setup")]
-        [SerializeField] private float _openCloseAnimDuration = 1f;
+        [SerializeField] private float _openAnimDuration = 1f;
+        [SerializeField] private float _closeAnimDuration = 0.25f;
         [SerializeField] private Vector2 _receivedScale = new(0f, 0f);
         [SerializeField] private Vector2 _defaultScale = Vector2.one;
 
         private OfflineIncomeViewModel _viewModel;
 
         private bool _isCanBeOpened;
+        private bool _isReceived;
 
         private RectTransform _rectTransform;
 
@@ -35,8 +37,6 @@ namespace UI.GameplayMenu.Views
 
         private void Start()
         {
-            
-
             if(_receiveIncome == null || _receiveDoubleIncome == null)
             {
                 Debug.LogWarning("[Offline Income View] One or more buttons is empty!");
@@ -63,13 +63,10 @@ namespace UI.GameplayMenu.Views
             _viewModel.OfflineIncomeReceivedSignal.Subscribe(HandleReceivedOfflineIncome).AddTo(_disposables);
             _viewModel.OfflineHoursChangedSignal.Subscribe(HandleOfflineHoursChanged).AddTo(_disposables);
             _viewModel.OfflineIncomeChangedSignal.Subscribe(HandleOfflineIncomeChanged).AddTo(_disposables);
-            _viewModel.CanBeOpenedSignal.Subscribe(HandleCanBeOpenedState).AddTo(_disposables);
+            _viewModel.CanBeOpenedSignal.Subscribe(HandleCanBeOpenedSignal).AddTo(_disposables);
 
-            if (_viewModel.IsNewGame || !_isCanBeOpened)
-            {
-                Debug.Log("[Offline Income View] Can't be opened");
+            if (_viewModel.IsNewGame || !_isCanBeOpened || _isReceived)
                 return;
-            }
 
             OpenWindow();
         }
@@ -79,33 +76,31 @@ namespace UI.GameplayMenu.Views
             gameObject.SetActive(true);
 
             _rectTransform
-                .DOScale(_defaultScale, _openCloseAnimDuration)
-                .SetEase(Ease.InCubic);
+                .DOScale(_defaultScale, _openAnimDuration)
+                .SetEase(Ease.InOutBack);
         }
 
         private void HandleReceivedOfflineIncome(bool state)
         {
-            if (!state)
-                _isCanBeOpened = !state;
+            if (state)
+            {
+                _isReceived = state;
 
-            _rectTransform
-                .DOScale(_receivedScale, _openCloseAnimDuration)
-                .SetEase(Ease.InCubic)
+                _rectTransform
+                .DOScale(_receivedScale, _closeAnimDuration)
+                .SetEase(Ease.OutFlash)
                 .OnComplete(() =>
                 {
-                    gameObject.SetActive(!state);
+                    gameObject.SetActive(false);
                 });
-        }
 
-        private void HandleCanBeOpenedState(bool state)
-        {
-            _isCanBeOpened = state;
-
-            if (!_isCanBeOpened || _viewModel == null || _viewModel.IsNewGame || gameObject.activeSelf)
                 return;
+            }
 
-            OpenWindow();
+            _isReceived = state;
         }
+
+        private void HandleCanBeOpenedSignal(bool value) => _isCanBeOpened = value;
 
         private void HandleOfflineIncomeChanged(string value) => _offlineIncome.text = _offlineIncome.text.Replace("{income}", $"<color=yellow>{value}</color>");
 

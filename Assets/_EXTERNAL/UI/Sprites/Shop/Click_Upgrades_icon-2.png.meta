@@ -1,34 +1,34 @@
 fileFormatVersion: 2
-guid: 6848b0e9c50bd5c48a8cf076ec64b2ae
+guid: efe3552d3054c0a41aa449b5a75979ed
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6793989615592674265
-    second: Click_Upgrades_Icon-1_0
+      213: -603359987855262474
+    second: Click_Upgrades_icon-2_0
   - first:
-      213: 2305583269973539186
-    second: Click_Upgrades_Icon-1_1
+      213: 4725314174059563424
+    second: Click_Upgrades_icon-2_1
   - first:
-      213: -5275257837553944655
-    second: Click_Upgrades_Icon-1_2
+      213: 9048646539137972154
+    second: Click_Upgrades_icon-2_2
   - first:
-      213: -1362095584068738423
-    second: Click_Upgrades_Icon-1_3
+      213: 3130712907706581279
+    second: Click_Upgrades_icon-2_3
   - first:
-      213: 4109936663130646844
-    second: Click_Upgrades_Icon-1_4
+      213: 8027802825974466329
+    second: Click_Upgrades_icon-2_4
   - first:
-      213: -8381258383596806533
-    second: Click_Upgrades_Icon-1_5
+      213: -2783174442074901685
+    second: Click_Upgrades_icon-2_5
   - first:
-      213: -6157500393167525207
-    second: Click_Upgrades_Icon-1_6
+      213: -4249485078835734174
+    second: Click_Upgrades_icon-2_6
   - first:
-      213: -3098339431907347392
-    second: Click_Upgrades_Icon-1_7
+      213: 4723169206195236115
+    second: Click_Upgrades_icon-2_7
   - first:
-      213: -7304541776110389779
-    second: Click_Upgrades_Icon-1_8
+      213: 9129437022482711748
+    second: Click_Upgrades_icon-2_8
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,7 +96,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 256
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -122,9 +122,9 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Android
-    maxTextureSize: 256
+    maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 47
+    textureFormat: 50
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -135,9 +135,9 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: WebGL
-    maxTextureSize: 256
+    maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 47
+    textureFormat: 50
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -163,7 +163,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Click_Upgrades_Icon-1_0
+      name: Click_Upgrades_icon-2_0
       rect:
         serializedVersion: 2
         x: 0
@@ -178,8 +178,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 72ce7e2d076e6b1a0800000000000000
-      internalID: -6793989615592674265
+      spriteID: 6fcf33ca94f60a7f0800000000000000
+      internalID: -603359987855262474
       vertices: []
       indices: 
       edges: []
@@ -188,7 +188,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 02fa3e1653b081140b4edf707bdb3055
+    spriteID: 82e0d1e1a5e18714289f84b6180bfb7f
     internalID: 0
     vertices: []
     indices: 
@@ -198,16 +198,15 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Click_Upgrades_Icon-1_0: -6793989615592674265
-      Click_Upgrades_Icon-1_1: 2305583269973539186
-      Click_Upgrades_Icon-1_2: -5275257837553944655
-      Click_Upgrades_Icon-1_3: -1362095584068738423
-      Click_Upgrades_Icon-1_4: 4109936663130646844
-      Click_Upgrades_Icon-1_5: -8381258383596806533
-      Click_Upgrades_Icon-1_6: -6157500393167525207
-      Click_Upgrades_Icon-1_7: -3098339431907347392
-      Click_Upgrades_Icon-1_8: -7304541776110389779
-      Click_Upgrades_Icon-1_9: -1267472575
+      Click_Upgrades_icon-2_0: -603359987855262474
+      Click_Upgrades_icon-2_1: 4725314174059563424
+      Click_Upgrades_icon-2_2: 9048646539137972154
+      Click_Upgrades_icon-2_3: 3130712907706581279
+      Click_Upgrades_icon-2_4: 8027802825974466329
+      Click_Upgrades_icon-2_5: -2783174442074901685
+      Click_Upgrades_icon-2_6: -4249485078835734174
+      Click_Upgrades_icon-2_7: 4723169206195236115
+      Click_Upgrades_icon-2_8: 9129437022482711748
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

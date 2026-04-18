@@ -16,13 +16,13 @@ namespace Core.GlobalGameState.Services
         private readonly Subject<float> _giveCurrencyBonusSignal = new();
         private readonly BehaviorSubject<float> _temporaryBonusTimerChangedSignal;
 
-        private readonly float _initialTemporaryBonusDuration = 0f;
+        private readonly float _initialTemporaryBonusDurationInSeconds = 0f;
 
-        private float _temporaryBonusDuration = 0f;
+        private float _temporaryBonusDurationInSeconds = 0f;
 
         private bool _temporaryBonusState = false;
 
-        public float InitialTemporaryBonusDuration => _initialTemporaryBonusDuration;
+        public float InitialTemporaryBonusDuration => _initialTemporaryBonusDurationInSeconds;
 
         public Observable<bool> TemporaryBonusStateChanged => _temporaryBonusStateChangedSignal.AsObservable();
         public Observable<float> CurrencyBonusGiven => _giveCurrencyBonusSignal.AsObservable();
@@ -30,12 +30,12 @@ namespace Core.GlobalGameState.Services
 
         public PlayerRewardedBonusesService(float initialTemporaryBonusDurationMinutes)
         {
-            _initialTemporaryBonusDuration = initialTemporaryBonusDurationMinutes / 60f;
+            _initialTemporaryBonusDurationInSeconds = initialTemporaryBonusDurationMinutes * 60f;
 
-            _temporaryBonusDuration = _initialTemporaryBonusDuration * 60f;
+            _temporaryBonusDurationInSeconds = _initialTemporaryBonusDurationInSeconds;
 
             _temporaryBonusStateChangedSignal = new(_temporaryBonusState);
-            _temporaryBonusTimerChangedSignal = new(_temporaryBonusDuration);
+            _temporaryBonusTimerChangedSignal = new(_temporaryBonusDurationInSeconds);
         }
 
         public void ActiveTemporaryBonus()
@@ -64,13 +64,13 @@ namespace Core.GlobalGameState.Services
             _temporaryBonusCts.Dispose();
             _temporaryBonusCts = null;
 
-            _temporaryBonusDuration = _initialTemporaryBonusDuration * 60f;
-            _temporaryBonusTimerChangedSignal.OnNext(_temporaryBonusDuration);
+            _temporaryBonusDurationInSeconds = _initialTemporaryBonusDurationInSeconds;
+            _temporaryBonusTimerChangedSignal.OnNext(_temporaryBonusDurationInSeconds);
         }
 
         private async UniTask TemporaryBonusCountdown(CancellationToken token)
         {
-            float timer = _temporaryBonusDuration;
+            float timer = _temporaryBonusDurationInSeconds;
 
             while (!token.IsCancellationRequested)
             {
@@ -81,7 +81,7 @@ namespace Core.GlobalGameState.Services
                 }
 
                 timer -= 1f;
-                _temporaryBonusDuration = Mathf.Max(timer, 0f);
+                _temporaryBonusDurationInSeconds = Mathf.Max(timer, 0f);
                 _temporaryBonusTimerChangedSignal.OnNext(timer);
 
                 await UniTask.Delay(TimeSpan.FromSeconds(1f), ignoreTimeScale: true, cancellationToken: token);

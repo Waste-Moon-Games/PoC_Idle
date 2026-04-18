@@ -1,12 +1,11 @@
 ﻿using Core.AdsSystem;
 using R3;
-using UnityEngine;
 
 namespace Core.GlobalGameState.Services
 {
     public class OfflineIncomeReceiveService
     {
-        private readonly Subject<bool> _offlineIncomeReceivedSignal = new();
+        private readonly BehaviorSubject<bool> _offlineIncomeReceivedSignal;
 
         private readonly PlayerEconomyService _playerEconomyService;
         private readonly PlayerOfflineIncomeCalculatorService _playerOfflineIncomeCalculatorService;
@@ -31,6 +30,8 @@ namespace Core.GlobalGameState.Services
             _adsContext = adsSystemContext;
 
             _isNewGame = isNewGame;
+
+            _offlineIncomeReceivedSignal = new(_offlineIncomeReceived);
         }
 
         public void PrepareOfflineIncome()

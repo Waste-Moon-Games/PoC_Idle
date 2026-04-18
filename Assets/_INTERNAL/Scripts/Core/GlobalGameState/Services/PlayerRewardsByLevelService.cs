@@ -16,7 +16,7 @@ namespace Core.GlobalGameState.Services
         private readonly Subject<RewardByLevelRuntime> _requestRewardStateSignal = new();
         private readonly Subject<RewardByLevelRuntime> _rewardUnlockSignal = new();
         private readonly Subject<BaseReward> _rewardReceiveSignal = new();
-        private readonly Subject<bool> _hasAvailableRewardsSignal = new();
+        private readonly BehaviorSubject<bool> _hasAvailableRewardsSignal;
 
         private readonly RewardsByLevelConfig _rewardsByLevelConfig;
         private readonly CyclicRewardsConfig _cyclicRewardsConfig;
@@ -65,6 +65,8 @@ namespace Core.GlobalGameState.Services
             _cyclicRewardAmountIncreaseStep = _cyclicRewardsConfig.CyclicRewardAmountIncreaseStep;
 
             levelChangedSignal.Subscribe(HandleChangedLevel).AddTo(_disposables);
+
+            _hasAvailableRewardsSignal = new(false);
         }
 
         private Dictionary<int, RewardByLevelRuntime> BuildRewardsByLevelDictionary(PlayerData loadedData)
