@@ -24,6 +24,7 @@ namespace UI.ShopMenu.Views
         [SerializeField] private GameObject _closedMask;
 
         private ItemViewModel _viewModel;
+        private bool _isMaxed;
 
         private void Start()
         {
@@ -59,6 +60,7 @@ namespace UI.ShopMenu.Views
             _viewModel.UpgradeAmountChanged.Subscribe(HandleChangedUpgradeAmount).AddTo(_disposables);
             _viewModel.LevelChanged.Subscribe(HandleChangedLevel).AddTo(_disposables);
             _viewModel.StatusChanged.Subscribe(HandleChangedStatus).AddTo(_disposables);
+            _viewModel.MaxedChanged.Subscribe(HandleMaxedChanged).AddTo(_disposables);
             _viewModel.FinalDescSignal.Subscribe(HandleFinalDesc).AddTo(_disposables);
 
             _viewModel.RequestBaseInfo();
@@ -75,6 +77,12 @@ namespace UI.ShopMenu.Views
 
         private void HandleChangedPrice(string price)
         {
+            if (_isMaxed)
+            {
+                _priceText.text = "<color=#00E676>MAXED</color>";
+                return;
+            }
+
             if (_viewModel.CurrencyType == CurrencyType.Gems)
             {
                 _priceText.text = $"<color=red>{price}</color>";
@@ -86,9 +94,25 @@ namespace UI.ShopMenu.Views
 
         private void HandleChangedUpgradeAmount(string finalDesc) => _upgradeAmountText.text = finalDesc;
 
-        private void HandleChangedLevel(int level) => _levelText.text = $"<color=green>{level}</color> lvl";
+        private void HandleChangedLevel(int level)
+        {
+            _levelText.text = _isMaxed
+                ? "<color=#00E676>MAXED</color>"
+                : $"<color=green>{level}</color> lvl";
+        }
 
         private void HandleChangedStatus(bool value) => _closedMask.SetActive(!value);
+
+        private void HandleMaxedChanged(bool value)
+        {
+            _isMaxed = value;
+            _buyButton.interactable = !_isMaxed;
+            if (_isMaxed)
+            {
+                _levelText.text = "<color=#00E676>MAXED</color>";
+                _priceText.text = "<color=#00E676>MAXED</color>";
+            }
+        }
 
         private void HandleBuyButtonClick() => _viewModel.Buy();
     }

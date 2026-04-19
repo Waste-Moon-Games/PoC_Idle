@@ -26,5 +26,9 @@ namespace Core.Shop.Base
         [field: Header("Upgrade Rates")]
         [field: SerializeField] public float PriceRate { get; private set; } = 1f;
         [field: SerializeField] public float BonusRate { get; private set; } = 1f;
+
+        [field: Header("Optional Level Cap")]
+        [field: SerializeField] public bool UseLevelCap { get; private set; } = false;
+        [field: SerializeField, Min(1)] public int MaxLevel { get; private set; } = 1;
     }
 }

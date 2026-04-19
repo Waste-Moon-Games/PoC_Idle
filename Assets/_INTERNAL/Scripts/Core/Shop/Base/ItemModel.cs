@@ -13,6 +13,7 @@ namespace Core.Shop.Base
         private readonly Subject<int> _levelChangeSignal = new();
         private readonly Subject<float> _upgradeAmountChangeSignal = new();
         private readonly Subject<bool> _statusChangeSignal = new();
+        private readonly Subject<bool> _maxedChangeSignal = new();
         private readonly BehaviorSubject<string> _finalDescriptionSignal;
 
         private readonly Subject<int> _requestIdSignal = new();
@@ -40,6 +41,9 @@ namespace Core.Shop.Base
         public CurrencyType CurrencyType => _config.CurrencyType;
         public float PriceRate => _config.PriceRate;
         public float BonusRate => _config.BonusRate;
+        public bool HasLevelCap => _config.UseLevelCap;
+        public int MaxLevel => _config.MaxLevel;
+        public bool IsMaxed => HasLevelCap && Level >= MaxLevel;
 
         public int Level
         {
@@ -94,6 +98,7 @@ namespace Core.Shop.Base
         public Observable<int> LevelChanged => _levelChangeSignal.AsObservable();
         public Observable<float> UpgradeAmountChanged => _upgradeAmountChangeSignal.AsObservable();
         public Observable<bool> StatusChanged => _statusChangeSignal.AsObservable();
+        public Observable<bool> MaxedChanged => _maxedChangeSignal.AsObservable();
 
         public Observable<int> RequestesId => _requestIdSignal.AsObservable();
         public Observable<string> RequestedName => _requestNameSignal.AsObservable();
@@ -167,13 +172,27 @@ namespace Core.Shop.Base
             _levelChangeSignal.OnNext(Level);
             _upgradeAmountChangeSignal.OnNext(UpgradeAmount);
             _finalDescriptionSignal.OnNext(_description);
+            _maxedChangeSignal.OnNext(IsMaxed);
         }
 
         public void ChangeStatus(bool value) => IsOpened = value;
-        public void TryBuy() => _tryPurchaseSignal.OnNext(this);
+        public void TryBuy()
+        {
+            if (IsMaxed)
+                return;
+
+            _tryPurchaseSignal.OnNext(this);
+        }
         public void IncreasePrice(float value) => Price *= value;
         public void IncreaseUpgradeAmount(float value) => UpgradeAmount *= value;
-        public void IncreaseLevel() => Level++;
+        public void IncreaseLevel()
+        {
+            if (IsMaxed)
+                return;
+
+            Level++;
+            _maxedChangeSignal.OnNext(IsMaxed);
+        }
 
         public bool IsValidSaveFor(ItemUpgradeData loadedData) => loadedData != null && loadedData.ID == Id;
     }
