@@ -18,7 +18,7 @@ MonoBehaviour:
     - Language: 10
       Text: Scholar Sigil
     - Language: 30
-      Text: "Печать знаний"
+      Text: "\u041F\u0435\u0447\u0430\u0442\u044C \u0437\u043D\u0430\u043D\u0438\u0439"
   <Icon>k__BackingField: {fileID: 0}
   <CommonCurrencyIcon>k__BackingField: {fileID: -6122061090170777107, guid: 4ec5c2ae979b22740be929506510dde3, type: 3}
   <GemsCurrencyIcon>k__BackingField: {fileID: 7050381046710762136, guid: db2c698b0f18e844782e05d79a6643fb, type: 3}
@@ -29,10 +29,14 @@ MonoBehaviour:
     - Language: 10
       Text: Increases EXP gain by +<color=yellow>{amount}</color> per click.
     - Language: 30
-      Text: "Увеличивает получение опыта на +<color=yellow>{amount}</color> за клик."
+      Text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442 \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u0435
+        \u043E\u043F\u044B\u0442\u0430 \u043D\u0430 +<color=yellow>{amount}</color>
+        \u0437\u0430 \u043A\u043B\u0438\u043A."
   <StartPrice>k__BackingField: 20
   <StartUpgradeAmount>k__BackingField: 1
   <StartLevel>k__BackingField: 0
-  <IsOpenedByDefault>k__BackingField: 0
+  <IsOpenedByDefault>k__BackingField: 1
   <PriceRate>k__BackingField: 1.3
   <BonusRate>k__BackingField: 1.35
+  <UseLevelCap>k__BackingField: 0
+  <MaxLevel>k__BackingField: 1
