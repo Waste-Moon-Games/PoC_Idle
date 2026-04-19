@@ -10,29 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54369d851686d424db244b4403266e3a, type: 3}
-  m_Name: DoubleClickConfig
+  m_Name: OverchargeCoreConfig
   m_EditorClassIdentifier: Core.Shop.Base::Core.Shop.Base.ItemModelConfig
-  <ID>k__BackingField: 1
+  <ID>k__BackingField: 2
   <Names>k__BackingField:
     _entries:
     - Language: 10
-      Text: Power Gloves
+      Text: Overcharge Core
     - Language: 30
-      Text: "Силовые перчатки"
+      Text: "Ядро перегруза"
   <Icon>k__BackingField: {fileID: 0}
   <CommonCurrencyIcon>k__BackingField: {fileID: -6122061090170777107, guid: 4ec5c2ae979b22740be929506510dde3, type: 3}
   <GemsCurrencyIcon>k__BackingField: {fileID: 7050381046710762136, guid: db2c698b0f18e844782e05d79a6643fb, type: 3}
-  <Type>k__BackingField: 0
-  <CurrencyType>k__BackingField: 0
+  <Type>k__BackingField: 3
+  <CurrencyType>k__BackingField: 1
   <Descriptions>k__BackingField:
     _entries:
     - Language: 10
-      Text: Adds +<color=yellow>{amount}</color> to every manual click.
+      Text: Fills bonus gauge faster by +<color=yellow>{amount}</color> per click.
     - Language: 30
-      Text: "Добавляет +<color=yellow>{amount}</color> к каждому ручному клику."
-  <StartPrice>k__BackingField: 120
-  <StartUpgradeAmount>k__BackingField: 2
+      Text: "Заполняет бонусную шкалу быстрее на +<color=yellow>{amount}</color> за клик."
+  <StartPrice>k__BackingField: 45
+  <StartUpgradeAmount>k__BackingField: 0.25
   <StartLevel>k__BackingField: 0
   <IsOpenedByDefault>k__BackingField: 0
-  <PriceRate>k__BackingField: 1.26
-  <BonusRate>k__BackingField: 1.05
+  <PriceRate>k__BackingField: 1.35
+  <BonusRate>k__BackingField: 1.2

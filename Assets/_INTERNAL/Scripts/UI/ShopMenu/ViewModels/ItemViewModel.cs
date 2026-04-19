@@ -20,6 +20,7 @@ namespace UI.ShopMenu.ViewModels
         private readonly Subject<string> _upgradeAmountChangeSignal = new();
         private readonly Subject<int> _levelChangeSignal = new();
         private readonly Subject<bool> _statusChangeSignal = new();
+        private readonly Subject<bool> _maxedChangeSignal = new();
         private BehaviorSubject<string> _finalDescSignal;
 
         private int _id;
@@ -46,6 +47,7 @@ namespace UI.ShopMenu.ViewModels
         public Observable<string> UpgradeAmountChanged => _upgradeAmountChangeSignal.AsObservable();
         public Observable<int> LevelChanged => _levelChangeSignal.AsObservable();
         public Observable<bool> StatusChanged => _statusChangeSignal.AsObservable();
+        public Observable<bool> MaxedChanged => _maxedChangeSignal.AsObservable();
         public Observable<string> FinalDescSignal => _finalDescSignal.AsObservable();
 
         public void BindModel(IModel model)
@@ -63,6 +65,7 @@ namespace UI.ShopMenu.ViewModels
             _model.LevelChanged.Subscribe(HandleLevelChanged).AddTo(_disposables);
             _model.UpgradeAmountChanged.Subscribe(HandleUpgradeAmountChanged).AddTo(_disposables);
             _model.StatusChanged.Subscribe(HandleStatusChanged).AddTo(_disposables);
+            _model.MaxedChanged.Subscribe(HandleMaxedChanged).AddTo(_disposables);
 
             _finalDescSignal = new(_model.Description);
         }
@@ -114,6 +117,8 @@ namespace UI.ShopMenu.ViewModels
             _isOpened = value;
             _statusChangeSignal.OnNext(_isOpened);
         }
+
+        private void HandleMaxedChanged(bool value) => _maxedChangeSignal.OnNext(value);
 
         private void HandleFinalDescription(string desc)
         {
