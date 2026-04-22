@@ -4,6 +4,7 @@ using Core.SaveSystemBase;
 
 using Cysharp.Threading.Tasks;
 using SO.AdsConfigs;
+using SO.AudioSystemConfigs;
 using UI.Common;
 
 using UnityEngine;
@@ -53,6 +54,7 @@ namespace Entry.Global
         private void RegisterGlobalServices()
         {
             var adRatesConfig = Resources.Load<AdRatesConfig>("Configs/Ads/AdRatesConfig");
+            var soundsLibrary = Resources.Load<SoundsCollectionConfig>("Configs/AudioSystem/SoundsCollectionConfig");
             _rootContainer.RegisterInstance(_loadingView);
 
             var loadingScreen = _rootContainer.Resolve<UILoadingView>();
@@ -60,6 +62,7 @@ namespace Entry.Global
 
             _rootContainer.RegisterFactory(ssc => new SaveSystemContext(SaveSystemStrategyFactory.CreateStrategy())).AsSingle();
             _rootContainer.RegisterFactory(ads => new AdsSystemContext(AdsStrategyFactory.CreateStrategy(), adRatesConfig.InterstitialAdShowChance)).AsSingle();
+            _rootContainer.RegisterFactory(ass => new AudioSystemService(soundsLibrary.Sounds, soundsLibrary.MainTheme)).AsSingle();
 
             var saveSystemContext = _rootContainer.Resolve<SaveSystemContext>();
             var adsSystemContext = _rootContainer.Resolve<AdsSystemContext>();

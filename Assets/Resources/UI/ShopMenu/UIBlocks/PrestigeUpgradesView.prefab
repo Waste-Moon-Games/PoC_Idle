@@ -53,7 +53,7 @@ MonoBehaviour:
     m_Left: 25
     m_Right: 25
     m_Top: 50
-    m_Bottom: 25
+    m_Bottom: 50
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0

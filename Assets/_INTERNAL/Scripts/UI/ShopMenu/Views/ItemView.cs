@@ -106,7 +106,10 @@ namespace UI.ShopMenu.Views
         private void HandleMaxedChanged(bool value)
         {
             _isMaxed = value;
+
             _buyButton.interactable = !_isMaxed;
+            _currencyIcon.gameObject.SetActive(!_isMaxed);
+
             if (_isMaxed)
             {
                 _levelText.text = "<color=#00E676>MAXED</color>";

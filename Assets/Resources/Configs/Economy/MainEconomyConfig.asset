@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MainEconomyConfig
   m_EditorClassIdentifier: SO.EconomyConfigs::SO.EconomyConfigs.MainEconomyConfig
   <InitialCoinsWalletAmount>k__BackingField: 0
-  <InitialGemsWalletAmount>k__BackingField: 100
+  <InitialGemsWalletAmount>k__BackingField: 10
   <InitialPlayerClickAmount>k__BackingField: 1
   <InitialGemsClickRewardAmount>k__BackingField: 1
   <PassiveIncomeDelay>k__BackingField: 1

@@ -201,7 +201,7 @@ namespace Core.GlobalGameState
 #if UNITY_WEBGL
                 LastOnlineTime = YG2.ServerTime(),
 #elif UNITY_ANDROID
-                LastOnlineTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                LastOnlineTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
 #endif
 
                 ShopsData = CreateShopsData(),

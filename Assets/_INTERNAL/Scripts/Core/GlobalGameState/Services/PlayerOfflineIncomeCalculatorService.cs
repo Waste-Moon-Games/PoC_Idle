@@ -26,9 +26,11 @@ namespace Core.GlobalGameState.Services
             _offlineHoursCalculatedSignal = new(0f);
 
 #if UNITY_WEBGL
-            _lastOnlineTime = lastOnlineTime;
+            _lastOnlineTime = NormalizeEpochToMs(lastOnlineTime);
 #elif UNITY_ANDROID
-            _lastOnlineTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            _lastOnlineTime = NormalizeEpochToMs(lastOnlineTime);
+#else
+            _lastOnlineTime = NormalizeEpochToMs(lastOnlineTime);
 #endif
             _maxOfflineSeconds = maxOfflineHours * 3600;
         }
@@ -73,10 +75,18 @@ namespace Core.GlobalGameState.Services
 #if UNITY_WEBGL
             var serverTime = YG2.ServerTime();
             if(serverTime > 0)
-                return serverTime;
+                return NormalizeEpochToMs(serverTime);
 #endif
 
             return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        }
+
+        private long NormalizeEpochToMs(long epoch)
+        {
+            if (epoch <= 0)
+                return 0;
+
+            return epoch < 1_000_000_000_000 ? epoch * 1000 : epoch;
         }
     }
 }
