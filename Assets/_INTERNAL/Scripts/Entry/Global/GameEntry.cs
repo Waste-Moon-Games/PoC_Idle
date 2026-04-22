@@ -1,5 +1,6 @@
 using Core.AdsSystem;
 using Core.GlobalGameState;
+using Core.MonoContainers;
 using Core.SaveSystemBase;
 
 using Cysharp.Threading.Tasks;
@@ -66,7 +67,8 @@ namespace Entry.Global
 
             var saveSystemContext = _rootContainer.Resolve<SaveSystemContext>();
             var adsSystemContext = _rootContainer.Resolve<AdsSystemContext>();
-            _rootContainer.RegisterFactory(gws => new GameWorldState(saveSystemContext, adsSystemContext)).AsSingle();
+            var audioSystemService = _rootContainer.Resolve<AudioSystemService>();
+            _rootContainer.RegisterFactory(gws => new GameWorldState(saveSystemContext, adsSystemContext, audioSystemService)).AsSingle();
         }
 
         private async UniTask Run()
@@ -76,6 +78,12 @@ namespace Entry.Global
             gameWorldState.StartAsyncOperations();
 
             _sceneNavigatorService.Start();
+
+            var uiSfxSystemsPrefab = Resources.Load<UISFXMonoContainer>("Other/Utils/UI_SFX Systems");
+            var uiSfxSystem = Object.Instantiate(uiSfxSystemsPrefab);
+
+            var audioPlayer = uiSfxSystem.AudioPlayer;
+            audioPlayer.BindAudioSystemService(gameWorldState.AudioSystemService);
         }
 
         private static void HandleApplicationQuit()

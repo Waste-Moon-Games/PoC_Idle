@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a48c55df74ad03418f61681b5133ed1, type: 3}
   m_Name: AdRatesConfig
   m_EditorClassIdentifier: Assembly-CSharp::SO.AdsConfigs.AdRatesConfig
-  <InterstitialAdShowChance>k__BackingField: 0.5
+  <InterstitialAdShowChance>k__BackingField: 0.4

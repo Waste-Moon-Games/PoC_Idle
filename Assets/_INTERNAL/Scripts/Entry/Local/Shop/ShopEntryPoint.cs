@@ -50,10 +50,10 @@ namespace Entry.Local.Shop
 
         private void CreateScene(in DIContainer container, out NavigationButtonsModel navigationButtonsModel)
         {
-            navigationButtonsModel = new();
-            var shopState = container.Resolve<GameWorldState>().PlayerState.ShopState;
+            var gameWorldState = container.Resolve<GameWorldState>();
+            navigationButtonsModel = new(gameWorldState.AudioSystemService);
 
-            CreateModels(container,
+            CreateModels(gameWorldState,
                 out EconomyPlayerInfoModel playerInfoModel);
             CreateViewModels(
                 out NavigationButtonsViewModel navigationViewModel,
@@ -67,7 +67,7 @@ namespace Entry.Local.Shop
                 out ShopView prestigeUpgradesView,
                 out EconomyPlayerInfoView playerInfoView);
 
-            _shopModels.AddRange(shopState.ShopModels.Values);
+            _shopModels.AddRange(gameWorldState.PlayerState.ShopState.ShopModels.Values);
             foreach (var shopModel in _shopModels)
                 shopModel.SubscribeOnItems();
 
@@ -94,13 +94,13 @@ namespace Entry.Local.Shop
             navigationButtonsView.BindViewModel(navigationViewModel);
         }
 
-        private void CreateModels(in DIContainer container,
+        private void CreateModels(in GameWorldState gameWorldState,
             out EconomyPlayerInfoModel playerInfoModel)
         {
             playerInfoModel = new();
 
-            var economyModel = container.Resolve<GameWorldState>().PlayerState.EconomyService;
-            var rewardedBonusesService = container.Resolve<GameWorldState>().PlayerState.PlayerRewardedBonusesService;
+            var economyModel = gameWorldState.PlayerState.EconomyService;
+            var rewardedBonusesService = gameWorldState.PlayerState.PlayerRewardedBonusesService;
             playerInfoModel.BindModel(economyModel, rewardedBonusesService);
         }
 

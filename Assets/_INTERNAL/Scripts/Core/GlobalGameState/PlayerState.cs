@@ -33,6 +33,7 @@ namespace Core.GlobalGameState
         private readonly AutoSaveService _autoSaveService;
         private readonly PlayerRewardedBonusesService _rewardedBonusesService;
         private readonly AdsSystemContext _adsSystemContext;
+        private readonly AudioSystemService _audioSystemService;
 
         private PlayerEconomyService _playerEconomyService;
         private PlayerUpgradeService _playerUpgradeService;
@@ -61,13 +62,14 @@ namespace Core.GlobalGameState
         public OfflineIncomeReceiveService OfflineIncomeReceiveService => _offlineIncomeReceiveService;
         public ShopState ShopState => _shopState;
 
-        public PlayerState(SaveSystemContext saveSystemContext, AdsSystemContext adsSystemContext, SystemLanguage currentLanguage)
+        public PlayerState(SaveSystemContext saveSystemContext, AdsSystemContext adsSystemContext, SystemLanguage currentLanguage, AudioSystemService audioSystemService)
         {
 #if UNITY_WEBGL
             YG2.onGetSDKData += HandleSDKData;
 #endif
             _saveSystemContext = saveSystemContext;
             _currentLanguage = currentLanguage;
+            _audioSystemService = audioSystemService;
 
             _economyConfig = Resources.Load<MainEconomyConfig>("Configs/Economy/MainEconomyConfig");
             _playerConfig = Resources.Load<PlayerConfig>("Configs/Player/PlayerConfig");
@@ -130,7 +132,7 @@ namespace Core.GlobalGameState
                 _playerBonusesService.BonusStateChanged,
                 _rewardedBonusesService,
                 _playerConfig.BonusClickMultiplier);
-            _playerUpgradeService = new(_playerEconomyService, _playerBonusesService);
+            _playerUpgradeService = new(_playerEconomyService, _playerBonusesService, _audioSystemService);
             _playerRewardsByLevelService = new(
                 _rewardsByLevelConfig,
                 _cyclicRewardsConfig,
@@ -166,7 +168,7 @@ namespace Core.GlobalGameState
                 _rewardedBonusesService,
                 _playerConfig.BonusClickMultiplier,
                 loadedData);
-            _playerUpgradeService = new(_playerEconomyService, _playerBonusesService);
+            _playerUpgradeService = new(_playerEconomyService, _playerBonusesService, _audioSystemService);
             _playerRewardsByLevelService = new(_rewardsByLevelConfig,
                 _cyclicRewardsConfig,
                 _playerBonusesService.LevelChanged,

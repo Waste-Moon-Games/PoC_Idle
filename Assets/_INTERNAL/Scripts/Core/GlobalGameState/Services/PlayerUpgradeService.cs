@@ -1,3 +1,4 @@
+using Core.AudioSystemCommon;
 using Core.Common.Player;
 using Core.Shop.Base;
 using R3;
@@ -16,14 +17,16 @@ namespace Core.GlobalGameState.Services
 
         private readonly PlayerEconomyService _playerEconomyService;
         private readonly PlayerBonusesService _playerBonusesService;
+        private readonly AudioSystemService _audioSystemService;
 
         public Observable<(int, string)> SuccessfulPurchase => _successfulPurchaseSignal.AsObservable();
         public Observable<(int, string)> FailedPurchase => _failedPurchaseSignal.AsObservable();
 
-        public PlayerUpgradeService(PlayerEconomyService playerEconomyService, PlayerBonusesService playerBonusesService)
+        public PlayerUpgradeService(PlayerEconomyService playerEconomyService, PlayerBonusesService playerBonusesService, AudioSystemService audioSystemService)
         {
             _playerEconomyService = playerEconomyService;
             _playerBonusesService = playerBonusesService;
+            _audioSystemService = audioSystemService;
 
             _upgradeActions = new()
             {
@@ -46,6 +49,7 @@ namespace Core.GlobalGameState.Services
         {
             if (!_playerEconomyService.TryToSpend(currencyType, price))
             {
+                _audioSystemService.PlaySoundByID(SoundsIds.FBuy);
                 _failedPurchaseSignal.OnNext((itemId, shopId));
                 return;
             }
@@ -55,6 +59,7 @@ namespace Core.GlobalGameState.Services
             else
                 Debug.LogWarning($"[Player Upgrade Service] Handler for {itemType} + {currencyType} not found!");
 
+            _audioSystemService.PlaySoundByID(SoundsIds.SBuy);
             _successfulPurchaseSignal.OnNext((itemId, shopId));
         }
 

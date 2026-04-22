@@ -9,14 +9,17 @@ namespace Core.GlobalGameState
     {
         private readonly PlayerState _playerState;
         private readonly LocalizationService _localizationService;
+        private readonly AudioSystemService _audioSystemService;
 
         public PlayerState PlayerState => _playerState;
         public LocalizationService LocalizationService => _localizationService;
+        public AudioSystemService AudioSystemService => _audioSystemService;
 
-        public GameWorldState(SaveSystemContext saveSystemContext, AdsSystemContext adsSystemContext)
+        public GameWorldState(SaveSystemContext saveSystemContext, AdsSystemContext adsSystemContext, AudioSystemService audioSystemService)
         {
             _localizationService = new LocalizationService();
-            _playerState = new(saveSystemContext, adsSystemContext, _localizationService.CurrentLanguage);
+            _playerState = new(saveSystemContext, adsSystemContext, _localizationService.CurrentLanguage, audioSystemService);
+            _audioSystemService = audioSystemService;
         }
 
         public async UniTask InitPlayerState()

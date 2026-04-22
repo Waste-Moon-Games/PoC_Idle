@@ -1,8 +1,6 @@
 ﻿#if UNITY_ANDROID
 using Core.AdsSystem.Mobile;
-#endif
-
-#if UNITY_WEBGL
+#elif UNITY_WEBGL
 using Core.AdsSystem.Web;
 #endif
 
@@ -14,9 +12,10 @@ namespace Core.AdsSystem
         {
 #if UNITY_ANDROID
             return new MobileAdsProvider();
-#endif
-#if UNITY_WEBGL
+#elif UNITY_WEBGL
             return new WebAdsProvider();
+#else
+            throw new System.PlatformNotSupportedException("Platform not supported");
 #endif
         }
     }

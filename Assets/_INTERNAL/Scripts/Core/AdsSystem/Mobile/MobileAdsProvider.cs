@@ -45,12 +45,10 @@ namespace Core.AdsSystem.Mobile
 
             if (_rewardedAd != null)
             {
-                Debug.Log("Showing rewarded ad");
                 _rewardedAd.Show();
             }
             else
             {
-                Debug.LogWarning("Rewarded ad not loaded yet, will show after load");
                 _pendingShowRewarded = true;
                 RequestRewarded();
             }
@@ -64,7 +62,6 @@ namespace Core.AdsSystem.Mobile
 
         private void DestroyInterstitial()
         {
-            Debug.Log("[Mobile Ads Provider] Interstitial destroyed");
             _interstitialAd?.Destroy();
             _interstitialAd = null;
         }
@@ -74,8 +71,6 @@ namespace Core.AdsSystem.Mobile
             string adUnitId = "demo-rewarded-yandex";
             AdRequestConfiguration adRequestConfiguration = new AdRequestConfiguration.Builder(adUnitId).Build();
             _rewardedLoader.LoadAd(adRequestConfiguration);
-
-            Debug.Log("[Mobile Ads Provider] Rewarded requested");
         }
 
         private void RequestInterstitial()
@@ -83,14 +78,11 @@ namespace Core.AdsSystem.Mobile
             string adUnitId = "demo-interstitial-yandex";
             AdRequestConfiguration adRequestConfiguration = new AdRequestConfiguration.Builder(adUnitId).Build();
             _interstitialLoader.LoadAd(adRequestConfiguration);
-
-            Debug.Log("[Mobile Ads Provider] Interstitial requested");
         }
 
         private void HandleInterstitialAdLoaded(object sender, InterstitialAdLoadedEventArgs e)
         {
             _interstitialAd = e.Interstitial;
-            Debug.Log("YandexAds OnAdLoaded");
 
             _interstitialAd.OnAdClicked += HandleInterstitialAdClicked;
             _interstitialAd.OnAdShown += HandleInterstitialAdShown;
@@ -121,7 +113,6 @@ namespace Core.AdsSystem.Mobile
         private void HandleRewardedAdLoaded(object sender, RewardedAdLoadedEventArgs e)
         {
             _rewardedAd = e.RewardedAd;
-            Debug.Log($"YandexAds: ad loaded {e}");
 
             _rewardedAd.OnRewarded += HandleRewarded;
             _rewardedAd.OnAdShown += HandleRewardedAdShown;
@@ -168,7 +159,6 @@ namespace Core.AdsSystem.Mobile
 
         private void HandleRewarded(object sender, Reward e)
         {
-            Debug.Log($"YandexAds: rewarded {e}");
             _onComplete?.Invoke();
             _onComplete = null;
         }

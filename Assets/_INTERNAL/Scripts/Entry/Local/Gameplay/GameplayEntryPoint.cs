@@ -43,15 +43,16 @@ namespace Entry.Local.Gameplay
         private void CreateScene(DIContainer container, out NavigationButtonsModel navigationModel)
         {
             _loader.LoadRootViews(out UIRootTopBlockView topRootView);
+            var gameWorldState = container.Resolve<GameWorldState>();
 
-            navigationModel = new();
+            navigationModel = new(gameWorldState.AudioSystemService);
 
             CreateModels(
                 out MainGameModel mainGameModel,
                 out EconomyPlayerInfoModel economyPlayerInfoModel,
                 out PlayerStatsModel playerStatsModel,
                 out OfflineIncomeModel offlineIncomeModel,
-                container);
+                gameWorldState);
             CreateViewModels(
                 out MainGameViewModel mainGameViewModel,
                 out EconomyPlayerInfoViewModel economyPlayerInfoViewModel,
@@ -63,16 +64,14 @@ namespace Entry.Local.Gameplay
                 out PlayerStatsView playerStatsView,
                 out OfflineIncomeView offlineIncomeView);
 
-            CreateLocalRewardsSystem(container, mainGameView);
-            CreateLocalRewardedAdsSystem(container, mainGameView);
+            CreateLocalRewardsSystem(gameWorldState, mainGameView);
+            CreateLocalRewardedAdsSystem(container, gameWorldState, mainGameView);
 
             topRootView.AttachView(economyPlayerInfoView.transform);
             topRootView.AttachView(playerStatsView.transform);
 
-            var playerState = container.Resolve<GameWorldState>().PlayerState;
-
-            economyPlayerInfoModel.BindModel(playerState.EconomyService, playerState.PlayerRewardedBonusesService);
-            playerStatsModel.BindModel(playerState);
+            economyPlayerInfoModel.BindModel(gameWorldState.PlayerState.EconomyService, gameWorldState.PlayerState.PlayerRewardedBonusesService);
+            playerStatsModel.BindModel(gameWorldState.PlayerState);
 
             mainGameViewModel.BindModel(mainGameModel);
             economyPlayerInfoViewModel.BindModel(economyPlayerInfoModel);
@@ -97,9 +96,10 @@ namespace Entry.Local.Gameplay
 #endif
         }
 
-        private void CreateLocalRewardsSystem(in DIContainer container, in MainGameView mainGameView)
+        private void CreateLocalRewardsSystem(in GameWorldState gameWorldState, in MainGameView mainGameView)
         {
-            var rewardsService = container.Resolve<GameWorldState>().PlayerState.RewardsService;
+            var rewardsService = gameWorldState.PlayerState.RewardsService;
+            var audioSystemService = gameWorldState.AudioSystemService;
 
             RewardsSystemModel model = new(rewardsService);
             model.InitRewards();
@@ -109,15 +109,16 @@ namespace Entry.Local.Gameplay
 
             RewardsSystemView view = _loader.LoadRewardSystemView();
             view.BindViewModel(viewModel);
+            view.BindAudioSystemService(audioSystemService);
 
             mainGameView.AttachView(view.gameObject);
         }
 
-        private void CreateLocalRewardedAdsSystem(in DIContainer container, in MainGameView mainGameView)
+        private void CreateLocalRewardedAdsSystem(in DIContainer container, in GameWorldState gameWorldState, in MainGameView mainGameView)
         {
             var adsSystem = container.Resolve<AdsSystemContext>();
-            var bonusesService = container.Resolve<GameWorldState>().PlayerState.PlayerRewardedBonusesService;
-            var localizationService = container.Resolve<GameWorldState>().LocalizationService;
+            var bonusesService = gameWorldState.PlayerState.PlayerRewardedBonusesService;
+            var localizationService = gameWorldState.LocalizationService;
             var rewardedBonusesConfig = _loader.LoadRewardedBonusesConfig();
 
             PlayerRewardedBonusesModel model = new(adsSystem, bonusesService);
@@ -137,11 +138,11 @@ namespace Entry.Local.Gameplay
             out EconomyPlayerInfoModel playerInfoModel,
             out PlayerStatsModel playerStatsModel,
             out OfflineIncomeModel offlineIncomeModel,
-            in DIContainer container)
+            in GameWorldState gameWorldState)
         {
-            var playerState = container.Resolve<GameWorldState>().PlayerState;
+            var playerState = gameWorldState.PlayerState;
 
-            mainGameModel = new MainGameModel(playerState);
+            mainGameModel = new MainGameModel(playerState, gameWorldState.AudioSystemService);
             playerInfoModel = new EconomyPlayerInfoModel();
             playerStatsModel = new PlayerStatsModel();
             offlineIncomeModel = new(

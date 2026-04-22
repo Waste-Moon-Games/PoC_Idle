@@ -6,11 +6,13 @@
         private static string _sBuy;
         private static string _fBuy;
         private static string _mainTheme;
+        private static string _closeSound;
 
         public static string MainTheme => _mainTheme;
         public static string SBuy => _sBuy;
         public static string FBuy => _fBuy;
         public static string ClickSound => _clickSound;
+        public static string CloseSound => _closeSound;
 
         public static void SetNewIdByType(string id, SoundType type)
         {
@@ -27,6 +29,9 @@
                     break;
                 case SoundType.Main_Music:
                     _mainTheme = id;
+                    break;
+                case SoundType.Close:
+                    _closeSound = id;
                     break;
                 default:
                     throw new System.ArgumentNullException("Invalid sound type", nameof(type));

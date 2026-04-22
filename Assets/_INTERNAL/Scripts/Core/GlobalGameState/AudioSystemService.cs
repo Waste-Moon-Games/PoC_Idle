@@ -29,7 +29,6 @@ namespace Core.GlobalGameState
                 _soundsLibrary[sound.ID] = sound;
             }
 
-
             _mainThemeMusic = new(mainThemeMusic.SoundData);
         }
 

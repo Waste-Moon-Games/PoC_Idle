@@ -4,6 +4,8 @@ using UI.GameplayMenu.ViewModels;
 using R3;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using Core.GlobalGameState;
+using Core.AudioSystemCommon;
 
 namespace UI.GameplayMenu.Views
 {
@@ -26,6 +28,7 @@ namespace UI.GameplayMenu.Views
         private readonly List<RewardView> _rewadViews = new();
 
         private RewardsSystemViewModel _viewModel;
+        private AudioSystemService _audioSystemService;
 
         private void Start()
         {
@@ -59,16 +62,25 @@ namespace UI.GameplayMenu.Views
             _viewModel.RequestedRewardModels();
         }
 
+        public void BindAudioSystemService(AudioSystemService audioSystemService)
+        {
+            _audioSystemService = audioSystemService;
+        }
+
         private void OpenRewardsPanel()
         {
             if(!_rewardsPanel.activeSelf)
                 _rewardsPanel.SetActive(true);
+
+            _audioSystemService.PlaySoundByID(SoundsIds.CloseSound);
         }
 
         private void CloseRewardsPanel()
         {
             if(_rewardsPanel.activeSelf)
                 _rewardsPanel.SetActive(false);
+
+            _audioSystemService.PlaySoundByID(SoundsIds.CloseSound);
         }
 
         private void HandleAvailableRewardsSignal(bool value)
