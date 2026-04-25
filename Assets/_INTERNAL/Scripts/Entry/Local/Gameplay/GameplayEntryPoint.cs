@@ -52,17 +52,20 @@ namespace Entry.Local.Gameplay
                 out EconomyPlayerInfoModel economyPlayerInfoModel,
                 out PlayerStatsModel playerStatsModel,
                 out OfflineIncomeModel offlineIncomeModel,
+                out SettingsModel settingsModel,
                 gameWorldState);
             CreateViewModels(
                 out MainGameViewModel mainGameViewModel,
                 out EconomyPlayerInfoViewModel economyPlayerInfoViewModel,
                 out PlayerStatsViewModel playerStatsViewModel,
-                out OfflineIncomeViewModel offlineIncomeViewModel);
+                out OfflineIncomeViewModel offlineIncomeViewModel,
+                out SettingsViewModel settingsViewModel);
             CreateViews(
                 out EconomyPlayerInfoView economyPlayerInfoView,
                 out MainGameView mainGameView,
                 out PlayerStatsView playerStatsView,
-                out OfflineIncomeView offlineIncomeView);
+                out OfflineIncomeView offlineIncomeView,
+                out SettingsView settingsView);
 
             CreateLocalRewardsSystem(gameWorldState, mainGameView);
             CreateLocalRewardedAdsSystem(container, gameWorldState, mainGameView);
@@ -72,11 +75,13 @@ namespace Entry.Local.Gameplay
 
             economyPlayerInfoModel.BindModel(gameWorldState.PlayerState.EconomyService, gameWorldState.PlayerState.PlayerRewardedBonusesService);
             playerStatsModel.BindModel(gameWorldState.PlayerState);
+            settingsModel.BindNavigationActions(navigationModel.Actions.Where(action => action == MainMenuEvents.SettingsClicked));
 
             mainGameViewModel.BindModel(mainGameModel);
             economyPlayerInfoViewModel.BindModel(economyPlayerInfoModel);
             playerStatsViewModel.BindModel(playerStatsModel);
             offlineIncomeViewModel.BindModel(offlineIncomeModel);
+            settingsViewModel.BindModel(settingsModel);
 
             mainGameView.BindViewModel(mainGameViewModel);
             CreateAnimationServices(out ClickAnimationsService clickAnimationsService, mainGameView.ClickableZone.transform);
@@ -88,8 +93,12 @@ namespace Entry.Local.Gameplay
 
             playerStatsView.BindViewModel(playerStatsViewModel);
             offlineIncomeView.BindViewModel(offlineIncomeViewModel);
+            settingsView.BindViewModel(settingsViewModel);
 
             mainGameView.AttachView(offlineIncomeView.gameObject);
+            mainGameView.AttachView(settingsView.gameObject);
+
+            gameWorldState.AudioSystemService.StartPlayMainThemeMusic();
 
 #if UNITY_WEBGL
             YG2.GameplayStart();
@@ -138,6 +147,7 @@ namespace Entry.Local.Gameplay
             out EconomyPlayerInfoModel playerInfoModel,
             out PlayerStatsModel playerStatsModel,
             out OfflineIncomeModel offlineIncomeModel,
+            out SettingsModel settingsModel,
             in GameWorldState gameWorldState)
         {
             var playerState = gameWorldState.PlayerState;
@@ -149,25 +159,30 @@ namespace Entry.Local.Gameplay
                 playerState.PlayerOfflineCalculator.OfflineIncomeCalculatedSignal,
                 playerState.PlayerOfflineCalculator.OfflineHoursCalculatedSignal,
                 playerState.OfflineIncomeReceiveService);
+
+            settingsModel = new(gameWorldState.AudioSystemService);
         }
 
         private void CreateViewModels(
             out MainGameViewModel mainGameViewModel,
             out EconomyPlayerInfoViewModel playerInfoViewModel,
             out PlayerStatsViewModel playerStatsViewModel,
-            out OfflineIncomeViewModel offlineIncomeViewModel)
+            out OfflineIncomeViewModel offlineIncomeViewModel,
+            out SettingsViewModel settingsViewModel)
         {
             mainGameViewModel = new();
             playerInfoViewModel = new();
             playerStatsViewModel = new();
             offlineIncomeViewModel = new(new());
+            settingsViewModel = new();
         }
 
         private void CreateViews(
             out EconomyPlayerInfoView playerInfoView,
             out MainGameView mainGameView,
             out PlayerStatsView playerStatsView,
-            out OfflineIncomeView offlineIncomeView)
+            out OfflineIncomeView offlineIncomeView,
+            out SettingsView settingsView)
         {
             _loader.LoadPlayableViews(out MainGameView mView, out EconomyPlayerInfoView pView, out PlayerStatsView pStatsView);
 
@@ -175,6 +190,7 @@ namespace Entry.Local.Gameplay
             mainGameView = mView;
             playerStatsView = pStatsView;
             offlineIncomeView = _loader.LoadOfflineIncomeView();
+            settingsView = _loader.LoadSettignsView();
         }
 
         private void CreateAnimationServices(out ClickAnimationsService clickAnimationsService, in Transform target)

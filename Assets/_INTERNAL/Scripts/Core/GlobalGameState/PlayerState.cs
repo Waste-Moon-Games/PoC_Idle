@@ -96,8 +96,16 @@ namespace Core.GlobalGameState
             try
             {
 #if UNITY_WEBGL
-                await UniTask.WaitUntil(() => YG2.isSDKEnabled)
-                    .AttachExternalCancellation(_lifetimeCts.Token);
+                await UniTask.WaitUntil(() =>
+                {
+                    if (!YG2.isSDKEnabled)
+                    {
+                        Debug.LogError("YG2 is disabled");
+                        return false;
+                    }
+
+                    return YG2.isSDKEnabled;
+                }).AttachExternalCancellation(_lifetimeCts.Token);
 #endif
 #if UNITY_ANDROID
                 await UniTask.Delay(TimeSpan.FromSeconds(1f));

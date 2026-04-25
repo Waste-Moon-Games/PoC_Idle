@@ -2,6 +2,7 @@
 using R3;
 using UnityEngine;
 using UnityEngine.Audio;
+using Utils.Audio;
 
 namespace Core.AudioSystemCommon.MonoObjects
 {
@@ -49,7 +50,27 @@ namespace Core.AudioSystemCommon.MonoObjects
                 })
                 .AddTo(_disposables);
 
-            _audioSystemService.StartPlayMainThemeMusic();
+            _audioSystemService.SFXVolumeChangedSignal.Subscribe(HandleChangedSFXVolume).AddTo(_disposables);
+            _audioSystemService.MusicVolumeChangedSignal.Subscribe(HandleChangedMusicVolume).AddTo(_disposables);
+
+            _audioSystemService.SFXStateChangedSignal.Subscribe(HandleChangedSFXState).AddTo(_disposables);
+            _audioSystemService.MusicStateChangedSignal.Subscribe(HandleChangedMusicState).AddTo(_disposables);
+        }
+
+        private void HandleChangedSFXState(bool state) => _sfxSource.enabled = state;
+
+        private void HandleChangedMusicState(bool state) => _musicSource.enabled = state;
+
+        private void HandleChangedSFXVolume(float volume)
+        {
+            var sfxVolume = Mathf.Clamp01(volume);
+            _mainMixer.SetFloat(_sfxMixerName, AudioUtils.LinearToDB(sfxVolume));
+        }
+
+        private void HandleChangedMusicVolume(float volume)
+        {
+            var musicVolume = Mathf.Clamp01(volume);
+            _mainMixer.SetFloat(_musicMixerName, AudioUtils.LinearToDB(musicVolume));
         }
 
         private void HandleSoundToPlay(Sound sound) => _sfxSource.PlayOneShot(sound.Clip);

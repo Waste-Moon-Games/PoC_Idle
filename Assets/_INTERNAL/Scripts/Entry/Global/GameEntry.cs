@@ -1,14 +1,18 @@
 using Core.AdsSystem;
 using Core.GlobalGameState;
+#if UNITY_WEBGL
 using Core.MonoContainers;
+#endif
 using Core.SaveSystemBase;
 
 using Cysharp.Threading.Tasks;
 using SO.AdsConfigs;
 using SO.AudioSystemConfigs;
+using System;
 using UI.Common;
 
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 using Utils.DI;
 using Utils.SceneLoader;
@@ -29,15 +33,30 @@ namespace Entry.Global
         private readonly UILoadingView _loadingView;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        public static async UniTask AutoStart()
+        public static void AutoStart()
         {
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
             _instance = new GameEntry();
-            await _instance.Run();
 
+            RunAsync().Forget();
+
+#if UNITY_ANDROID
             Application.quitting += HandleApplicationQuit;
+#endif
+        }
+
+        private static async UniTaskVoid RunAsync()
+        {
+            try
+            {
+                await _instance.Run();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"GameEntry failed: {ex}");
+            }
         }
 
         private GameEntry()
@@ -78,23 +97,30 @@ namespace Entry.Global
             gameWorldState.StartAsyncOperations();
 
             _sceneNavigatorService.Start();
-
-            var uiSfxSystemsPrefab = Resources.Load<UISFXMonoContainer>("Other/Utils/UI_SFX Systems");
+            
+            var uiSfxSystemsPrefab = Resources.Load<UISFXMonoContainer>("Other/Utils/UISFXSystems");
             var uiSfxSystem = Object.Instantiate(uiSfxSystemsPrefab);
 
+#if UNITY_WEBGL
+            var monoDisposeContainerPrefab = Resources.Load<DisposeContainer>("Other/Utils/[DISPOSE_CONTAINER]");
+            var monoDisposeContainer = Object.Instantiate(monoDisposeContainerPrefab);
+            YG2.infoYG.QuitGameEvent.objectName = monoDisposeContainer.name;
+            YG2.infoYG.QuitGameEvent.methodName = nameof(monoDisposeContainer.Dispose);
+            monoDisposeContainer.BindDisposableComponents(_rootContainer, _sceneNavigatorService, gameWorldState);
+#endif
+
             var audioPlayer = uiSfxSystem.AudioPlayer;
+            gameWorldState.AudioSystemService.Initialization();
             audioPlayer.BindAudioSystemService(gameWorldState.AudioSystemService);
         }
 
+#if UNITY_ANDROID
         private static void HandleApplicationQuit()
         {
             _instance._rootContainer.Resolve<GameWorldState>().Dispose();
             _instance._sceneNavigatorService.Dispose();
             _instance._rootContainer.Dispose();
-
-#if UNITY_WEBGL
-            YG2.GameplayStop();
-#endif
         }
+#endif
     }
 }

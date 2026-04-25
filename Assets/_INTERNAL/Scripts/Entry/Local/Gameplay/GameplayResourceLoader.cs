@@ -60,6 +60,15 @@ namespace Entry.Local.Gameplay
             return offlineIncomeView;
         }
 
+        public SettingsView LoadSettignsView()
+        {
+            var prefab = Resources.Load<SettingsView>("UI/GameplayMenu/UIBlocks/SettingsPanelView");
+
+            var settingsView = Object.Instantiate(prefab);
+
+            return settingsView;
+        }
+
         public RewardAdsConfig LoadRewardedBonusesConfig()
         {
             var result = Resources.Load<RewardAdsConfig>("Configs/Ads/RewardAdsConfig");

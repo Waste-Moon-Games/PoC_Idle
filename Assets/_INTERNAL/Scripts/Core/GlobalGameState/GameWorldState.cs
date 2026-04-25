@@ -37,6 +37,7 @@ namespace Core.GlobalGameState
             _playerState.StopAsyncTasks();
             _playerState.Dispose();
             _localizationService.Dispose();
+            _audioSystemService.Dispose();
         }
     }
 }

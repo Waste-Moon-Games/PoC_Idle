@@ -10,8 +10,8 @@ namespace Core.AudioSystemCommon
         private readonly SoundType _type;
         private readonly AudioMixerGroup _mixerGroup;
 
-        private float _volume;
-        private float _pitch;
+        private readonly float _volume;
+        private readonly float _pitch;
         private bool _isPlaying;
 
         public string ID => _id;
@@ -34,7 +34,5 @@ namespace Core.AudioSystemCommon
         }
 
         public void MarkPlayingFlag(bool value) => _isPlaying = value;
-        public void SetNewVolume(float volume) => _volume = volume;
-        public void SetNewPitch(float pitch) => _pitch = pitch;
     }
 }

@@ -3,6 +3,8 @@ AutoTranslateLangs v1.003
 InterstitialAdv v1.02
 Localization v1.02
 Payments v1.02
+QuitGameEvent v1.001
+RedefinePlayerPrefs v1.001
 RewardedAdv v1.011
 ServerTime v1.02
 Storage v1.021

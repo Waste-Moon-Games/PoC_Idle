@@ -38,7 +38,6 @@ namespace Core.AdsSystem.Web
             catch (Exception)
             {
                 Debug.LogWarning("YG2.RewVideoShow call failed. Invoking callback immediately as fallback.");
-                _pendingCallback?.Invoke();
                 _pendingCallback = null;
             }
         }
