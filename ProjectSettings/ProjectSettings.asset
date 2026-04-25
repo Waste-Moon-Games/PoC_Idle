@@ -803,9 +803,9 @@ PlayerSettings:
   webGLMemorySize: 32
   webGLExceptionSupport: 2
   webGLNameFilesAsHashes: 0
-  webGLShowDiagnostics: 1
+  webGLShowDiagnostics: 0
   webGLDataCaching: 1
-  webGLDebugSymbols: 2
+  webGLDebugSymbols: 0
   webGLEmscriptenArgs: 
   webGLModulesDirectory: 
   webGLTemplate: PROJECT:YandexGames
@@ -851,10 +851,10 @@ PlayerSettings:
   scriptingBackend:
     Android: 1
   il2cppCompilerConfiguration:
-    WebGL: 0
+    WebGL: 1
   il2cppCodeGeneration:
     Android: 0
-    WebGL: 1
+    WebGL: 0
   il2cppStacktraceInformation: {}
   managedStrippingLevel:
     Android: 3

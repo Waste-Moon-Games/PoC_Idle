@@ -27,9 +27,7 @@ namespace Core.GlobalGameState
         private readonly SystemLanguage _currentLanguage;
 
         private CancellationTokenSource _lifetimeCts = new();
-#if UNITY_WEBGL
-        private readonly UniTaskCompletionSource _sdkDataReadyTcs = new();
-#endif
+
         private readonly AutoSaveService _autoSaveService;
         private readonly PlayerRewardedBonusesService _rewardedBonusesService;
         private readonly AdsSystemContext _adsSystemContext;
@@ -96,16 +94,14 @@ namespace Core.GlobalGameState
             try
             {
 #if UNITY_WEBGL
-                await UniTask.WaitUntil(() =>
-                {
-                    if (!YG2.isSDKEnabled)
-                    {
-                        Debug.LogError("YG2 is disabled");
-                        return false;
-                    }
+                var sdkReadyTask = UniTask.WaitUntil(() => YG2.isSDKEnabled)
+                    .AttachExternalCancellation(_lifetimeCts.Token);
+                var sdkTimeoutTask = UniTask.Delay(TimeSpan.FromSeconds(15))
+                    .AttachExternalCancellation(_lifetimeCts.Token);
+                var completedTaskIndex = await UniTask.WhenAny(sdkReadyTask, sdkTimeoutTask);
 
-                    return YG2.isSDKEnabled;
-                }).AttachExternalCancellation(_lifetimeCts.Token);
+                if (completedTaskIndex == 1)
+                    Debug.LogWarning("YG2 SDK initialization timeout (15s). Continue startup with current available data.");
 #endif
 #if UNITY_ANDROID
                 await UniTask.Delay(TimeSpan.FromSeconds(1f));
@@ -275,7 +271,6 @@ namespace Core.GlobalGameState
 #if UNITY_WEBGL
         private void HandleSDKData()
         {
-            _sdkDataReadyTcs.TrySetResult();
         }
 #endif
 
