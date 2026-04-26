@@ -138,20 +138,41 @@ namespace Core.Shop.Base
         {
             return new ItemUpgradeData
             {
+                ContentRevision = ItemUpgradeData.CurrentContentRevision,
+
                 ID = Id,
                 Name = Name,
+                Description = _description,
+
                 Price = Price,
                 UpgradeAmount = UpgradeAmount,
-                IsOpened = IsOpened,
                 Level = Level,
+
+                IsOpened = IsOpened,
             };
         }
 
         public void Restore(ItemUpgradeData loadedData)
         {
-            Price = loadedData.Price;
-            UpgradeAmount = loadedData.UpgradeAmount;
-            Level = loadedData.Level;
+            if (loadedData == null)
+                return;
+
+            int normalizedLevel = Mathf.Max(loadedData.Level, _config.StartLevel);
+            bool requiersContentMigration = loadedData.ContentRevision < ItemUpgradeData.CurrentContentRevision;
+
+            if (requiersContentMigration)
+            {
+                int appliedUpgradeCount = normalizedLevel - _config.StartLevel;
+                Price = _config.StartPrice * Mathf.Pow(_config.PriceRate, appliedUpgradeCount);
+                UpgradeAmount = _config.StartUpgradeAmount * Mathf.Pow(_config.BonusRate, appliedUpgradeCount);
+            }
+            else
+            {
+                Price = loadedData.Price;
+                UpgradeAmount = loadedData.UpgradeAmount;
+            }
+
+            Level = normalizedLevel;
             IsOpened = loadedData.IsOpened;
         }
 

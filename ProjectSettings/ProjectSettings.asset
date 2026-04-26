@@ -854,7 +854,7 @@ PlayerSettings:
     WebGL: 1
   il2cppCodeGeneration:
     Android: 0
-    WebGL: 0
+    WebGL: 1
   il2cppStacktraceInformation: {}
   managedStrippingLevel:
     Android: 3

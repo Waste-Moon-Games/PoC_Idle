@@ -5,6 +5,10 @@ namespace Core.SaveSystemBase.Data
     [System.Serializable]
     public class PlayerData
     {
+        public const int CurrentSaveVersion = 1;
+
+        public int SaveVersion = CurrentSaveVersion;
+
         public float Coins = 0f;
         public float Gems = 0f;
 

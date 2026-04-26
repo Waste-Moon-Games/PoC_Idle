@@ -32,6 +32,7 @@ namespace Core.GlobalGameState
         private readonly PlayerRewardedBonusesService _rewardedBonusesService;
         private readonly AdsSystemContext _adsSystemContext;
         private readonly AudioSystemService _audioSystemService;
+        private readonly SaveMigrationService _saveMigrationService;
 
         private PlayerEconomyService _playerEconomyService;
         private PlayerUpgradeService _playerUpgradeService;
@@ -65,6 +66,7 @@ namespace Core.GlobalGameState
 #if UNITY_WEBGL
             YG2.onGetSDKData += HandleSDKData;
 #endif
+            _saveMigrationService = new();
             _saveSystemContext = saveSystemContext;
             _currentLanguage = currentLanguage;
             _audioSystemService = audioSystemService;
@@ -165,6 +167,8 @@ namespace Core.GlobalGameState
                 return;
             }
 
+            _saveMigrationService.MigrateLoadedPlayerData(loadedData);
+
             _playerBonusesService = new(_playerConfig, loadedData);
             _playerEconomyService = new(
                 _economyConfig,
@@ -190,6 +194,8 @@ namespace Core.GlobalGameState
         {
             PlayerData playerData = new()
             {
+                SaveVersion = PlayerData.CurrentSaveVersion,
+
                 Coins = _playerEconomyService.CoinsWallet.Amount,
                 Gems = _playerEconomyService.GemsWallet.Amount,
 

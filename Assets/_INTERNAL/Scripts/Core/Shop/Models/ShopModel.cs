@@ -139,6 +139,7 @@ namespace Core.Shop.Models
 
                 if(savedItems.TryGetValue(itemConfig.ID, out var savedItem))
                 {
+                    ApplyUIMigration(savedItem, name, desc);
                     model = new(itemConfig, savedItem, desc, name);
                     syncedItemsCount++;
                 }
@@ -185,6 +186,18 @@ namespace Core.Shop.Models
 
             foreach (var item in _itemsDict.Values)
                 item.Purchased.Subscribe(HandleBuyItem).AddTo(_itemsDisposables);
+        }
+
+        private void ApplyUIMigration(ItemUpgradeData loadedData, string currentName, string currentDesc)
+        {
+            if (loadedData == null)
+                return;
+
+            if(loadedData.Name != currentName)
+                loadedData.Name = currentName;
+
+            if(loadedData.Description != currentDesc)
+                loadedData.Description = currentDesc;
         }
 
         private void TryOpenNextItem(int itemId)
