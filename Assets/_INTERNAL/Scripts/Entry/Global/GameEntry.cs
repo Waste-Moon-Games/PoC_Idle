@@ -1,8 +1,6 @@
 using Core.AdsSystem;
 using Core.GlobalGameState;
-#if UNITY_WEBGL
 using Core.MonoContainers;
-#endif
 using Core.SaveSystemBase;
 
 using Cysharp.Threading.Tasks;

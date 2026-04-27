@@ -18,10 +18,10 @@ MonoBehaviour:
     - Language: 10
       Text: Quantum Tap
     - Language: 30
-      Text: "Квантовый тап"
-  <Icon>k__BackingField: {fileID: 0}
+      Text: "\u041A\u0432\u0430\u043D\u0442\u043E\u0432\u044B\u0439 \u0442\u0430\u043F"
+  <Icon>k__BackingField: {fileID: -1928324130, guid: 7c83c0a3648e99c488d826dc144d16e5, type: 3}
   <CommonCurrencyIcon>k__BackingField: {fileID: -6122061090170777107, guid: 4ec5c2ae979b22740be929506510dde3, type: 3}
-  <GemsCurrencyIcon>k__BackingField: {fileID: 7050381046710762136, guid: db2c698b0f18e844782e05d79a6643fb, type: 3}
+  <GemsCurrencyIcon>k__BackingField: {fileID: 5747697367745346532, guid: c22ec7c526c7e70488dcb1d8e7ebb7e0, type: 3}
   <Type>k__BackingField: 0
   <CurrencyType>k__BackingField: 0
   <Descriptions>k__BackingField:
@@ -29,10 +29,14 @@ MonoBehaviour:
     - Language: 10
       Text: Adds +<color=yellow>{amount}</color> click power from quantum taps.
     - Language: 30
-      Text: "Добавляет +<color=yellow>{amount}</color> к клику от квантовых тапов."
+      Text: "\u0414\u043E\u0431\u0430\u0432\u043B\u044F\u0435\u0442 +<color=yellow>{amount}</color>
+        \u043A \u043A\u043B\u0438\u043A\u0443 \u043E\u0442 \u043A\u0432\u0430\u043D\u0442\u043E\u0432\u044B\u0445
+        \u0442\u0430\u043F\u043E\u0432."
   <StartPrice>k__BackingField: 12000
   <StartUpgradeAmount>k__BackingField: 20
   <StartLevel>k__BackingField: 0
   <IsOpenedByDefault>k__BackingField: 0
   <PriceRate>k__BackingField: 1.38
   <BonusRate>k__BackingField: 1.08
+  <UseLevelCap>k__BackingField: 0
+  <MaxLevel>k__BackingField: 1

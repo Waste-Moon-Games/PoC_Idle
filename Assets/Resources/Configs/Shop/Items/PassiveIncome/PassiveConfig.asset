@@ -18,10 +18,10 @@ MonoBehaviour:
     - Language: 10
       Text: Lemon Stand
     - Language: 30
-      Text: "Лимонадная стойка"
-  <Icon>k__BackingField: {fileID: 0}
+      Text: "\u041B\u0438\u043C\u043E\u043D\u0430\u0434\u043D\u0430\u044F \u0441\u0442\u043E\u0439\u043A\u0430"
+  <Icon>k__BackingField: {fileID: 7827938524470309309, guid: 7c83c0a3648e99c488d826dc144d16e5, type: 3}
   <CommonCurrencyIcon>k__BackingField: {fileID: -6122061090170777107, guid: 4ec5c2ae979b22740be929506510dde3, type: 3}
-  <GemsCurrencyIcon>k__BackingField: {fileID: 7050381046710762136, guid: db2c698b0f18e844782e05d79a6643fb, type: 3}
+  <GemsCurrencyIcon>k__BackingField: {fileID: 5747697367745346532, guid: c22ec7c526c7e70488dcb1d8e7ebb7e0, type: 3}
   <Type>k__BackingField: 2
   <CurrencyType>k__BackingField: 0
   <Descriptions>k__BackingField:
@@ -29,10 +29,14 @@ MonoBehaviour:
     - Language: 10
       Text: Generates +<color=yellow>{amount}</color> passive income each tick.
     - Language: 30
-      Text: "Генерирует +<color=yellow>{amount}</color> пассивного дохода каждый тик."
+      Text: "\u0413\u0435\u043D\u0435\u0440\u0438\u0440\u0443\u0435\u0442 +<color=yellow>{amount}</color>
+        \u043F\u0430\u0441\u0441\u0438\u0432\u043D\u043E\u0433\u043E \u0434\u043E\u0445\u043E\u0434\u0430
+        \u043A\u0430\u0436\u0434\u044B\u0439 \u0442\u0438\u043A."
   <StartPrice>k__BackingField: 100
   <StartUpgradeAmount>k__BackingField: 5
   <StartLevel>k__BackingField: 0
   <IsOpenedByDefault>k__BackingField: 1
   <PriceRate>k__BackingField: 1.24
   <BonusRate>k__BackingField: 1.04
+  <UseLevelCap>k__BackingField: 0
+  <MaxLevel>k__BackingField: 1

@@ -108,7 +108,6 @@ namespace UI.ShopMenu.Views
             _isMaxed = value;
 
             _buyButton.interactable = !_isMaxed;
-            _currencyIcon.gameObject.SetActive(!_isMaxed);
 
             if (_isMaxed)
             {
