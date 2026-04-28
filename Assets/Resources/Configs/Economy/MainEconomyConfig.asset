@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0593b748e6a41f49b20c547df5e67dd, type: 3}
   m_Name: MainEconomyConfig
   m_EditorClassIdentifier: SO.EconomyConfigs::SO.EconomyConfigs.MainEconomyConfig
-  <InitialCoinsWalletAmount>k__BackingField: 0
-  <InitialGemsWalletAmount>k__BackingField: 10
-  <InitialPlayerClickAmount>k__BackingField: 1
+  <InitialCoinsWalletAmount>k__BackingField: 1e+9
+  <InitialGemsWalletAmount>k__BackingField: 2000
+  <InitialPlayerClickAmount>k__BackingField: 30
   <InitialGemsClickRewardAmount>k__BackingField: 1
   <PassiveIncomeDelay>k__BackingField: 1
   <InitialMinTrippleClickChance>k__BackingField: 0.01
   <InitialCurrentTrippleClickChance>k__BackingField: 0.01
-  <MaxTrippleClickChance>k__BackingField: 0.9
+  <MaxTrippleClickChance>k__BackingField: 0.65
   <InitialMinGemsClickRewardChance>k__BackingField: 0.01
   <InitialGemsClickRewardChance>k__BackingField: 0.01
   <MaxGemsClickRewardChance>k__BackingField: 0.5

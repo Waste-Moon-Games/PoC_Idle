@@ -18,8 +18,8 @@ MonoBehaviour:
   <ExpIncreaseMultiplier>k__BackingField: 1.25
   <PlayerBonusGauge>k__BackingField: 100
   <InitPlayerBonusPerClick>k__BackingField: 1.5
-  <BonusClickMultiplier>k__BackingField: 2
+  <BonusClickMultiplier>k__BackingField: 2.5
   <DecreaseBonusGaugeDelay>k__BackingField: 0.125
   <DecreaseActiveBonusGaugeDelay>k__BackingField: 0.1
-  <IsDebug>k__BackingField: 1
+  <IsDebug>k__BackingField: 0
   <AutoSaveDelay>k__BackingField: 25

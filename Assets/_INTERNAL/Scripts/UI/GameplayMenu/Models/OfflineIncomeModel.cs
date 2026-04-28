@@ -1,6 +1,10 @@
 ﻿using Common.MVVM;
 using Core.GlobalGameState.Services;
 using R3;
+using SO.PlayerConfigs;
+using System.Globalization;
+using UnityEngine;
+using Utils.Formatter;
 
 namespace UI.GameplayMenu.Models
 {
@@ -9,31 +13,49 @@ namespace UI.GameplayMenu.Models
         private readonly CompositeDisposable _disposables = new();
 
         private readonly OfflineIncomeReceiveService _service;
+        private readonly NumberFormatter _formatter;
+        private readonly OfflineIncomeLocalizationConfig _localizationConfig;
 
         private readonly BehaviorSubject<bool> _incomeHasReceivedSignal;
-        private readonly BehaviorSubject<float> _offlineIcnomeChangedSignal;
-        private readonly BehaviorSubject<float> _offlineHoursChangedSignal;
+        private readonly BehaviorSubject<bool> _canBeOpenedSignal;
+        private readonly BehaviorSubject<string> _offlineHoursChangedSignal;
+        private readonly BehaviorSubject<string> _offlineIncomeChangedSignal;
 
-        private float _offlineHours;
-        private float _offlineIncome;
+        private readonly BehaviorSubject<string> _offlineIncomeDescSignal;
+        private readonly BehaviorSubject<string> _offlineHoursDescSignal;
+
+        private string _offlineHours;
+        private string _offlineIncome;
         private bool _isIncomeReceived = false;
 
         public bool IsNewGame => _service.IsNewGame;
 
         public Observable<bool> OfflineIncomeReceivedSignal => _incomeHasReceivedSignal.AsObservable();
-
-        public Observable<float> OfflineIncomeChangedSignal => _offlineIcnomeChangedSignal.AsObservable();
-
-        public Observable<float> OfflineHoursChangedSignal => _offlineHoursChangedSignal.AsObservable();
+        public Observable<bool> CanBeOpenedSignal => _canBeOpenedSignal.AsObservable();
+        public Observable<string> OfflineIncomeChangedSignal => _offlineIncomeChangedSignal.AsObservable();
+        public Observable<string> OfflineHoursChangedSignal => _offlineHoursChangedSignal.AsObservable();
+        public Observable<string> OfflineIncomeDescSignal => _offlineIncomeDescSignal.AsObservable();
+        public Observable<string> OfflineHoursDescSignal => _offlineHoursDescSignal.AsObservable();
 
         public OfflineIncomeModel(
             Observable<float> offlineIncomeSignal,
             Observable<float> offlineHoursSignal,
-            OfflineIncomeReceiveService receiveService)
+            OfflineIncomeReceiveService receiveService,
+            LocalizationService localizationService,
+            NumberFormatter formatter,
+            OfflineIncomeLocalizationConfig localizationConfig)
         {
+            _formatter = formatter;
+            _localizationConfig = localizationConfig;
+
             _incomeHasReceivedSignal = new(false);
-            _offlineIcnomeChangedSignal = new(0f);
-            _offlineHoursChangedSignal = new(0f);
+            _offlineIncomeChangedSignal = new(string.Empty);
+            _offlineHoursChangedSignal = new(string.Empty);
+
+            _offlineIncomeDescSignal = new(string.Empty);
+            _offlineHoursDescSignal = new(string.Empty);
+
+            localizationService.LanguageChangedSignal.Subscribe(HandleCurrentDescription).AddTo(_disposables);
 
             _service = receiveService;
 
@@ -58,16 +80,28 @@ namespace UI.GameplayMenu.Models
 
         private void HandleOfflineIncomeChanged(float amount)
         {
-            _offlineIncome = amount;
+            _canBeOpenedSignal.OnNext(amount > 0);
 
-            _offlineIcnomeChangedSignal.OnNext(_offlineIncome);
+            _offlineIncome = _formatter.FormatNumber(amount);
         }
 
         private void HandleOfflineHoursChanged(float hours)
         {
-            _offlineHours = hours;
+            _offlineHours = $"{hours.ToString("F1", CultureInfo.InvariantCulture)}";
+        }
+
+        private void HandleCurrentDescription(SystemLanguage lang)
+        {
+#if UNITY_ANDROID
+            var startMessage = _localizationConfig.StartMessageLocalizations.Get(lang);
+            var offlineIncomeMessage = _localizationConfig.OfflineIncomeLocalizations.Get(lang);
+
+            _offlineHoursDescSignal.OnNext(startMessage);
+            _offlineIncomeDescSignal.OnNext(offlineIncomeMessage);
 
             _offlineHoursChangedSignal.OnNext(_offlineHours);
+            _offlineIncomeChangedSignal.OnNext(_offlineIncome);
+#endif
         }
     }
 }

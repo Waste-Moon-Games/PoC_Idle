@@ -4,7 +4,6 @@ using Core.GlobalGameState;
 using R3;
 
 using SO.AnimationConfigs;
-
 using UI.GameplayMenu.Animations;
 using UI.GameplayMenu.Models;
 using UI.GameplayMenu.Models.BonusesFromRewardAd;
@@ -151,6 +150,7 @@ namespace Entry.Local.Gameplay
             in GameWorldState gameWorldState)
         {
             var playerState = gameWorldState.PlayerState;
+            var offlineIncomeLocalizationConfig = _loader.LoadOfflineLocalizationConfig();
 
             mainGameModel = new MainGameModel(playerState, gameWorldState.AudioSystemService);
             playerInfoModel = new EconomyPlayerInfoModel();
@@ -158,7 +158,10 @@ namespace Entry.Local.Gameplay
             offlineIncomeModel = new(
                 playerState.PlayerOfflineCalculator.OfflineIncomeCalculatedSignal,
                 playerState.PlayerOfflineCalculator.OfflineHoursCalculatedSignal,
-                playerState.OfflineIncomeReceiveService);
+                playerState.OfflineIncomeReceiveService,
+                gameWorldState.LocalizationService,
+                new(),
+                offlineIncomeLocalizationConfig);
 
             settingsModel = new(gameWorldState.AudioSystemService);
         }
@@ -173,7 +176,7 @@ namespace Entry.Local.Gameplay
             mainGameViewModel = new();
             playerInfoViewModel = new();
             playerStatsViewModel = new();
-            offlineIncomeViewModel = new(new());
+            offlineIncomeViewModel = new();
             settingsViewModel = new();
         }
 

@@ -9,7 +9,7 @@ namespace Core.GlobalGameState.Services
 {
     public sealed class LocalizationService : IDisposable
     {
-        private readonly Subject<SystemLanguage> _languageChangedSignal = new();
+        private readonly BehaviorSubject<SystemLanguage> _languageChangedSignal;
 
 #if UNITY_WEBGL
         private bool _sdkReadySubscribed;
@@ -20,6 +20,8 @@ namespace Core.GlobalGameState.Services
 
         public LocalizationService()
         {
+            _languageChangedSignal = new(CurrentLanguage);
+
 #if UNITY_WEBGL
             YG2.onSwitchLang += OnYgLangChanged;
 
@@ -74,7 +76,7 @@ namespace Core.GlobalGameState.Services
         }
 
 
-        private static SystemLanguage Map(string code) => code?.ToLower() switch
+        private SystemLanguage Map(string code) => code?.ToLower() switch
         {
             "ru" => SystemLanguage.Russian,
             "en" => SystemLanguage.English,

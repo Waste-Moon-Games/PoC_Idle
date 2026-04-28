@@ -194,9 +194,9 @@ MonoBehaviour:
     saveCloud: 1
     flush: 0
   Basic:
-    platform: {fileID: 11400000, guid: fabe82a4ab034324eb452cc7109f6d19, type: 2}
+    platform: {fileID: 0}
     autoApplySettings: 1
-    autoPauseGame: 1
+    autoPauseGame: 0
     editTimeScale: 1
     editEventSystem: 1
     autoGRA: 0
@@ -207,7 +207,7 @@ MonoBehaviour:
     loadSceneIfSDKLate: 0
     loadSceneIndex: 0
     initDelaySimulation: 0
-    buildNumber: 39
+    buildNumber: 43
   Simulation:
     device: 1
     language: ru

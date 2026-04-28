@@ -1,4 +1,5 @@
 ﻿using SO.AdsConfigs;
+using SO.PlayerConfigs;
 using UI.GameplayMenu.Views;
 using UI.GameplayMenu.Views.BonusesFromRewardAd;
 using UnityEngine;
@@ -72,6 +73,12 @@ namespace Entry.Local.Gameplay
         public RewardAdsConfig LoadRewardedBonusesConfig()
         {
             var result = Resources.Load<RewardAdsConfig>("Configs/Ads/RewardAdsConfig");
+            return result;
+        }
+
+        public OfflineIncomeLocalizationConfig LoadOfflineLocalizationConfig()
+        {
+            var result = Resources.Load<OfflineIncomeLocalizationConfig>("Configs/Player/OfflineIncomeLocalizationConfig");
             return result;
         }
     }

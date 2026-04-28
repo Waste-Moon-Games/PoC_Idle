@@ -3,7 +3,7 @@
     [System.Serializable]
     public class ItemUpgradeData
     {
-        public const int CurrentContentRevision = 2;
+        public const int CurrentContentRevision = 3;
 
         public int ContentRevision = CurrentContentRevision;
 

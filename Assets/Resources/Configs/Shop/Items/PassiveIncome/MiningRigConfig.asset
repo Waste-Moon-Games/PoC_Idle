@@ -19,7 +19,7 @@ MonoBehaviour:
       Text: Mining Rig
     - Language: 30
       Text: "\u0414\u043E\u0431\u044B\u0432\u0430\u044E\u0449\u0430\u044F \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0430"
-  <Icon>k__BackingField: {fileID: -5709690640261451516, guid: 7c83c0a3648e99c488d826dc144d16e5, type: 3}
+  <Icon>k__BackingField: {fileID: 5619862724828136477, guid: 7c83c0a3648e99c488d826dc144d16e5, type: 3}
   <CommonCurrencyIcon>k__BackingField: {fileID: -6122061090170777107, guid: 4ec5c2ae979b22740be929506510dde3, type: 3}
   <GemsCurrencyIcon>k__BackingField: {fileID: 5747697367745346532, guid: c22ec7c526c7e70488dcb1d8e7ebb7e0, type: 3}
   <Type>k__BackingField: 2

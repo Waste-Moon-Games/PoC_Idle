@@ -102,9 +102,9 @@ namespace UI.GameplayMenu.Views
 
         private void HandleCanBeOpenedSignal(bool value) => _isCanBeOpened = value;
 
-        private void HandleOfflineIncomeChanged(string value) => _offlineIncome.text = _offlineIncome.text.Replace("{income}", $"<color=yellow>{value}</color>");
+        private void HandleOfflineIncomeChanged(string desc) => _offlineIncome.text = desc;
 
-        private void HandleOfflineHoursChanged(string hours) => _offlineHours.text = _offlineHours.text.Replace("{hours}", $"<color=white>{hours}</color>");
+        private void HandleOfflineHoursChanged(string des) => _offlineHours.text = des;
 
         private void HandleReceiveIncomeButtonClick() => _viewModel.ReceiveOfflineIncome();
 

@@ -13,53 +13,53 @@ MonoBehaviour:
   m_Name: RewardsByLevelConfig
   m_EditorClassIdentifier: SO.PlayerConfigs::SO.PlayerConfigs.RewardsByLevelConfig
   <RewardsByLevel>k__BackingField:
-  - ID: coins_1_250
+  - ID: coins_1_500
     RequiredLevel: 1
-    Amount: 250
+    Amount: 500
     Type: 0
     State: 0
-  - ID: coins_2_450
+  - ID: coins_2_900
     RequiredLevel: 2
-    Amount: 450
-    Type: 0
-    State: 0
-  - ID: coins_3_650
-    RequiredLevel: 3
-    Amount: 650
-    Type: 0
-    State: 0
-  - ID: coins_4_750
-    RequiredLevel: 4
-    Amount: 750
-    Type: 0
-    State: 0
-  - ID: gems_5_10
-    RequiredLevel: 5
-    Amount: 10
-    Type: 1
-    State: 0
-  - ID: coins_6_900
-    RequiredLevel: 6
     Amount: 900
     Type: 0
     State: 0
-  - ID: coins_7_1100
+  - ID: coins_3_1300
+    RequiredLevel: 3
+    Amount: 1300
+    Type: 0
+    State: 0
+  - ID: coins_4_1500
+    RequiredLevel: 4
+    Amount: 1500
+    Type: 0
+    State: 0
+  - ID: gems_5_15
+    RequiredLevel: 5
+    Amount: 15
+    Type: 1
+    State: 0
+  - ID: coins_6_1800
+    RequiredLevel: 6
+    Amount: 1800
+    Type: 0
+    State: 0
+  - ID: coins_7_2200
     RequiredLevel: 7
-    Amount: 1100
+    Amount: 2200
     Type: 0
     State: 0
-  - ID: coins_8_1350
+  - ID: coins_8_2700
     RequiredLevel: 8
-    Amount: 1350
+    Amount: 2700
     Type: 0
     State: 0
-  - ID: coins_9_2500
+  - ID: coins_9_5000
     RequiredLevel: 9
-    Amount: 2500
+    Amount: 5000
     Type: 0
     State: 0
-  - ID: gems_10_10
+  - ID: gems_10_50
     RequiredLevel: 10
-    Amount: 10
+    Amount: 50
     Type: 1
     State: 0
