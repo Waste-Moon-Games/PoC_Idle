@@ -187,6 +187,7 @@ namespace Core.GlobalGameState
             _offlineIncomeReceiveService = new(_playerEconomyService, _playerOfflineCalculator, _adsSystemContext);
 
             _shopState.Restore(loadedData.ShopsData);
+            _shopState.UpdateLanguage(_currentLanguage);
             _offlineIncomeReceiveService.PrepareOfflineIncome();
         }
 

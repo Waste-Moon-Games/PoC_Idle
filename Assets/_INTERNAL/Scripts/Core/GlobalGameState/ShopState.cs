@@ -92,6 +92,15 @@ namespace Core.GlobalGameState
             }
         }
 
+        public void UpdateLanguage(SystemLanguage language)
+        {
+            if (_currentLanguage == language)
+                return;
+
+            foreach (var shopModel in _shopsDict.Values)
+                shopModel.UpdateLanguage(language);
+        }
+
         public void Dispose()
         {
             foreach(var shopModel in _shopsDict.Values)

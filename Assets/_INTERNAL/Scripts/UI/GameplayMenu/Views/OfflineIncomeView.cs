@@ -5,6 +5,7 @@ using TMPro;
 using UI.GameplayMenu.ViewModels;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Localization;
 
 namespace UI.GameplayMenu.Views
 {
@@ -15,6 +16,8 @@ namespace UI.GameplayMenu.Views
         [Header("Text setup")]
         [SerializeField] private TextMeshProUGUI _offlineHours;
         [SerializeField] private TextMeshProUGUI _offlineIncome;
+        [SerializeField] private TextMeshProUGUI _getText;
+        [SerializeField] private TextMeshProUGUI _doubleGetText;
 
         [Space(5), Header("Buttons setup")]
         [SerializeField] private Button _receiveIncome;
@@ -25,6 +28,10 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private float _closeAnimDuration = 0.25f;
         [SerializeField] private Vector2 _receivedScale = new(0f, 0f);
         [SerializeField] private Vector2 _defaultScale = Vector2.one;
+
+        [Space(5), Header("Buttons text localization setup")]
+        [SerializeField] private LocalizedText _getLocalizations;
+        [SerializeField] private LocalizedText _doubleGetLocalizations;
 
         private OfflineIncomeViewModel _viewModel;
 
@@ -60,15 +67,23 @@ namespace UI.GameplayMenu.Views
         {
             _viewModel = viewModel as OfflineIncomeViewModel;
 
-            _viewModel.OfflineIncomeReceivedSignal.Subscribe(HandleReceivedOfflineIncome).AddTo(_disposables);
-            _viewModel.OfflineHoursChangedSignal.Subscribe(HandleOfflineHoursChanged).AddTo(_disposables);
-            _viewModel.OfflineIncomeChangedSignal.Subscribe(HandleOfflineIncomeChanged).AddTo(_disposables);
             _viewModel.CanBeOpenedSignal.Subscribe(HandleCanBeOpenedSignal).AddTo(_disposables);
+            _viewModel.CurrentLangSignal.Subscribe(HandleCurrentLang).AddTo(_disposables);
+
+            _viewModel.OfflineIncomeReceivedSignal.Subscribe(HandleReceivedOfflineIncome).AddTo(_disposables);
+            _viewModel.OfflineHoursDescSignal.Subscribe(HandleOfflineHoursChanged).AddTo(_disposables);
+            _viewModel.OfflineIncomeDescSignal.Subscribe(HandleOfflineIncomeChanged).AddTo(_disposables);
 
             if (_viewModel.IsNewGame || !_isCanBeOpened || _isReceived)
                 return;
 
             OpenWindow();
+        }
+
+        private void HandleCurrentLang(SystemLanguage lang)
+        {
+            _getText.text = _getLocalizations.Get(lang);
+            _doubleGetText.text = _doubleGetLocalizations.Get(lang);
         }
 
         private void OpenWindow()

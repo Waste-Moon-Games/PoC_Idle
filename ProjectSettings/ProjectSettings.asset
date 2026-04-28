@@ -829,23 +829,23 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Android: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    Android: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
     EmbeddedLinux: DOTWEEN
     GameCoreScarlett: DOTWEEN
     GameCoreXboxOne: DOTWEEN
-    LinuxHeadlessSimulation: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    Nintendo Switch: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    PS4: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    PS5: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    LinuxHeadlessSimulation: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
+    Nintendo Switch: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
+    PS4: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
+    PS5: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
     QNX: DOTWEEN
     Stadia: DOTWEEN
-    Standalone: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    Standalone: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
     VisionOS: DOTWEEN
-    WebGL: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    Windows Store Apps: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    XboxOne: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    iPhone: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    tvOS: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    WebGL: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
+    Windows Store Apps: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
+    XboxOne: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
+    iPhone: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
+    tvOS: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
@@ -854,7 +854,7 @@ PlayerSettings:
     WebGL: 1
   il2cppCodeGeneration:
     Android: 0
-    WebGL: 1
+    WebGL: 0
   il2cppStacktraceInformation: {}
   managedStrippingLevel:
     Android: 4

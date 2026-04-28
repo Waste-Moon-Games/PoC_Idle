@@ -35,7 +35,7 @@ namespace UI.GameplayMenu.Views
             _viewModel.RequestDefaultLevelState();
         }
 
-        private void HandleChangedLevel(int level) => _currentLevelText.text = $"Уровень: {level}";
+        private void HandleChangedLevel(int level) => _currentLevelText.text = $"{level}";
         private void HandleExpChanges(int currentExp, int expToLevelUp)
         {
             float progress = (float)currentExp / (float)expToLevelUp;

@@ -20,6 +20,7 @@ namespace UI.GameplayMenu.Models
         private readonly BehaviorSubject<bool> _canBeOpenedSignal;
         private readonly BehaviorSubject<string> _offlineHoursChangedSignal;
         private readonly BehaviorSubject<string> _offlineIncomeChangedSignal;
+        private readonly BehaviorSubject<SystemLanguage> _currentLangSignal;
 
         private readonly BehaviorSubject<string> _offlineIncomeDescSignal;
         private readonly BehaviorSubject<string> _offlineHoursDescSignal;
@@ -36,10 +37,10 @@ namespace UI.GameplayMenu.Models
         public Observable<string> OfflineHoursChangedSignal => _offlineHoursChangedSignal.AsObservable();
         public Observable<string> OfflineIncomeDescSignal => _offlineIncomeDescSignal.AsObservable();
         public Observable<string> OfflineHoursDescSignal => _offlineHoursDescSignal.AsObservable();
+        public Observable<SystemLanguage> CurrentLangSignal => _currentLangSignal.AsObservable();
 
         public OfflineIncomeModel(
-            Observable<float> offlineIncomeSignal,
-            Observable<float> offlineHoursSignal,
+            PlayerOfflineIncomeCalculatorService incomeCalculatorService,
             OfflineIncomeReceiveService receiveService,
             LocalizationService localizationService,
             NumberFormatter formatter,
@@ -49,6 +50,7 @@ namespace UI.GameplayMenu.Models
             _localizationConfig = localizationConfig;
 
             _incomeHasReceivedSignal = new(false);
+            _canBeOpenedSignal = new(false);
             _offlineIncomeChangedSignal = new(string.Empty);
             _offlineHoursChangedSignal = new(string.Empty);
 
@@ -56,13 +58,14 @@ namespace UI.GameplayMenu.Models
             _offlineHoursDescSignal = new(string.Empty);
 
             localizationService.LanguageChangedSignal.Subscribe(HandleCurrentDescription).AddTo(_disposables);
+            _currentLangSignal = new(localizationService.CurrentLanguage);
 
             _service = receiveService;
 
             _service.OfflineIncomeReceivedSignal.Subscribe(HandleIncomeReceivedSignal).AddTo(_disposables);
 
-            offlineIncomeSignal.Subscribe(HandleOfflineIncomeChanged).AddTo(_disposables);
-            offlineHoursSignal.Subscribe(HandleOfflineHoursChanged).AddTo(_disposables);
+            incomeCalculatorService.OfflineIncomeCalculatedSignal.Subscribe(HandleOfflineIncomeChanged).AddTo(_disposables);
+            incomeCalculatorService.OfflineHoursCalculatedSignal.Subscribe(HandleOfflineHoursChanged).AddTo(_disposables);
         }
 
         public void ReceiveOfflineIncome() => _service.ReceiveOfflineIncome();
@@ -83,25 +86,23 @@ namespace UI.GameplayMenu.Models
             _canBeOpenedSignal.OnNext(amount > 0);
 
             _offlineIncome = _formatter.FormatNumber(amount);
+            _offlineIncomeChangedSignal.OnNext(_offlineIncome);
         }
 
         private void HandleOfflineHoursChanged(float hours)
         {
             _offlineHours = $"{hours.ToString("F1", CultureInfo.InvariantCulture)}";
+            _offlineHoursChangedSignal.OnNext(_offlineHours);
         }
 
         private void HandleCurrentDescription(SystemLanguage lang)
         {
-#if UNITY_ANDROID
             var startMessage = _localizationConfig.StartMessageLocalizations.Get(lang);
             var offlineIncomeMessage = _localizationConfig.OfflineIncomeLocalizations.Get(lang);
 
             _offlineHoursDescSignal.OnNext(startMessage);
             _offlineIncomeDescSignal.OnNext(offlineIncomeMessage);
-
-            _offlineHoursChangedSignal.OnNext(_offlineHours);
-            _offlineIncomeChangedSignal.OnNext(_offlineIncome);
-#endif
+            _currentLangSignal.OnNext(lang);
         }
     }
 }

@@ -156,8 +156,7 @@ namespace Entry.Local.Gameplay
             playerInfoModel = new EconomyPlayerInfoModel();
             playerStatsModel = new PlayerStatsModel();
             offlineIncomeModel = new(
-                playerState.PlayerOfflineCalculator.OfflineIncomeCalculatedSignal,
-                playerState.PlayerOfflineCalculator.OfflineHoursCalculatedSignal,
+                playerState.PlayerOfflineCalculator,
                 playerState.OfflineIncomeReceiveService,
                 gameWorldState.LocalizationService,
                 new(),

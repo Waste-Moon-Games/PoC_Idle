@@ -157,6 +157,24 @@ namespace Core.Shop.Models
             _itemsInitializedSignal.OnNext(_itemsDict.Values.OrderBy(i => i.Id).ToList());
         }
 
+        public void UpdateLanguage(SystemLanguage language)
+        {
+            if (_currentLanguage == language)
+                return;
+
+            var currentState = new ShopStateData
+            {
+                ShopID = _sId,
+                IsOpened = _state,
+                Items = _itemsDict.Values
+                    .OrderBy(item => item.Id)
+                    .Select(item => item.Capture())
+                    .ToList()
+            };
+
+            SyncWithSave(currentState);
+        }
+
         public void RequestState() => _stateChangedSignal.OnNext(_state);
 
         public void Open()

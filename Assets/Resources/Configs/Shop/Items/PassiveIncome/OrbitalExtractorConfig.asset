@@ -19,7 +19,7 @@ MonoBehaviour:
       Text: Orbital Extractor
     - Language: 30
       Text: "\u041E\u0440\u0431\u0438\u0442\u0430\u043B\u044C\u043D\u044B\u0439 \u044D\u043A\u0441\u0442\u0440\u0430\u043A\u0442\u043E\u0440"
-  <Icon>k__BackingField: {fileID: 0}
+  <Icon>k__BackingField: {fileID: -3505044146884949855, guid: ccfa45e534487c443bcf28c77e7f1a47, type: 3}
   <CommonCurrencyIcon>k__BackingField: {fileID: -6122061090170777107, guid: 4ec5c2ae979b22740be929506510dde3, type: 3}
   <GemsCurrencyIcon>k__BackingField: {fileID: 5747697367745346532, guid: c22ec7c526c7e70488dcb1d8e7ebb7e0, type: 3}
   <Type>k__BackingField: 2
