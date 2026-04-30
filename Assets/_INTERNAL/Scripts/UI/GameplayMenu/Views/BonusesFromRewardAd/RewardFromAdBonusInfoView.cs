@@ -3,6 +3,7 @@ using R3;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Localization;
 
 namespace UI.GameplayMenu.Views.BonusesFromRewardAd
 {
@@ -10,10 +11,14 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
     {
         [SerializeField] private float _toggleAnimationDuration = 0.25f;
         [SerializeField] private TextMeshProUGUI _bonusDescription;
+        [SerializeField] private TextMeshProUGUI _getText;
 
         [Space(5), Header("Buttons")]
         [SerializeField] private Button _showAdButton;
         [SerializeField] private Button _closeButton;
+
+        [Space(5), Header("Localization setup")]
+        [SerializeField] private LocalizedText _getLocalizations;
 
         private readonly Subject<Unit> _showAdButtonClickSignal = new();
         private readonly Subject<Unit> _closeButtonClickSignal = new();
@@ -35,6 +40,9 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
                 return;
             }
 
+#if UNITY_ANDROID
+            _getText.text = _getLocalizations.Get(Application.systemLanguage);
+#endif
             _showAdButton.onClick.AddListener(HandleShowAdButtonClick);
             _closeButton.onClick.AddListener(Close);
         }

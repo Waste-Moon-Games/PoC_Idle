@@ -68,14 +68,14 @@ namespace Core.AdsSystem.Mobile
 
         private void RequestRewarded()
         {
-            string adUnitId = "demo-rewarded-yandex";
+            string adUnitId = "R-M-19182918-1";
             AdRequestConfiguration adRequestConfiguration = new AdRequestConfiguration.Builder(adUnitId).Build();
             _rewardedLoader.LoadAd(adRequestConfiguration);
         }
 
         private void RequestInterstitial()
         {
-            string adUnitId = "demo-interstitial-yandex";
+            string adUnitId = "R-M-19182918-2";
             AdRequestConfiguration adRequestConfiguration = new AdRequestConfiguration.Builder(adUnitId).Build();
             _interstitialLoader.LoadAd(adRequestConfiguration);
         }

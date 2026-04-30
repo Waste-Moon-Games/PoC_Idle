@@ -38,6 +38,10 @@ namespace UI.GameplayMenu.Views
 
         private void Start()
         {
+#if UNITY_WEBGL
+            _openVK.gameObject.SetActive(false);
+#endif
+
             _sfxVolumeSlider.onValueChanged.AddListener(ChangeSFXVolume);
             _musicVolumeSlider.onValueChanged.AddListener(ChangeMusicVolume);
 

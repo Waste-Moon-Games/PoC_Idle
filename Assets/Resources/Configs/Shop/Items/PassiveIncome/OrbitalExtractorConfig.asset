@@ -27,7 +27,8 @@ MonoBehaviour:
   <Descriptions>k__BackingField:
     _entries:
     - Language: 10
-      Text: 
+      Text: 'Extracts resources from orbit: +<color=yellow>{amount}</color> to passive
+        income.'
     - Language: 30
       Text: "\u0414\u043E\u0431\u044B\u0432\u0430\u0435\u0442 \u0440\u0435\u0441\u0443\u0440\u0441\u044B
         \u0441 \u043E\u0440\u0431\u0438\u0442\u044B: +<color=yellow>{amount}</color>

@@ -37,5 +37,5 @@ MonoBehaviour:
   <IsOpenedByDefault>k__BackingField: 1
   <PriceRate>k__BackingField: 1.25
   <BonusRate>k__BackingField: 1.1
-  <UseLevelCap>k__BackingField: 0
-  <MaxLevel>k__BackingField: 1
+  <UseLevelCap>k__BackingField: 1
+  <MaxLevel>k__BackingField: 50

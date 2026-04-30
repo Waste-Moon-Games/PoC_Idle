@@ -18,7 +18,7 @@ namespace Core.GlobalGameState
         public GameWorldState(SaveSystemContext saveSystemContext, AdsSystemContext adsSystemContext, AudioSystemService audioSystemService)
         {
             _localizationService = new LocalizationService();
-            _playerState = new(saveSystemContext, adsSystemContext, _localizationService.CurrentLanguage, audioSystemService);
+            _playerState = new(saveSystemContext, adsSystemContext, () => _localizationService.CurrentLanguage, audioSystemService);
             _audioSystemService = audioSystemService;
         }
 

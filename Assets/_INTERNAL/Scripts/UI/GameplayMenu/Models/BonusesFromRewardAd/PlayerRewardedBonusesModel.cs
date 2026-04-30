@@ -6,7 +6,6 @@ using Core.GlobalGameState.Services;
 using R3;
 using System.Collections.Generic;
 using UnityEngine;
-using Utils.Localization;
 
 namespace UI.GameplayMenu.Models.BonusesFromRewardAd
 {

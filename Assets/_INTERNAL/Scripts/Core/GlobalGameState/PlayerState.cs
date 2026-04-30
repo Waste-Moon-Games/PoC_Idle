@@ -24,7 +24,8 @@ namespace Core.GlobalGameState
     {
         private readonly string _playerSaveDataKey = "Player_Data";
         private readonly CompositeDisposable _disposables = new();
-        private readonly SystemLanguage _currentLanguage;
+        private SystemLanguage _currentLanguage;
+        private Func<SystemLanguage> _resolveCurrentLanguage;
 
         private CancellationTokenSource _lifetimeCts = new();
 
@@ -61,14 +62,19 @@ namespace Core.GlobalGameState
         public OfflineIncomeReceiveService OfflineIncomeReceiveService => _offlineIncomeReceiveService;
         public ShopState ShopState => _shopState;
 
-        public PlayerState(SaveSystemContext saveSystemContext, AdsSystemContext adsSystemContext, SystemLanguage currentLanguage, AudioSystemService audioSystemService)
+        public PlayerState(
+            SaveSystemContext saveSystemContext,
+            AdsSystemContext adsSystemContext,
+            Func<SystemLanguage> resolveCurrentLanguage,
+            AudioSystemService audioSystemService)
         {
 #if UNITY_WEBGL
             YG2.onGetSDKData += HandleSDKData;
 #endif
             _saveMigrationService = new();
             _saveSystemContext = saveSystemContext;
-            _currentLanguage = currentLanguage;
+            _resolveCurrentLanguage = resolveCurrentLanguage ?? throw new ArgumentNullException(nameof(_resolveCurrentLanguage));
+            _currentLanguage = _resolveCurrentLanguage();
             _audioSystemService = audioSystemService;
 
             _economyConfig = Resources.Load<MainEconomyConfig>("Configs/Economy/MainEconomyConfig");
@@ -108,6 +114,7 @@ namespace Core.GlobalGameState
 #if UNITY_ANDROID
                 await UniTask.Delay(TimeSpan.FromSeconds(1f));
 #endif
+                RefreshCurrentLanguage();
                 bool hasSavedData = HasSavedData();
 #if UNITY_EDITOR
                 if (_playerConfig.IsDebug)
@@ -187,7 +194,6 @@ namespace Core.GlobalGameState
             _offlineIncomeReceiveService = new(_playerEconomyService, _playerOfflineCalculator, _adsSystemContext);
 
             _shopState.Restore(loadedData.ShopsData);
-            _shopState.UpdateLanguage(_currentLanguage);
             _offlineIncomeReceiveService.PrepareOfflineIncome();
         }
 
@@ -224,6 +230,8 @@ namespace Core.GlobalGameState
 
             _saveSystemContext.Save(playerData, _playerSaveDataKey);
         }
+
+        private void RefreshCurrentLanguage() => _currentLanguage = _resolveCurrentLanguage();
 
         private bool HasSavedData()
         {

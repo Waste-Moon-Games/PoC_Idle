@@ -2,9 +2,11 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using R3;
+using TMPro;
 using UI.GameplayMenu.ViewModels.BonusesFromRewardAd;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Localization;
 
 namespace UI.GameplayMenu.Views.BonusesFromRewardAd
 {

@@ -35,8 +35,7 @@ namespace Core.GlobalGameState.Services
                 YG2.onGetSDKData += HandleSdkReady;
                 _sdkReadySubscribed = true;
             }
-
-            _languageChangedSignal = new(CurrentLanguage);
+            _languageChangedSignal = new(Map(YG2.lang));
 #endif
         }
 
@@ -75,6 +74,7 @@ namespace Core.GlobalGameState.Services
             if (mapped == CurrentLanguage) return;
 
             CurrentLanguage = mapped;
+            
             _languageChangedSignal.OnNext(CurrentLanguage);
         }
 
@@ -82,7 +82,7 @@ namespace Core.GlobalGameState.Services
         {
             "ru" => SystemLanguage.Russian,
             "en" => SystemLanguage.English,
-            _ => SystemLanguage.Russian
+            _ => SystemLanguage.English
         };
 #endif
     }

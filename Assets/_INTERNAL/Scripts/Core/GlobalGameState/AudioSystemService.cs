@@ -85,16 +85,12 @@ namespace Core.GlobalGameState
         {
             _currentSFXVolume = volume;
             _sfxVolumeChangedSignal.OnNext(volume);
-
-            SavePrefs();
         }
 
         public void MusicVolumeChange(float volume)
         {
             _currentMusicVolume = volume;
             _musicVolumeChangedSignal.OnNext(volume);
-
-            SavePrefs();
         }
 
         public void SFXStateChange(bool state)
