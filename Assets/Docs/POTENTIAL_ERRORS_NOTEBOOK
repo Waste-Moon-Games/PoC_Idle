@@ -1,0 +1,11 @@
+# Блокнот потенциальных ошибок
+
+> Ниже перечислены **потенциальные** ошибки/риски, отсортированные по критичности (от наиболее критичных к менее критичным). Исправления в этом документе не вносятся — только фиксация рисков.
+
+| № | Степень критичности | Название класса | Номер строки | Строка(и) | Потенциальное последствие |
+|---|---|---|---|---|---|
+| 1 | Критичная | `Core.SaveSystem.Web.YandexSaveSystemStrategy` | 22 | `PlayerData result = JsonConvert.DeserializeObject<PlayerData>(YG2.saves.JsonData);` | Если `YG2.saves.JsonData` пустой/битый JSON, десериализация может вернуть `null` или бросить исключение. Это может привести к падению загрузки состояния игрока и/или к `NullReferenceException` в последующем коде. |
+| 2 | Высокая | `Entry.Local.Gameplay.GameplayResourceLoader` | 13-15 | `Resources.Load<UIRootTopBlockView>(...)` + `Object.Instantiate(topRootViewPrefab);` | Отсутствует проверка на `null` перед `Instantiate`. При отсутствии/переименовании префаба в `Resources` возможен runtime-crash при старте gameplay UI. |
+| 3 | Высокая | `Entry.Local.Gameplay.GameplayResourceLoader` | 40-47 | Несколько `Resources.Load<...>()` и последующие `Object.Instantiate(...)` без проверок | Аналогичный риск массового падения при частичной потере ассетов: ошибки проявятся каскадно при создании `MainGameView`, `EconomyPlayerInfoView`, `PlayerStatsView`. |
+| 4 | Средняя | `Core.SaveSystem.Mobile.MobileSaveSystemStrategy` | 25 | `return JsonConvert.DeserializeObject<PlayerData>(PlayerPrefs.GetString(key));` | При повреждённой строке в `PlayerPrefs` десериализация может вернуть `null`/исключение. Последствие — неконсистентная загрузка прогресса, потенциальные ошибки в логике и UI после запуска. |
+| 5 | Низкая | `Entry.Local.Gameplay.GameplayResourceLoader` | 65 | `public SettingsView LoadSettignsView()` | Опечатка в имени метода (`Settigns`) увеличивает риск ошибок интеграции/поиска API и снижает читаемость кода (не crash сама по себе, но источник будущих дефектов). |
