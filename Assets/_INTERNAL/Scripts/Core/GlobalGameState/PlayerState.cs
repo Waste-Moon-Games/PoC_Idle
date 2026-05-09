@@ -1,4 +1,5 @@
 using Core.AdsSystem;
+using Core.Enums;
 using Core.GlobalGameState.Services;
 using Core.SaveSystemBase;
 using Core.SaveSystemBase.Data;
@@ -10,6 +11,7 @@ using SO.PlayerConfigs;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 using UnityEngine;
@@ -52,6 +54,7 @@ namespace Core.GlobalGameState
         private readonly CyclicRewardsConfig _cyclicRewardsConfig;
         private readonly PlayerConfig _playerConfig;
         private readonly PlayerOfflineConfig _playerOfflineConfig;
+        private readonly RewardAdsConfig _rewardedsAdsConfig;
 
         public PlayerEconomyService EconomyService => _playerEconomyService;
         public PlayerUpgradeService UpgradeService => _playerUpgradeService;
@@ -82,13 +85,13 @@ namespace Core.GlobalGameState
             _rewardsByLevelConfig = Resources.Load<RewardsByLevelConfig>("Configs/Player/RewardsByLevelConfig");
             _cyclicRewardsConfig = Resources.Load<CyclicRewardsConfig>("Configs/Player/CyclicRewardsConfig");
             _playerOfflineConfig = Resources.Load<PlayerOfflineConfig>("Configs/Player/PlayerOfflineConfig");
-            var rewardAdsConfig = Resources.Load<RewardAdsConfig>("Configs/Ads/RewardAdsConfig");
+            _rewardedsAdsConfig = Resources.Load<RewardAdsConfig>("Configs/Ads/RewardAdsConfig");
 
             var autoSaveToken = new CancellationTokenSource();
             _autoSaveService = new(_playerConfig.AutoSaveDelay, autoSaveToken);
             _autoSaveService.AutoSaveSignal.Subscribe(def => SavePlayerState()).AddTo(_disposables);
 
-            _rewardedBonusesService = new(rewardAdsConfig.InitTemporaryBonusDurationInMinutes);
+            _rewardedBonusesService = new(_rewardedsAdsConfig.InitTemporaryBonusDurationInMinutes);
             _adsSystemContext = adsSystemContext;
         }
 
@@ -144,7 +147,8 @@ namespace Core.GlobalGameState
                 _economyConfig,
                 _playerBonusesService.BonusStateChanged,
                 _rewardedBonusesService,
-                _playerConfig.BonusClickMultiplier);
+                _playerConfig.BonusClickMultiplier,
+                _rewardedsAdsConfig.Items.FirstOrDefault(item => item.Type == BonusItemType.TemporaryBonus).Amount);
             _playerUpgradeService = new(_playerEconomyService, _playerBonusesService, _audioSystemService);
             _playerRewardsByLevelService = new(
                 _rewardsByLevelConfig,
@@ -182,6 +186,7 @@ namespace Core.GlobalGameState
                 _playerBonusesService.BonusStateChanged,
                 _rewardedBonusesService,
                 _playerConfig.BonusClickMultiplier,
+                _rewardedsAdsConfig.Items.FirstOrDefault(item => item.Type == BonusItemType.TemporaryBonus).Amount,
                 loadedData);
             _playerUpgradeService = new(_playerEconomyService, _playerBonusesService, _audioSystemService);
             _playerRewardsByLevelService = new(_rewardsByLevelConfig,

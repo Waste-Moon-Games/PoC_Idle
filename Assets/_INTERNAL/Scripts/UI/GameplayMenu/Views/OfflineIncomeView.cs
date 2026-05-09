@@ -33,6 +33,9 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private LocalizedText _getLocalizations;
         [SerializeField] private LocalizedText _doubleGetLocalizations;
 
+        [Space(5), Header("Other")]
+        [SerializeField] private GameObject _viewport;
+
         private OfflineIncomeViewModel _viewModel;
 
         private bool _isCanBeOpened;
@@ -88,7 +91,7 @@ namespace UI.GameplayMenu.Views
 
         private void OpenWindow()
         {
-            gameObject.SetActive(true);
+            _viewport.SetActive(true);
 
             _rectTransform
                 .DOScale(_defaultScale, _openAnimDuration)
@@ -106,7 +109,7 @@ namespace UI.GameplayMenu.Views
                 .SetEase(Ease.OutFlash)
                 .OnComplete(() =>
                 {
-                    gameObject.SetActive(false);
+                    _viewport.SetActive(false);
                 });
 
                 return;

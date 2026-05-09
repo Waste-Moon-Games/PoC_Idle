@@ -71,9 +71,9 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
                 _rectTransform.DOAnchorPos(_activatedPosition, _activateAnimationDuration)
                     .SetEase(Ease.OutElastic)
                     .OnComplete(() =>
-                {
-                    gameObject.SetActive(false);
-                });
+                    {
+                        gameObject.SetActive(false);
+                    });
             }
             else
             {

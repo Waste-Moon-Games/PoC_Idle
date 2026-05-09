@@ -13,7 +13,7 @@ namespace UI.GameplayMenu.Views
 
         [SerializeField] private Image _expProgressBar;
 
-        [Space(5), Header("RewardRequiredLevel/Exp Info")]
+        [Space(5), Header("Exp setup")]
         [SerializeField] private TextMeshProUGUI _currentLevelText;
         [SerializeField] private TextMeshProUGUI _expText;
 

@@ -40,11 +40,7 @@ namespace UI.GameplayMenu.Views
         {
             _startTime = startTime;
             _bonusTimer.maxValue = startTime;
-
-            if (_isActive)
-                return;
-
-            _bonusTimer.value = startTime;
+            Debug.Log($"[Temporary Bonus View] Start time in seconds: {startTime}");
         }
 
         public void UpdateProgress(float time)

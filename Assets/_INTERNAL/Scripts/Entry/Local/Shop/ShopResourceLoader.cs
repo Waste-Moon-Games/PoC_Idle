@@ -1,7 +1,8 @@
 ﻿using UI.GameplayMenu.Views;
 using UI.ShopMenu.Views;
-using NavigationButtonsView = UI.ShopMenu.Views.NavigationButtonsView;
 using UnityEngine;
+using Utils.CustomResourceLoader;
+using NavigationButtonsView = UI.ShopMenu.Views.NavigationButtonsView;
 
 namespace Entry.Local.Shop
 {
@@ -9,28 +10,28 @@ namespace Entry.Local.Shop
     {
         public void LoadNavigationView(out NavigationButtonsView navigationButtonsView)
         {
-            var navigationViewPrefab = Resources.Load<NavigationButtonsView>("UI/ShopMenu/UIBlocks/UINavigationView");
+            var navigationViewPrefab = ResourceLoader.LoadOrThrow<NavigationButtonsView>("UI/ShopMenu/UIBlocks/UINavigationView");
 
             navigationButtonsView = Object.Instantiate(navigationViewPrefab);
         }
 
         public EconomyPlayerInfoView LoadPlayerInfoView()
         {
-            var playerInfoViewPrefab = Resources.Load<EconomyPlayerInfoView>("UI/ShopMenu/UIBlocks/UIPlayerInfoView");
+            var playerInfoViewPrefab = ResourceLoader.LoadOrThrow<EconomyPlayerInfoView>("UI/ShopMenu/UIBlocks/UIPlayerInfoView");
 
             return Object.Instantiate(playerInfoViewPrefab);
         }
 
         public ShopView LoadShopView(string path)
         {
-            var shopViewPrefab = Resources.Load<ShopView>(path);
+            var shopViewPrefab = ResourceLoader.LoadOrThrow<ShopView>(path);
 
             return Object.Instantiate(shopViewPrefab);
         }
 
         public UIShopRootView LoadShopRootView()
         {
-            var rootPrefab = Resources.Load<UIShopRootView>("UI/ShopMenu/UIBlocks/UIShopView");
+            var rootPrefab = ResourceLoader.LoadOrThrow<UIShopRootView>("UI/ShopMenu/UIBlocks/UIShopView");
 
             return Object.Instantiate(rootPrefab);
         }

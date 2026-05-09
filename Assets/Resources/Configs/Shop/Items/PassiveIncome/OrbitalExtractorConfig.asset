@@ -33,11 +33,11 @@ MonoBehaviour:
       Text: "\u0414\u043E\u0431\u044B\u0432\u0430\u0435\u0442 \u0440\u0435\u0441\u0443\u0440\u0441\u044B
         \u0441 \u043E\u0440\u0431\u0438\u0442\u044B: +<color=yellow>{amount}</color>
         \u043A \u043F\u0430\u0441\u0441\u0438\u0432\u043D\u043E\u043C\u0443 \u0434\u043E\u0445\u043E\u0434\u0443."
-  <StartPrice>k__BackingField: 65000
+  <StartPrice>k__BackingField: 7500
   <StartUpgradeAmount>k__BackingField: 90
   <StartLevel>k__BackingField: 0
   <IsOpenedByDefault>k__BackingField: 0
-  <PriceRate>k__BackingField: 1.4
+  <PriceRate>k__BackingField: 1.55
   <BonusRate>k__BackingField: 1.08
   <UseLevelCap>k__BackingField: 0
   <MaxLevel>k__BackingField: 1

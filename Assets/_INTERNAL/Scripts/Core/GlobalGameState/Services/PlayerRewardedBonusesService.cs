@@ -22,7 +22,7 @@ namespace Core.GlobalGameState.Services
 
         private bool _temporaryBonusState = false;
 
-        public float InitialTemporaryBonusDuration => _initialTemporaryBonusDurationInSeconds;
+        public float InitialTemporaryBonusDurationInSeconds => _initialTemporaryBonusDurationInSeconds;
 
         public Observable<bool> TemporaryBonusStateChanged => _temporaryBonusStateChangedSignal.AsObservable();
         public Observable<float> CurrencyBonusGiven => _giveCurrencyBonusSignal.AsObservable();
@@ -37,6 +37,8 @@ namespace Core.GlobalGameState.Services
             _temporaryBonusStateChangedSignal = new(_temporaryBonusState);
             _temporaryBonusTimerChangedSignal = new(_temporaryBonusDurationInSeconds);
         }
+
+        public void RequestActualTemporaryBonusesState() => _temporaryBonusStateChangedSignal.OnNext(_temporaryBonusState);
 
         public void ActiveTemporaryBonus()
         {

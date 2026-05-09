@@ -22,6 +22,7 @@ namespace UI.GameplayMenu.Models
         public Observable<float> PassiveIncomeChanged => _economyModel.PassiveIncomeChanged.AsObservable();
         public Observable<bool> TemporaryBonusStateChanged => _rewardedBonusesService.TemporaryBonusStateChanged.AsObservable();
         public Observable<float> TemporaryBonusTimerChanged => _rewardedBonusesService.TemporaryBonusTimerChanged.AsObservable();
+        public float InitialTemporaryBonusDurationInSeconds => _rewardedBonusesService.InitialTemporaryBonusDurationInSeconds;
         #endregion
 
         public void BindModel(PlayerEconomyService model, PlayerRewardedBonusesService playerRewardBonusesService)

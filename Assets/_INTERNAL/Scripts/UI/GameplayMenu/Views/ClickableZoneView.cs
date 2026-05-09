@@ -1,7 +1,12 @@
 ﻿using Common.MVVM;
+
+using DG.Tweening;
+
 using R3;
+
 using UI.GameplayMenu.Animations;
 using UI.GameplayMenu.ViewModels;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -17,11 +22,13 @@ namespace UI.GameplayMenu.Views
         private void OnDestroy()
         {
             _disposables.Dispose();
+            _animationService.StopAnimations();
+            DOTween.KillAll();
         }
 
         private void Update()
         {
-            _animationService?.RotateAnimation();
+            _animationService?.LoopAnimations();
         }
 
         public void BindViewModel(IViewModel viewModel)
@@ -32,6 +39,7 @@ namespace UI.GameplayMenu.Views
         public void BindAnimationService(ClickAnimationsService animationsService)
         {
             _animationService = animationsService;
+            _animationService.StartAnimations();
         }
 
         public void OnPointerUp(PointerEventData eventData)

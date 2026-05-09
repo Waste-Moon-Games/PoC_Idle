@@ -40,6 +40,9 @@ namespace UI.GameplayMenu.Views
         {
             _viewModel = viewModel as EconomyPlayerInfoViewModel;
 
+            if (_temporaryBonus != null)
+                _temporaryBonus.SetStartTime(_viewModel.InitialTemporaryBonusDurationInSeconds);
+
             _viewModel.CoinsChanged.Subscribe(UpdateCoinsCount).AddTo(_disposables);
             _viewModel.GemsChanged.Subscribe(UpdateGemsCount).AddTo(_disposables);
 
@@ -48,15 +51,14 @@ namespace UI.GameplayMenu.Views
             _viewModel.CoinsPerClickChanged.Subscribe(UpdateCoinsPerClick).AddTo(_disposables);
             _viewModel.PassiveIncomeChanged.Subscribe(UpdateCurrentPassiveIncome).AddTo(_disposables);
 
-            _viewModel.TemporartyBonusTimerChanged.Take(1).Subscribe(HandleInitTemporaryBonusTimer).AddTo(_disposables);
             _viewModel.TemporaryBonusStateChanged.Subscribe(HandleChangedTemporaryBonusState).AddTo(_disposables);
             _viewModel.TemporartyBonusTimerChanged.Subscribe(UpdateTemporaryBonusTimer).AddTo(_disposables);
         }
 
         public void BindAnimationService(ClickAnimationsService animationService) => _animationsService = animationService;
 
-        private void UpdateCoinsCount(float amount) => _currentCoinsCount.text = $"<color=yellow>{_formatter.FormatNumber(amount)}</color>";
-        private void UpdateGemsCount(float amount) => _currentGemsCount.text = $"<color=red>{_formatter.FormatNumber(amount)}</color>";
+        private void UpdateCoinsCount(float amount) => _currentCoinsCount.text = $"<color=#FFCB7A>{_formatter.FormatNumber(amount)}</color>";
+        private void UpdateGemsCount(float amount) => _currentGemsCount.text = $"<color=#E78DFF>{_formatter.FormatNumber(amount)}</color>";
 
         private void UpdateCoinsPerClick(float amount) => _currentCoinsPerClick.text = $"<color=#00FFFF>{_formatter.FormatNumber(amount)}</color>/Click";
 
@@ -65,7 +67,6 @@ namespace UI.GameplayMenu.Views
         private void UpdateCurrentPassiveIncome(float amount) => _currentPassiveIncome.text = $"<color=green>{_formatter.FormatNumber(amount)}</color>/Sec";
 
         private void UpdateTemporaryBonusTimer(float time) => _temporaryBonus.UpdateProgress(time);
-        private void HandleInitTemporaryBonusTimer(float time) => _temporaryBonus.SetStartTime(time);
         private void HandleChangedTemporaryBonusState(bool state) => _temporaryBonus.Toggle(state);
     }
 }

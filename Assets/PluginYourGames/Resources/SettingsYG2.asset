@@ -176,8 +176,8 @@ MonoBehaviour:
       consumed: 1
   QuitGameEvent:
     enable: 1
-    objectName: NameYourObject
-    methodName: NameYourMethod
+    objectName: '[DISPOSE_CONTAINER](Clone)'
+    methodName: Dispose
   RewardedAdv:
     skipInterAdvAfterReward: 0
     labelAdvSimLabel: 0
@@ -207,7 +207,7 @@ MonoBehaviour:
     loadSceneIfSDKLate: 0
     loadSceneIndex: 0
     initDelaySimulation: 0
-    buildNumber: 51
+    buildNumber: 60
   Simulation:
     device: 1
     language: en
@@ -227,12 +227,12 @@ MonoBehaviour:
       color2: {r: 0.36, g: 0.09, b: 1, a: 1}
     customProgressBar: 1
     progressBarSettigs:
-      round: 1
+      round: 0
       roundAngle: 10
-      width: 30
-      height: 24
-      color1: {r: 0.25, g: 0.6392, b: 1, a: 1}
-      color2: {r: 1, g: 0.831, b: 0.149, a: 0.7}
+      width: 25
+      height: 20
+      color1: {r: 0.25098038, g: 1, b: 0.475072, a: 1}
+      color2: {r: 1, g: 0.20726229, b: 0.1490196, a: 0.7}
     fixedAspectRatio: 1
     aspectRatio: 9/16
     disableForMobile: 0

@@ -13,7 +13,7 @@ using UI.GameplayMenu.Views;
 using UI.GameplayMenu.Views.BonusesFromRewardAd;
 
 using UnityEngine;
-
+using Utils.CustomResourceLoader;
 using Utils.DI;
 #if UNITY_WEBGL
 using YG;
@@ -27,7 +27,7 @@ namespace Entry.Local.Gameplay
 
         public Observable<MainMenuEvents> Run(DIContainer container)
         {
-            _loader.LoadMainViews(out NavigationButtonsView navigationButtonsView);
+            NavigationButtonsView navigationButtonsView = _loader.LoadNavigationView();
 
             CreateScene(container, out NavigationButtonsModel navigationModel);
 
@@ -41,7 +41,7 @@ namespace Entry.Local.Gameplay
 
         private void CreateScene(DIContainer container, out NavigationButtonsModel navigationModel)
         {
-            _loader.LoadRootViews(out UIRootTopBlockView topRootView);
+            UIRootTopBlockView topRootView = _loader.LoadTopRootView();
             var gameWorldState = container.Resolve<GameWorldState>();
 
             navigationModel = new(gameWorldState.AudioSystemService);
@@ -115,7 +115,7 @@ namespace Entry.Local.Gameplay
             RewardsSystemViewModel viewModel = new();
             viewModel.BindModel(model);
 
-            RewardsSystemView view = _loader.LoadRewardSystemView();
+            RewardsSystemView view = _loader.LoadRewardsSystemView();
             view.BindViewModel(viewModel);
             view.BindAudioSystemService(audioSystemService);
 
@@ -127,7 +127,7 @@ namespace Entry.Local.Gameplay
             var adsSystem = container.Resolve<AdsSystemContext>();
             var bonusesService = gameWorldState.PlayerState.PlayerRewardedBonusesService;
             var localizationService = gameWorldState.LocalizationService;
-            var rewardedBonusesConfig = _loader.LoadRewardedBonusesConfig();
+            var rewardedBonusesConfig = _loader.LoadRewardAdsConfig();
 
             PlayerRewardedBonusesModel model = new(adsSystem, bonusesService);
             model.CreateBonusItemModels(rewardedBonusesConfig.Items, localizationService.CurrentLanguage);
@@ -135,7 +135,7 @@ namespace Entry.Local.Gameplay
             PlayerRewardedBonusesViewModel viewModel = new();
             viewModel.BindModel(model);
 
-            PlayerRewardedBonusesView view = _loader.LoadPlayerRewardedBonusesService();
+            PlayerRewardedBonusesView view = _loader.LoadPlayerRewardedBonusesView();
             view.BindViewModel(viewModel);
 
             mainGameView.AttachView(view.gameObject);
@@ -150,7 +150,7 @@ namespace Entry.Local.Gameplay
             in GameWorldState gameWorldState)
         {
             var playerState = gameWorldState.PlayerState;
-            var offlineIncomeLocalizationConfig = _loader.LoadOfflineLocalizationConfig();
+            var offlineIncomeLocalizationConfig = _loader.LoadOfflineIncomeLocalizationConfig();
 
             mainGameModel = new MainGameModel(playerState, gameWorldState.AudioSystemService);
             playerInfoModel = new EconomyPlayerInfoModel();
@@ -192,18 +192,13 @@ namespace Entry.Local.Gameplay
             mainGameView = mView;
             playerStatsView = pStatsView;
             offlineIncomeView = _loader.LoadOfflineIncomeView();
-            settingsView = _loader.LoadSettignsView();
+            settingsView = _loader.LoadSettingsView();
         }
 
         private void CreateAnimationServices(out ClickAnimationsService clickAnimationsService, in Transform target)
         {
-            var animationsConfig = Resources.Load<ClickAnimationsConfig>("Configs/Animations/ClickAnimationsConfig");
-            clickAnimationsService = new
-                (target,
-                animationsConfig.TargetScale,
-                animationsConfig.DefaultScale,
-                animationsConfig.Prefab,
-                animationsConfig.InitPoolCount);
+            var animationsConfig = ResourceLoader.LoadOrThrow<ClickAnimationsConfig>("Configs/Animations/ClickAnimationsConfig");
+            clickAnimationsService = new(target, animationsConfig);
         }
     }
 }

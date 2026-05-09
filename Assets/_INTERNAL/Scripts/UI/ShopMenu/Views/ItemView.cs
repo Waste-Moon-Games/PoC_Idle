@@ -5,7 +5,6 @@ using TMPro;
 using UI.ShopMenu.ViewModels;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.Localization;
 
 namespace UI.ShopMenu.Views
 {
@@ -19,14 +18,10 @@ namespace UI.ShopMenu.Views
         [SerializeField] private TextMeshProUGUI _priceText;
         [SerializeField] private TextMeshProUGUI _upgradeAmountText;
         [SerializeField] private TextMeshProUGUI _levelText;
-        [SerializeField] private TextMeshProUGUI _buyText;
 
         [Space(5)]
         [SerializeField] private Button _buyButton;
         [SerializeField] private GameObject _closedMask;
-
-        [Space(5), Header("Localization setup")]
-        [SerializeField] private LocalizedText _buyTextLocalizations;
 
         private ItemViewModel _viewModel;
         private bool _isMaxed;
@@ -40,9 +35,6 @@ namespace UI.ShopMenu.Views
 
             _viewModel?.RequestBaseInfo();
             _viewModel?.RequestGeneralInfo();
-#if UNITY_ANDROID
-            _buyText.text = _buyTextLocalizations.Get(Application.systemLanguage);
-#endif
         }
 
         private void OnDestroy()
@@ -87,7 +79,7 @@ namespace UI.ShopMenu.Views
         {
             if (_isMaxed)
             {
-                _priceText.text = "<color=#00E676>MAXED</color>";
+                _priceText.text = "<color=#00E676>MAX</color>";
                 return;
             }
 
@@ -105,8 +97,8 @@ namespace UI.ShopMenu.Views
         private void HandleChangedLevel(int level)
         {
             _levelText.text = _isMaxed
-                ? "<color=#00E676>MAXED</color>"
-                : $"<color=green>{level}</color> lvl";
+                ? "<color=#00E676>MAX</color>"
+                : $"<color=green>{level}</color>";
         }
 
         private void HandleChangedStatus(bool value) => _closedMask.SetActive(!value);
@@ -119,8 +111,8 @@ namespace UI.ShopMenu.Views
 
             if (_isMaxed)
             {
-                _levelText.text = "<color=#00E676>MAXED</color>";
-                _priceText.text = "<color=#00E676>MAXED</color>";
+                _levelText.text = "<color=#00E676>MAX</color>";
+                _priceText.text = "<color=#00E676>MAX</color>";
             }
         }
 

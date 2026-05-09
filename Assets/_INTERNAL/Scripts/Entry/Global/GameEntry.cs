@@ -14,6 +14,7 @@ using Object = UnityEngine.Object;
 
 using Utils.DI;
 using Utils.SceneLoader;
+using Utils.CustomResourceLoader;
 
 #if UNITY_WEBGL
 using YG;
@@ -59,9 +60,7 @@ namespace Entry.Global
 
         private GameEntry()
         {
-            var loadingScreenPrefab = Resources.Load<UILoadingView>("UI/Common/UILoadingView");
-            if (loadingScreenPrefab == null)
-                throw new InvalidOperationException("Resources/UI/Common/UILoadingView prefab not found");
+            var loadingScreenPrefab = ResourceLoader.LoadOrThrow<UILoadingView>("UI/Common/UILoadingView");
 
             _loadingView = Object.Instantiate(loadingScreenPrefab);
 
@@ -73,13 +72,8 @@ namespace Entry.Global
 
         private void RegisterGlobalServices()
         {
-            var adRatesConfig = Resources.Load<AdRatesConfig>("Configs/Ads/AdRatesConfig");
-            var soundsLibrary = Resources.Load<SoundsCollectionConfig>("Configs/AudioSystem/SoundsCollectionConfig");
-
-            if (adRatesConfig == null)
-                throw new InvalidOperationException("Resources/Configs/Ads/AdRatesConfig asset not found");
-            if (soundsLibrary == null)
-                throw new InvalidOperationException("Resources/Configs/AudioSystem/SoundsCollectionConfig asset not found");
+            var adRatesConfig = ResourceLoader.LoadOrThrow<AdRatesConfig>("Configs/Ads/AdRatesConfig");
+            var soundsLibrary = ResourceLoader.LoadOrThrow<SoundsCollectionConfig>("Configs/AudioSystem/SoundsCollectionConfig");
 
             _rootContainer.RegisterInstance(_loadingView);
 
@@ -104,18 +98,14 @@ namespace Entry.Global
 
             _sceneNavigatorService.Start();
             
-            var uiSfxSystemsPrefab = Resources.Load<UISFXMonoContainer>("Other/Utils/UISFXSystems");
-            if (uiSfxSystemsPrefab == null)
-                throw new InvalidOperationException("Resources/Other/Utils/UISFXSystems prefab not found");
+            var uiSfxSystemsPrefab = ResourceLoader.LoadOrThrow<UISFXMonoContainer>("Other/Utils/UISFXSystems");
 
             var uiSfxSystem = Object.Instantiate(uiSfxSystemsPrefab);
 
 #if UNITY_WEBGL
-            var monoDisposeContainerPrefab = Resources.Load<DisposeContainer>("Other/Utils/[DISPOSE_CONTAINER]");
-            if (monoDisposeContainerPrefab == null)
-                throw new InvalidOperationException("Resources/Other/Utils/[DISPOSE_CONTAINER] prefab not found");
-
+            var monoDisposeContainerPrefab = ResourceLoader.LoadOrThrow<DisposeContainer>("Other/Utils/[DISPOSE_CONTAINER]");
             var monoDisposeContainer = Object.Instantiate(monoDisposeContainerPrefab);
+
             var infoYG = YG2.infoYG;
             if (infoYG != null && infoYG.QuitGameEvent != null)
             {

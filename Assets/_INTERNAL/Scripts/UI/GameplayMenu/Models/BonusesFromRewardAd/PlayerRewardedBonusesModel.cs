@@ -54,6 +54,8 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
 
                 _items.Add(itemModel);
             }
+
+            _rewardAdsBonusesService.RequestActualTemporaryBonusesState();
         }
 
         public void Dispose() => _disposables.Dispose();
@@ -76,10 +78,19 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
             _selectedBonus.CloseItemWindow();
         }
 
+        private void ApplyTemporaryBonusStateToItems(bool state)
+        {
+            foreach (var item in _items)
+            {
+                if (item.Type == BonusItemType.TemporaryBonus)
+                    item.SetBonusState(state);
+            }
+        }
+
         private void HandleChangedTemporaryBonusState(bool state)
         {
-            if (_selectedBonus.Type == BonusItemType.TemporaryBonus)
-                _selectedBonus.SetBonusState(state);
+            ApplyTemporaryBonusStateToItems(state);
+            Debug.Log($"[Player Bonuses from rewarded ad] Temporary State: {state}");
         }
 
         private void HandleSelectedBonusItem(BonusItemModel item)

@@ -2,6 +2,8 @@ using Core.GlobalGameState;
 using Core.Consts.Enums;
 using Core.Shop.Base;
 using Core.Shop.Models;
+using Core.AdsSystem;
+
 using R3;
 
 using System.Collections.Generic;
@@ -20,7 +22,6 @@ using NavigationButtonsView = UI.ShopMenu.Views.NavigationButtonsView;
 using NavigationButtonsViewModel = UI.ShopMenu.ViewModels.NavigationButtonsViewModel;
 using NavigationButtonsModel = UI.ShopMenu.Models.NavigationButtonsModel;
 using System.Linq;
-using Core.AdsSystem;
 
 namespace Entry.Local.Shop
 {

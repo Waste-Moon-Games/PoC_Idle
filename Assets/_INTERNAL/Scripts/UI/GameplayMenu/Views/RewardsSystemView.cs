@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using Core.GlobalGameState;
 using Core.AudioSystemCommon;
+using Utils.Localization;
+using TMPro;
 
 namespace UI.GameplayMenu.Views
 {
@@ -14,6 +16,7 @@ namespace UI.GameplayMenu.Views
         [Header("Content settings")]
         [SerializeField] private RewardView _rewardViewPrefab;
         [SerializeField] private Transform _rewardViewsContainer;
+        [SerializeField] private TextMeshProUGUI _nameText;
 
         [Space(10), Header("Other")]
         [SerializeField] private Button _openRewardsPanelButton;
@@ -22,6 +25,9 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private GameObject _rewardsPanel;
         [SerializeField] private Sprite _availableRewardsChestSprite;
         [SerializeField] private Sprite _defaultChestSprite;
+
+        [Space(5), Header("Localization setup")]
+        [SerializeField] private LocalizedText _nameLocalizations;
 
         private readonly CompositeDisposable _disposables = new();
 
@@ -38,6 +44,8 @@ namespace UI.GameplayMenu.Views
             transform.SetAsLastSibling();
             _openRewardsPanelButton.onClick.AddListener(OpenRewardsPanel);
             _closeRewardsPanelButton.onClick.AddListener(CloseRewardsPanel);
+
+            _nameText.text = _nameLocalizations.Get(Application.systemLanguage);
         }
 
         private void OnDestroy()

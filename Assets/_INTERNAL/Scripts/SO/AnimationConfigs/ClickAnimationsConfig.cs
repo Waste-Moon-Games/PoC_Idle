@@ -9,8 +9,10 @@ namespace SO.AnimationConfigs
         [field: SerializeField] public int InitPoolCount { get; private set; }
         [field: SerializeField] public Transform Cointainer { get; private set; }
 
+        [field: Header("Click settings")]
         [field: SerializeField] public Transform Target { get; private set; }
         [field: SerializeField] public Vector3 TargetScale { get; private set; }
         [field: SerializeField] public Vector3 DefaultScale { get; private set; }
+        [field: SerializeField] public float ClickAnimationDuration { get; private set; }
     }
 }

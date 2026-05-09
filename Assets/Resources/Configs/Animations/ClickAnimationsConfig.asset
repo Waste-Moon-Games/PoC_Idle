@@ -16,5 +16,6 @@ MonoBehaviour:
   <InitPoolCount>k__BackingField: 3
   <Cointainer>k__BackingField: {fileID: 6984799524095725571, guid: 7b9f1b1396f884548ba59beb42e49d29, type: 3}
   <Target>k__BackingField: {fileID: 6984799524095725571, guid: 7b9f1b1396f884548ba59beb42e49d29, type: 3}
-  <TargetScale>k__BackingField: {x: 0.95, y: 0.95, z: 0.95}
+  <TargetScale>k__BackingField: {x: 0.85, y: 0.85, z: 0.85}
   <DefaultScale>k__BackingField: {x: 1, y: 1, z: 1}
+  <ClickAnimationDuration>k__BackingField: 0.075

@@ -38,4 +38,4 @@ MonoBehaviour:
   <PriceRate>k__BackingField: 1.32
   <BonusRate>k__BackingField: 1.08
   <UseLevelCap>k__BackingField: 1
-  <MaxLevel>k__BackingField: 25
+  <MaxLevel>k__BackingField: 50

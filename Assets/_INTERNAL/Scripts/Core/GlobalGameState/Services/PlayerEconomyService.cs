@@ -43,11 +43,11 @@ namespace Core.GlobalGameState.Services
         private float _passiveIncomeBonusAmount = 1f;
 
         private bool _bonusState;
-        private bool _rewardedBonusState;
+        private bool _temporaryBonusIncomeState;
 
         private readonly float _bonusClickMultiplier;
+        private readonly float _temporaryBonusIncomeMultiplier;
         private readonly float _defaultClickMultiplier = 1f;
-        private readonly float _rewardedBonusClickMultiplier;
 
         public float PlayerClickAmount
         {
@@ -113,8 +113,9 @@ namespace Core.GlobalGameState.Services
             MainEconomyConfig config,
             Observable<bool> bonusStateChaged,
             PlayerRewardedBonusesService playerRewardedBonusesService,
-            float bonusClickMultiplier)
-            : this(config, bonusStateChaged, playerRewardedBonusesService, bonusClickMultiplier, null)
+            float bonusClickMultiplier,
+            float temporaryBonusIncomeMultiplier)
+            : this(config, bonusStateChaged, playerRewardedBonusesService, bonusClickMultiplier, temporaryBonusIncomeMultiplier, null)
         {
         }
 
@@ -123,6 +124,7 @@ namespace Core.GlobalGameState.Services
             Observable<bool> bonusStateChaged,
             PlayerRewardedBonusesService playerRewardedBonusesService,
             float bonusClickMultiplier,
+            float temporaryBonusIncomeMultiplier,
             PlayerData loadedData)
         {
             _wallets[CurrencyType.Coins] = new CurrencyWallet("Coins_Wallet", loadedData?.Coins ?? config.InitialCoinsWalletAmount);
@@ -146,11 +148,11 @@ namespace Core.GlobalGameState.Services
 
             bonusStateChaged.Subscribe(HandleChangedBonusState).AddTo(_disposables);
 
-            playerRewardedBonusesService.TemporaryBonusStateChanged.Subscribe(HandleChangedStateRewardBonus).AddTo(_disposables);
+            playerRewardedBonusesService.TemporaryBonusStateChanged.Subscribe(HandleChangedStateTemporaryBonus).AddTo(_disposables);
             playerRewardedBonusesService.CurrencyBonusGiven.Subscribe(HandleGivenCurrencyBonus).AddTo(_disposables);
 
             _bonusClickMultiplier = bonusClickMultiplier;
-            _rewardedBonusClickMultiplier = bonusClickMultiplier;
+            _temporaryBonusIncomeMultiplier = temporaryBonusIncomeMultiplier;
 
             _passiveIncomeAmountChangedSignal.AddTo(_disposables);
         }
@@ -242,8 +244,8 @@ namespace Core.GlobalGameState.Services
 
             if (_bonusState)
                 rewardMultiplier *= _bonusClickMultiplier;
-            if (_rewardedBonusState)
-                rewardMultiplier *= _rewardedBonusClickMultiplier;
+            if (_temporaryBonusIncomeState)
+                rewardMultiplier *= _temporaryBonusIncomeMultiplier;
 
             float result = PlayerClickAmount * rewardMultiplier;
 
@@ -256,8 +258,8 @@ namespace Core.GlobalGameState.Services
         {
             float result = PassiveIncomeAmount;
 
-            if(_rewardedBonusState)
-                result = PassiveIncomeAmount * _bonusClickMultiplier;
+            if(_temporaryBonusIncomeState)
+                result = PassiveIncomeAmount * _temporaryBonusIncomeMultiplier;
 
             return result;
         }
@@ -281,7 +283,7 @@ namespace Core.GlobalGameState.Services
         }
 
         private void HandleChangedBonusState(bool state) => _bonusState = state;
-        private void HandleChangedStateRewardBonus(bool state) => _rewardedBonusState = state;
+        private void HandleChangedStateTemporaryBonus(bool state) => _temporaryBonusIncomeState = state;
         private void HandleGivenCurrencyBonus(float amount) => GemsWallet.Add(amount);
     }
 }
