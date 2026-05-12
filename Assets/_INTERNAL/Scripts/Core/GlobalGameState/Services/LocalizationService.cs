@@ -20,6 +20,9 @@ namespace Core.GlobalGameState.Services
 
         public LocalizationService()
         {
+#if UNITY_EDITOR
+            CurrentLanguage = SystemLanguage.English;
+#endif
 #if UNITY_ANDROID
             _languageChangedSignal = new(CurrentLanguage);
 #endif

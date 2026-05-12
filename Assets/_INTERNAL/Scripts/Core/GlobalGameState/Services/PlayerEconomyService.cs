@@ -239,7 +239,7 @@ namespace Core.GlobalGameState.Services
 
         private float CalculateReward()
         {
-            float randRoll = RandRoll(_minTripleClickChance, _maxTripleClickChance);
+            float randRoll = RandRoll(0f, 1f);
             float rewardMultiplier = randRoll < TripleClickChance ? _bonusClickMultiplier : _defaultClickMultiplier;
 
             if (_bonusState)

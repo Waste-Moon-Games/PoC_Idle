@@ -43,7 +43,7 @@ namespace UI.GameplayMenu.Views
 
         private RectTransform _rectTransform;
 
-        private void Awake() => _rectTransform = GetComponent<RectTransform>();
+        private void Awake() => _rectTransform = _viewport.GetComponent<RectTransform>();
 
         private void Start()
         {
@@ -95,7 +95,7 @@ namespace UI.GameplayMenu.Views
 
             _rectTransform
                 .DOScale(_defaultScale, _openAnimDuration)
-                .SetEase(Ease.InOutBack);
+                .SetEase(Ease.InOutSine);
         }
 
         private void HandleReceivedOfflineIncome(bool state)
