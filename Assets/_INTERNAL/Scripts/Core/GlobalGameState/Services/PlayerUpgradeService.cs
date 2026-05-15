@@ -36,6 +36,7 @@ namespace Core.GlobalGameState.Services
                 { (ItemType.Chance, CurrencyType.Gems), IncreasePlayerGemsRewardPerClickChance },
                 { (ItemType.Bonus, CurrencyType.Gems), IncreasePlayerBonusPerClick },
                 { (ItemType.Passive, CurrencyType.Coins), IncreasePlayerPassiveIncome },
+                { (ItemType.GemsPerClick, CurrencyType.Gems), IncreaseGemsAmountPerClick }
             };
         }
 
@@ -69,5 +70,6 @@ namespace Core.GlobalGameState.Services
         private void IncreasePlayerGemsRewardPerClickChance(float amount) => _playerEconomyService.IncreaseGemsRewardClickChance(amount);
         private void IncreasePlayerBonusPerClick(float amount) => _playerBonusesService.TryIncreaseBonusPerClick(amount);
         private void IncreasePlayerPassiveIncome(float amount) => _playerEconomyService.IncreasePlayerPassiveIncome(amount);
+        private void IncreaseGemsAmountPerClick(float amount) => _playerEconomyService.IncreaseGemsAmountPerClick(amount);
     }
 }

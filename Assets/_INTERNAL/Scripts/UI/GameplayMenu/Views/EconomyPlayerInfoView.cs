@@ -18,7 +18,7 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private TextMeshProUGUI _currentCoinsPerClick;
         [SerializeField] private TextMeshProUGUI _currentPassiveIncome;
 
-        [Space(5), Header("Player Gems Info")]
+        [Space(5), Header("Player GemsPerClick Info")]
         [SerializeField] private TextMeshProUGUI _currentGemsCount;
 
         [Space(5), Header("Player Temporary Bonus Info")]

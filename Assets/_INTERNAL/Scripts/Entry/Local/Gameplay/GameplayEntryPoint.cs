@@ -3,7 +3,11 @@ using Core.GlobalGameState;
 
 using R3;
 
+using RuStore;
+using RuStore.Review;
+
 using SO.AnimationConfigs;
+
 using UI.GameplayMenu.Animations;
 using UI.GameplayMenu.Models;
 using UI.GameplayMenu.Models.BonusesFromRewardAd;
@@ -13,6 +17,7 @@ using UI.GameplayMenu.Views;
 using UI.GameplayMenu.Views.BonusesFromRewardAd;
 
 using UnityEngine;
+
 using Utils.CustomResourceLoader;
 using Utils.DI;
 #if UNITY_WEBGL
@@ -24,6 +29,7 @@ namespace Entry.Local.Gameplay
     public class GameplayEntryPoint : MonoBehaviour
     {
         private readonly GameplayResourceLoader _loader = new();
+        private ReviewScreen _reviewScreen;
 
         public Observable<MainMenuEvents> Run(DIContainer container)
         {
@@ -42,7 +48,16 @@ namespace Entry.Local.Gameplay
         private void CreateScene(DIContainer container, out NavigationButtonsModel navigationModel)
         {
             UIRootTopBlockView topRootView = _loader.LoadTopRootView();
+            
             var gameWorldState = container.Resolve<GameWorldState>();
+#if UNITY_ANDROID
+            RuStoreReviewManager.Instance.RequestReviewFlow(
+                onFailure: (error) =>
+                {
+                    HandleFailureRequestReview(error);
+                },
+                onSuccess: HandleSuccessRequestReview);
+#endif
 
             navigationModel = new(gameWorldState.AudioSystemService);
 
@@ -98,6 +113,10 @@ namespace Entry.Local.Gameplay
             mainGameView.AttachView(settingsView.gameObject);
 
             gameWorldState.AudioSystemService.StartPlayMainThemeMusic();
+
+            var reviewScreenPrefab = ResourceLoader.LoadOrThrow<ReviewScreen>("UI/Common/ReviewScreen");
+            _reviewScreen = Instantiate(reviewScreenPrefab);
+            mainGameView.AttachView(_reviewScreen.gameObject);
 
 #if UNITY_WEBGL
             YG2.GameplayStart();
@@ -200,5 +219,17 @@ namespace Entry.Local.Gameplay
             var animationsConfig = ResourceLoader.LoadOrThrow<ClickAnimationsConfig>("Configs/Animations/ClickAnimationsConfig");
             clickAnimationsService = new(target, animationsConfig);
         }
+
+#if UNITY_ANDROID
+        private void HandleSuccessRequestReview()
+        {
+            _reviewScreen.gameObject.SetActive(true);
+        }
+
+        private void HandleFailureRequestReview(RuStoreError error)
+        {
+            
+        }
+#endif
     }
 }

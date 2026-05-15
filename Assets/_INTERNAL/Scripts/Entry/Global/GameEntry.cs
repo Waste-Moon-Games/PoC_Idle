@@ -15,6 +15,7 @@ using Object = UnityEngine.Object;
 using Utils.DI;
 using Utils.SceneLoader;
 using Utils.CustomResourceLoader;
+using RuStore.Review;
 
 #if UNITY_WEBGL
 using YG;
@@ -68,6 +69,9 @@ namespace Entry.Global
 
             var scl = _rootContainer.Resolve<SceneLoaderService>();
             _sceneNavigatorService = new(scl, _rootContainer);
+#if UNITY_ANDROID
+            RuStoreReviewManager.Instance.Init();
+#endif
         }
 
         private void RegisterGlobalServices()

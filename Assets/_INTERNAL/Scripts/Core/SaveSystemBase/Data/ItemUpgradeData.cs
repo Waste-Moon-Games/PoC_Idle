@@ -11,6 +11,7 @@
         public string Description;
 
         public int ID;
+        public string StableId;
         public int Level;
 
         public bool IsOpened;

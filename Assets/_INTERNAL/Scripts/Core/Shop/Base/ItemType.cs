@@ -2,6 +2,6 @@
 {
     public enum ItemType
     {
-        Click, Chance, Passive, Bonus
+        Click, Chance, Passive, Bonus, GemsPerClick
     }
 }

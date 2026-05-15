@@ -1,4 +1,5 @@
 ﻿#if UNITY_ANDROID
+using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 using YandexMobileAds;
@@ -20,21 +21,17 @@ namespace Core.AdsSystem.Mobile
 
         public MobileAdsProvider()
         {
-            SetupLoaders();
+            SetupLoaders().Forget();
         }
 
-        public void SetupLoaders()
+        public async UniTask SetupLoaders()
         {
-            _rewardedLoader = new RewardedAdLoader();
-            _rewardedLoader.OnAdLoaded += HandleRewardedAdLoaded;
-            _rewardedLoader.OnAdFailedToLoad += HandleRewardedFailedToLoad;
+            _rewardedLoader = new();
 
             _interstitialLoader = new();
-            _interstitialLoader.OnAdLoaded += HandleInterstitialAdLoaded;
-            _interstitialLoader.OnAdFailedToLoad += HandleInterstitialFailedToLoad;
 
-            RequestRewarded();
-            RequestInterstitial();
+            await RequestRewarded();
+            await RequestInterstitial();
         }
 
         public void ShowInterstitial() => _interstitialAd?.Show();
@@ -50,7 +47,7 @@ namespace Core.AdsSystem.Mobile
             else
             {
                 _pendingShowRewarded = true;
-                RequestRewarded();
+                RequestRewarded().Forget();
             }
         }
 
@@ -66,23 +63,39 @@ namespace Core.AdsSystem.Mobile
             _interstitialAd = null;
         }
 
-        private void RequestRewarded()
+        private async UniTask RequestRewarded()
         {
             string adUnitId = "R-M-19182918-1";
-            AdRequestConfiguration adRequestConfiguration = new AdRequestConfiguration.Builder(adUnitId).Build();
-            _rewardedLoader.LoadAd(adRequestConfiguration);
+            try
+            {
+                var loadedAd = await _rewardedLoader.LoadAd(new(adUnitId));
+                HandleRewardedAdLoaded(loadedAd);
+            }
+            catch (AdLoadingException e)
+            {
+                HandleRewardedFailedToLoad(e);
+            }
+            
+            
         }
 
-        private void RequestInterstitial()
+        private async UniTask RequestInterstitial()
         {
             string adUnitId = "R-M-19182918-2";
-            AdRequestConfiguration adRequestConfiguration = new AdRequestConfiguration.Builder(adUnitId).Build();
-            _interstitialLoader.LoadAd(adRequestConfiguration);
+            try
+            {
+                var loadedAd = await _interstitialLoader.LoadAd(new(adUnitId));
+                HandleInterstitialAdLoaded(loadedAd);
+            }
+            catch (AdLoadingException e)
+            {
+                HandleInterstitialFailedToLoad(e);
+            }
         }
 
-        private void HandleInterstitialAdLoaded(object sender, InterstitialAdLoadedEventArgs e)
+        private void HandleInterstitialAdLoaded(Interstitial e)
         {
-            _interstitialAd = e.Interstitial;
+            _interstitialAd = e;
 
             _interstitialAd.OnAdClicked += HandleInterstitialAdClicked;
             _interstitialAd.OnAdShown += HandleInterstitialAdShown;
@@ -95,24 +108,24 @@ namespace Core.AdsSystem.Mobile
         private void HandleInterstitialAdShown(object sender, EventArgs e)
         {
             DestroyInterstitial();
-            RequestInterstitial();
+            RequestInterstitial().Forget();
         }
 
         private void HandleInterstitialAdFailedToShow(object sender, EventArgs e)
         {
             DestroyInterstitial();
-            RequestInterstitial();
+            RequestInterstitial().Forget();
         }
 
         private void HandleInterstitialAdDismissed(object sender, EventArgs e)
         {
             DestroyInterstitial();
-            RequestInterstitial();
+            RequestInterstitial().Forget();
         }
 
-        private void HandleRewardedAdLoaded(object sender, RewardedAdLoadedEventArgs e)
+        private void HandleRewardedAdLoaded(RewardedAd e)
         {
-            _rewardedAd = e.RewardedAd;
+            _rewardedAd = e;
 
             _rewardedAd.OnRewarded += HandleRewarded;
             _rewardedAd.OnAdShown += HandleRewardedAdShown;
@@ -129,27 +142,27 @@ namespace Core.AdsSystem.Mobile
         private void HandleRewardedAdDismissed(object sender, EventArgs e)
         {
             DestroyRewarded();
-            RequestRewarded();
+            RequestRewarded().Forget();
         }
 
-        private void HandleRewardedFailedToLoad(object sender, AdFailedToLoadEventArgs e)
+        private void HandleRewardedFailedToLoad(AdLoadingException e)
         {
             DestroyRewarded();
-            RequestRewarded();
+            RequestRewarded().Forget();
 
             _onComplete = null;
         }
 
-        private void HandleInterstitialFailedToLoad(object sender, AdFailedToLoadEventArgs e)
+        private void HandleInterstitialFailedToLoad(AdLoadingException e)
         {
             DestroyInterstitial();
-            RequestInterstitial();
+            RequestInterstitial().Forget();
         }
 
         private void HandleRewardedAdFailedToShow(object sender, AdFailureEventArgs e)
         {
             DestroyRewarded();
-            RequestRewarded();
+            RequestRewarded().Forget();
         }
 
         private void HandleRewardedAdShown(object sender, EventArgs e)

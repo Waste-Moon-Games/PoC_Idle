@@ -43,7 +43,7 @@ public class InterstitialAdComponentEditor : Editor
         serializedObject.Update();
 
         EditorGUILayout.LabelField("Interstitial", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(adName, new GUIContent("Ad Names"));
+        EditorGUILayout.PropertyField(adName, new GUIContent("Ad Name"));
 
         EditorGUILayout.Space();
 

@@ -2,6 +2,10 @@ using Core.Common.Player;
 using UnityEngine;
 using Utils.Localization;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace Core.Shop.Base
 {
     [CreateAssetMenu(fileName = "ItemConfig", menuName = "Configs/Shop/ItemConfig")]
@@ -9,6 +13,7 @@ namespace Core.Shop.Base
     {
         [field: Header("View Setup")]
         [field: SerializeField] public int ID { get; private set; }
+        [field: SerializeField] public string StableId { get; private set; }
         [field: SerializeField] public LocalizedText Names { get; private set; }
         [field: SerializeField] public Sprite Icon { get; private set; }
         [field: SerializeField] public Sprite CommonCurrencyIcon { get; private set; }
@@ -30,5 +35,16 @@ namespace Core.Shop.Base
         [field: Header("Optional Level Cap")]
         [field: SerializeField] public bool UseLevelCap { get; private set; } = false;
         [field: SerializeField, Min(1)] public int MaxLevel { get; private set; } = 1;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (!string.IsNullOrEmpty(StableId))
+                return;
+
+            StableId = GUID.Generate().ToString();
+            EditorUtility.SetDirty(this);
+        }
+#endif
     }
 }

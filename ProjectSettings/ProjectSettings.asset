@@ -143,7 +143,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 1.1R
+  bundleVersion: 1.1.2R
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -175,7 +175,7 @@ PlayerSettings:
     iPhone: 0
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
-  AndroidBundleVersionCode: 6
+  AndroidBundleVersionCode: 8
   AndroidMinSdkVersion: 25
   AndroidTargetSdkVersion: 36
   AndroidPreferredInstallLocation: 1
@@ -284,7 +284,7 @@ PlayerSettings:
   AndroidEnableTango: 0
   androidEnableBanner: 1
   androidUseLowAccuracyLocation: 0
-  androidUseCustomKeystore: 1
+  androidUseCustomKeystore: 0
   m_AndroidBanners:
   - width: 320
     height: 180
@@ -829,28 +829,29 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Android: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
+    Android: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
     EmbeddedLinux: DOTWEEN
     GameCoreScarlett: DOTWEEN
     GameCoreXboxOne: DOTWEEN
-    LinuxHeadlessSimulation: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
-    Nintendo Switch: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
-    PS4: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
-    PS5: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
+    LinuxHeadlessSimulation: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    Nintendo Switch: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    PS4: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    PS5: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
     QNX: DOTWEEN
     Stadia: DOTWEEN
-    Standalone: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
+    Standalone: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
     VisionOS: DOTWEEN
-    WebGL: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
-    Windows Store Apps: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
-    XboxOne: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
-    iPhone: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
-    tvOS: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;YandexGamesPlatform_yg
+    WebGL: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    Windows Store Apps: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    XboxOne: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    iPhone: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    tvOS: DOTWEEN;PLUGIN_YG_2;TMP_YG2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_YG2;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
     Android: 1
   il2cppCompilerConfiguration:
+    Android: 1
     WebGL: 1
   il2cppCodeGeneration:
     Android: 0

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: OverchargeCoreConfig
   m_EditorClassIdentifier: Core.Shop.Base::Core.Shop.Base.ItemModelConfig
   <ID>k__BackingField: 2
+  <StableId>k__BackingField: 1166abf4b87b9c247a82cfa9b54135e5
   <Names>k__BackingField:
     _entries:
     - Language: 10
@@ -36,7 +37,7 @@ MonoBehaviour:
   <StartUpgradeAmount>k__BackingField: 0.25
   <StartLevel>k__BackingField: 0
   <IsOpenedByDefault>k__BackingField: 1
-  <PriceRate>k__BackingField: 1.35
+  <PriceRate>k__BackingField: 1.15
   <BonusRate>k__BackingField: 1.2
   <UseLevelCap>k__BackingField: 1
   <MaxLevel>k__BackingField: 10

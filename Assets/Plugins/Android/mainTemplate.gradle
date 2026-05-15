@@ -6,16 +6,16 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
     implementation 'androidx.lifecycle:lifecycle-process:2.4.1' // Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:12
-    implementation 'com.yandex.ads.mediation:mobileads-mytarget:5.27.4.1' // Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/MobileadsMytargetMediationDependencies.xml:7
-    implementation 'com.yandex.ads.mediation:mobileads-unityads:4.16.4.0' // Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/MobileadsUnityAdsMediationDependencies.xml:7
-    implementation 'com.yandex.android:mobileads:7.18.2' // Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:7
-    implementation 'io.appmetrica.analytics:analytics:7.14.0' // Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:17
+    implementation 'com.yandex.android:mobileads:8.0.0' // Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:7
+    implementation 'io.appmetrica.analytics:analytics:8.0.0' // Assets/PluginYourGames/AdPlugins/YandexMobileAds/Editor/YandexMobileadsDependencies.xml:17
+    implementation 'ru.rustore.sdk:core:10.3.1' // Assets/RuStoreSDK/Editor/Common/CoreClientDependencies.xml:7
+    implementation 'ru.rustore.sdk:review:10.3.1' // Assets/RuStoreSDK/Editor/Review/ReviewDependencies.xml:7
 // Android Resolver Dependencies End
 **DEPS**}
 
 // Android Resolver Exclusions Start
 android {
-  packaging {
+  packagingOptions {
       exclude ('/lib/armeabi/*' + '*')
       exclude ('/lib/mips/*' + '*')
       exclude ('/lib/mips64/*' + '*')

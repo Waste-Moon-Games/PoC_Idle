@@ -10,7 +10,7 @@ using SO.PlayerConfigs;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Core.GlobalGameState.Services
@@ -158,8 +158,9 @@ namespace Core.GlobalGameState.Services
         }
 
         public void IncreasePlayerClick(float amount) => PlayerClickAmount += amount;
-        public void IncreaseTripleClickChance(float amount) => TripleClickChance = MathF.Min(TripleClickChance + amount, _maxTripleClickChance);
-        public void IncreaseGemsRewardClickChance(float amount) => GemsClickRewardChance = MathF.Min(GemsClickRewardChance + amount, _maxGemsRewardClickChance);
+        public void IncreaseGemsAmountPerClick(float amount) => _gemsClickRewardAmount += Mathf.RoundToInt(amount);
+        public void IncreaseTripleClickChance(float amount) => TripleClickChance = Mathf.Min(TripleClickChance + amount, _maxTripleClickChance);
+        public void IncreaseGemsRewardClickChance(float amount) => GemsClickRewardChance = Mathf.Min(GemsClickRewardChance + amount, _maxGemsRewardClickChance);
         public void IncreasePlayerPassiveIncome(float amount) => PassiveIncomeAmount += amount;
 
         public void IncreasePlayerClickByLevel(float amount)

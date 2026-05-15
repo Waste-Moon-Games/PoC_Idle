@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54369d851686d424db244b4403266e3a, type: 3}
   m_Name: FatePrismConfig
   m_EditorClassIdentifier: Core.Shop.Base::Core.Shop.Base.ItemModelConfig
-  <ID>k__BackingField: 4
+  <ID>k__BackingField: 5
+  <StableId>k__BackingField: 590bc9645f38c7247b39f0ecf5cdd8bf
   <Names>k__BackingField:
     _entries:
     - Language: 10

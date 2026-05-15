@@ -1,5 +1,6 @@
 ﻿#if UNITY_WEBGL
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using YG;
 
@@ -9,7 +10,7 @@ namespace Core.AdsSystem.Web
     {
         private Action _pendingCallback;
 
-        public void SetupLoaders() { }
+        public UniTask SetupLoaders() { }
 
         public void ShowInterstitial()
         {

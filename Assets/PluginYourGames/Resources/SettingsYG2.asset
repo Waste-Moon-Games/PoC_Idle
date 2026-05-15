@@ -194,9 +194,9 @@ MonoBehaviour:
     saveCloud: 1
     flush: 0
   Basic:
-    platform: {fileID: 11400000, guid: fabe82a4ab034324eb452cc7109f6d19, type: 2}
-    autoApplySettings: 1
-    autoPauseGame: 1
+    platform: {fileID: 0}
+    autoApplySettings: 0
+    autoPauseGame: 0
     editTimeScale: 1
     editEventSystem: 1
     autoGRA: 0

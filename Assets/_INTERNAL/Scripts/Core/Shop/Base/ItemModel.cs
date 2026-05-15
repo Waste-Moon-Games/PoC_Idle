@@ -37,6 +37,7 @@ namespace Core.Shop.Base
         public string Description => _description;
         public Sprite CurrencyIcon => _currencyIcon;
         public int Id => _config.ID;
+        public string StableId => _config.StableId;
         public ItemType Type => _config.Type;
         public CurrencyType CurrencyType => _config.CurrencyType;
         public float PriceRate => _config.PriceRate;
@@ -142,6 +143,7 @@ namespace Core.Shop.Base
 
                 ID = Id,
                 Name = Name,
+                StableId = StableId,
                 Description = _description,
 
                 Price = Price,
@@ -215,6 +217,9 @@ namespace Core.Shop.Base
             _maxedChangeSignal.OnNext(IsMaxed);
         }
 
-        public bool IsValidSaveFor(ItemUpgradeData loadedData) => loadedData != null && loadedData.ID == Id;
+        public bool IsValidSaveFor(ItemUpgradeData loadedData)
+        {
+            return loadedData != null && (!string.IsNullOrWhiteSpace(loadedData.StableId) ? loadedData.StableId == StableId : loadedData.ID == Id);
+        }
     }
 }

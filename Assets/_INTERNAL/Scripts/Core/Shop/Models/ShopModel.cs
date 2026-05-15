@@ -100,11 +100,22 @@ namespace Core.Shop.Models
             bool hasSavedData = savedShop != null;
             _state = hasSavedData ? savedShop.IsOpened : _itemsConfig.OpenedByDefault;
 
-            var savedItems = hasSavedData ? (savedShop.Items ?? new List<ItemUpgradeData>())
-                .Where(item => item != null)
-                .GroupBy(item => item.ID)
-                .ToDictionary(group => group.Key, group => group.Last())
-                : new Dictionary<int, ItemUpgradeData>();
+            var savedItemsByLegacyId = new Dictionary<int, ItemUpgradeData>();
+            var savedItemsByStableId = new Dictionary<string, ItemUpgradeData>();
+
+            if (hasSavedData)
+            {
+                foreach (var item in savedShop.Items ?? new List<ItemUpgradeData>())
+                {
+                    if (item == null)
+                        continue;
+
+                    savedItemsByLegacyId[item.ID] = item;
+
+                    if(!string.IsNullOrWhiteSpace(item.StableId))
+                        savedItemsByStableId[item.StableId] = item;
+                }
+            }
 
             _itemsDisposables.Dispose();
             _itemsDisposables = new();
@@ -137,7 +148,11 @@ namespace Core.Shop.Models
 
                 ItemModel model;
 
-                if(savedItems.TryGetValue(itemConfig.ID, out var savedItem))
+                var hasStableId = !string.IsNullOrWhiteSpace(itemConfig.StableId);
+                var hasSavedItem = (hasStableId && savedItemsByStableId.TryGetValue(itemConfig.StableId, out var savedItem))
+                    || savedItemsByLegacyId.TryGetValue(itemConfig.ID, out savedItem);
+
+                if(hasSavedItem)
                 {
                     ApplyUIMigration(savedItem, name, desc);
                     model = new(itemConfig, savedItem, desc, name);
@@ -205,8 +220,17 @@ namespace Core.Shop.Models
             if (!_itemsDict.TryGetValue(itemId, out var prevItem))
                 return;
 
-            if (!_itemsDict.TryGetValue(itemId + 1, out var nextItem))
+            var orderedItems = _itemsConfig.Items
+                .Where(config => config != null)
+                .Select(config => _itemsDict.TryGetValue(config.ID, out var model) ? model : null)
+                .Where(model => model != null)
+                .ToList();
+
+            int currentIndex = orderedItems.FindIndex(model => model.Id == itemId);
+            if (currentIndex < 0 || currentIndex + 1 >= orderedItems.Count)
                 return;
+
+            var nextItem = orderedItems[currentIndex + 1];
 
             if (nextItem.IsOpened)
                 return;

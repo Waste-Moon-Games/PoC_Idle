@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: IncreaseExpPerClickConfig
   m_EditorClassIdentifier: Core.Shop.Base::Core.Shop.Base.ItemModelConfig
   <ID>k__BackingField: 1
+  <StableId>k__BackingField: 39aadb5cf4f9ec842803cf2eac06a603
   <Names>k__BackingField:
     _entries:
     - Language: 10
@@ -36,7 +37,7 @@ MonoBehaviour:
   <StartUpgradeAmount>k__BackingField: 1
   <StartLevel>k__BackingField: 0
   <IsOpenedByDefault>k__BackingField: 1
-  <PriceRate>k__BackingField: 1.3
+  <PriceRate>k__BackingField: 1.1
   <BonusRate>k__BackingField: 1.35
   <UseLevelCap>k__BackingField: 1
   <MaxLevel>k__BackingField: 100
