@@ -9,6 +9,7 @@ namespace UI.GameplayMenu.Views
         private const string CATALOG_APP = "https://www.rustore.ru/catalog/app/";
 
         [SerializeField] private Button _openReviewURLButton;
+        [SerializeField] private Button _closeReviewScreen;
 
         private void OnEnable()
         {
@@ -18,11 +19,13 @@ namespace UI.GameplayMenu.Views
         private void Start()
         {
             _openReviewURLButton.onClick.AddListener(OpenReviewInRuStore);
+            _closeReviewScreen.onClick.AddListener(CloseReviewScreen);
         }
 
         private void OnDestroy()
         {
             _openReviewURLButton.onClick.RemoveListener(OpenReviewInRuStore);
+            _closeReviewScreen.onClick.RemoveListener(CloseReviewScreen);
         }
 
         private void LaunchReviewFlow()
@@ -36,6 +39,11 @@ namespace UI.GameplayMenu.Views
         {
             var url = CATALOG_APP + Application.identifier;
             Application.OpenURL(url);
+        }
+
+        private void CloseReviewScreen()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

@@ -12,6 +12,18 @@
 -dontwarn com.yandex.android.**
 -dontwarn com.yandex.ads.**
 
+# RuStore SDK (unity bridge + native sdk)
+-keep class ru.rustore.unitysdk.** { *; }
+-keep class ru.rustore.sdk.** { *; }
+-dontwarn ru.rustore.unitysdk.**
+-dontwarn ru.rustore.sdk.**
+
+# Kotlin runtime metadata often required by Android SDKs
+-keep class kotlin.Metadata { *; }
+-keep class kotlin.jvm.internal.** { *; }
+-dontwarn kotlin.**
+-dontwarn kotlinx.**
+
 # AppMetrica
 -keep class io.appmetrica.analytics.** { *; }
 -dontwarn io.appmetrica.analytics.**

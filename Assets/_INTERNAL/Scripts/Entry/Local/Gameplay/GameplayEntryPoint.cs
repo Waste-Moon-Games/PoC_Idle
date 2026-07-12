@@ -28,8 +28,14 @@ namespace Entry.Local.Gameplay
 {
     public class GameplayEntryPoint : MonoBehaviour
     {
+        private const float ReviewDelaySeconds = 5f * 60f;
+
         private readonly GameplayResourceLoader _loader = new();
         private ReviewScreen _reviewScreen;
+
+        private float _activeGameplayTime;
+        private bool _reviewFlowPrepared;
+        private bool _reviewWindowShown;
 
         public Observable<MainMenuEvents> Run(DIContainer container)
         {
@@ -50,14 +56,6 @@ namespace Entry.Local.Gameplay
             UIRootTopBlockView topRootView = _loader.LoadTopRootView();
             
             var gameWorldState = container.Resolve<GameWorldState>();
-#if UNITY_ANDROID
-            RuStoreReviewManager.Instance.RequestReviewFlow(
-                onFailure: (error) =>
-                {
-                    HandleFailureRequestReview(error);
-                },
-                onSuccess: HandleSuccessRequestReview);
-#endif
 
             navigationModel = new(gameWorldState.AudioSystemService);
 
@@ -116,12 +114,62 @@ namespace Entry.Local.Gameplay
 
             var reviewScreenPrefab = ResourceLoader.LoadOrThrow<ReviewScreen>("UI/Common/ReviewScreen");
             _reviewScreen = Instantiate(reviewScreenPrefab);
+            _reviewScreen.gameObject.SetActive(false);
             mainGameView.AttachView(_reviewScreen.gameObject);
+
+#if UNITY_ANDROID
+            RuStoreReviewManager.Instance.RequestReviewFlow(
+                onFailure: (error) =>
+                {
+                    HandleFailureRequestReview(error);
+                },
+                onSuccess: HandleSuccessRequestReview);
+#endif
 
 #if UNITY_WEBGL
             YG2.GameplayStart();
 #endif
+#if UNITY_ANDROID
+            StartCoroutine(TrackPlayerActivityForReview());
+#endif
         }
+
+#if UNITY_ANDROID
+        private System.Collections.IEnumerator TrackPlayerActivityForReview()
+        {
+            while (_reviewWindowShown == false)
+            {
+                if (Application.isFocused && IsPlayerActive())
+                    _activeGameplayTime += Time.unscaledDeltaTime;
+
+                TryShowReviewWindow();
+                yield return null;
+            }
+        }
+
+        private bool IsPlayerActive()
+        {
+            if (Input.touchCount > 0)
+                return true;
+
+            return Input.anyKey || Input.GetMouseButton(0);
+        }
+
+        private void TryShowReviewWindow()
+        {
+            if (_reviewWindowShown)
+                return;
+
+            if (_reviewFlowPrepared == false)
+                return;
+
+            if (_activeGameplayTime < ReviewDelaySeconds)
+                return;
+
+            _reviewWindowShown = true;
+            _reviewScreen.gameObject.SetActive(true);
+        }
+#endif
 
         private void CreateLocalRewardsSystem(in GameWorldState gameWorldState, in MainGameView mainGameView)
         {
@@ -223,13 +271,11 @@ namespace Entry.Local.Gameplay
 #if UNITY_ANDROID
         private void HandleSuccessRequestReview()
         {
-            _reviewScreen.gameObject.SetActive(true);
+            _reviewFlowPrepared = true;
+            TryShowReviewWindow();
         }
 
-        private void HandleFailureRequestReview(RuStoreError error)
-        {
-            
-        }
+        private void HandleFailureRequestReview(RuStoreError error) { }
 #endif
     }
 }
