@@ -11,17 +11,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Free Disk Space
+      - name: Disk usage before cleanup
+        run: df -h
+
+      - name: Free more disk space
         run: |
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /usr/local/lib/android
           sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache
+          sudo apt-get clean
           docker system prune -af
+          df -h
+
+      - name: Disk usage after cleanup
+        run: df -h
 
       - name: Build Unity Project
         uses: game-ci/unity-builder@v4
         env:
-          unityVersion: 6000.4.1f1
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           targetPlatform: Android
+          unityVersion: 6000.4.1f1
