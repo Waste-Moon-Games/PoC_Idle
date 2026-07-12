@@ -7,7 +7,7 @@ using RuStore;
 using RuStore.Review;
 
 using SO.AnimationConfigs;
-
+using System.Collections;
 using UI.GameplayMenu.Animations;
 using UI.GameplayMenu.Models;
 using UI.GameplayMenu.Models.BonusesFromRewardAd;
@@ -135,7 +135,7 @@ namespace Entry.Local.Gameplay
         }
 
 #if UNITY_ANDROID
-        private System.Collections.IEnumerator TrackPlayerActivityForReview()
+        private IEnumerator TrackPlayerActivityForReview()
         {
             while (_reviewWindowShown == false)
             {

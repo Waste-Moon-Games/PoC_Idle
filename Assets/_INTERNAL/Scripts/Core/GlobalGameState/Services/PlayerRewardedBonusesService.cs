@@ -83,6 +83,7 @@ namespace Core.GlobalGameState.Services
                 }
 
                 timer -= 1f;
+
                 _temporaryBonusDurationInSeconds = Mathf.Max(timer, 0f);
                 _temporaryBonusTimerChangedSignal.OnNext(timer);
 

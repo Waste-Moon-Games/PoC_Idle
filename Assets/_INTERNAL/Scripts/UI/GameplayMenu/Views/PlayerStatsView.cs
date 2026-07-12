@@ -1,4 +1,5 @@
 ﻿using Common.MVVM;
+using DG.Tweening;
 using R3;
 using TMPro;
 using UI.GameplayMenu.ViewModels;
@@ -17,6 +18,10 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private TextMeshProUGUI _currentLevelText;
         [SerializeField] private TextMeshProUGUI _expText;
 
+        [Space(5), Header("Animation setup")]
+        [SerializeField] private float _expChangeAnimationDuration = 0.5f;
+
+        private int _displayedExp = 0;
         private PlayerStatsViewModel _viewModel;
 
         private void OnDestroy()
@@ -39,8 +44,16 @@ namespace UI.GameplayMenu.Views
         private void HandleExpChanges(int currentExp, int expToLevelUp)
         {
             float progress = (float)currentExp / (float)expToLevelUp;
-            _expText.text = $"{currentExp}/{expToLevelUp}";
-            _expProgressBar.fillAmount = progress;
+
+            _expProgressBar.DOFillAmount(progress, _expChangeAnimationDuration).SetEase(Ease.OutQuad);
+
+            int oldExp = _displayedExp;
+            _displayedExp = currentExp;
+
+            DOVirtual.Float(oldExp, _displayedExp, _expChangeAnimationDuration, value =>
+            {
+                _expText.text = $"{Mathf.RoundToInt(value)}/{expToLevelUp}";
+            }).SetEase(Ease.OutQuad);
         }
     }
 }

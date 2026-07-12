@@ -10,7 +10,7 @@ namespace Core.AdsSystem.Web
     {
         private Action _pendingCallback;
 
-        public UniTask SetupLoaders() { }
+        public UniTask SetupLoaders() => UniTask.CompletedTask;
 
         public void ShowInterstitial()
         {

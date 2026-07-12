@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.GameplayMenu.Views
@@ -12,6 +13,7 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private Color _startColor;
         [SerializeField] private Color _endColor;
         [SerializeField] private Image _fill;
+        [SerializeField] private float _animationDuration = 0.5f;
 
         private float _startTime;
         private bool _isActive = false;
@@ -40,12 +42,11 @@ namespace UI.GameplayMenu.Views
         {
             _startTime = startTime;
             _bonusTimer.maxValue = startTime;
-            Debug.Log($"[Temporary Bonus View] Start time in seconds: {startTime}");
         }
 
         public void UpdateProgress(float time)
         {
-            _bonusTimer.value = time;
+            _bonusTimer.DOValue(time, _animationDuration).SetEase(Ease.OutQuad);
 
             float timer = Mathf.Clamp01(time / _startTime);
             _fill.color = Color.Lerp(_endColor, _startColor, timer);

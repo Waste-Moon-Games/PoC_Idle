@@ -1,10 +1,19 @@
 ﻿using Common.MVVM;
+
 using Core.Common.Animations;
+
+using DG.Tweening;
+
 using R3;
+
 using TMPro;
+
 using UI.GameplayMenu.Animations;
+
 using UI.GameplayMenu.ViewModels;
+
 using UnityEngine;
+
 using Utils.Formatter;
 
 namespace UI.GameplayMenu.Views
@@ -23,6 +32,13 @@ namespace UI.GameplayMenu.Views
 
         [Space(5), Header("Player Temporary Bonus Info")]
         [SerializeField] private TemporaryBonusView _temporaryBonus;
+
+        [Space(5), Header("Animations setup")]
+        [SerializeField] private float _coinsAnimationDuration = 0.5f;
+        [SerializeField] private float _gemsAnimationDuration = 0.75f;
+
+        private int _displayedCoinsCount = 0;
+        private int _displayedGemsCount = 0;
 
         private EconomyPlayerInfoViewModel _viewModel;
         private NumberFormatter _formatter;
@@ -57,8 +73,27 @@ namespace UI.GameplayMenu.Views
 
         public void BindAnimationService(ClickAnimationsService animationService) => _animationsService = animationService;
 
-        private void UpdateCoinsCount(float amount) => _currentCoinsCount.text = $"<color=#FFCB7A>{_formatter.FormatNumber(amount)}</color>";
-        private void UpdateGemsCount(float amount) => _currentGemsCount.text = $"<color=#E78DFF>{_formatter.FormatNumber(amount)}</color>";
+        private void UpdateCoinsCount(float amount)
+        {
+            int oldAmount = _displayedCoinsCount;
+            _displayedCoinsCount = Mathf.RoundToInt(amount);
+
+            DOVirtual.Float(oldAmount, _displayedCoinsCount, _coinsAnimationDuration, value =>
+            {
+                _currentCoinsCount.text = $"<color=#FFCB7A>{Mathf.RoundToInt(value)}</color>";
+            }).SetEase(Ease.OutQuad);
+        }
+
+        private void UpdateGemsCount(float amount)
+        {
+            int oldAmount = _displayedGemsCount;
+            _displayedGemsCount = Mathf.RoundToInt(amount);
+
+            DOVirtual.Float(oldAmount, _displayedGemsCount, _gemsAnimationDuration, value =>
+            {
+                _currentGemsCount.text = $"<color=#E78DFF>{_formatter.FormatNumber(Mathf.RoundToInt(value))}</color>";
+            }).SetEase(Ease.OutQuad);
+        }
 
         private void UpdateCoinsPerClick(float amount) => _currentCoinsPerClick.text = $"<color=#00FFFF>{_formatter.FormatNumber(amount)}</color>/Click";
 
