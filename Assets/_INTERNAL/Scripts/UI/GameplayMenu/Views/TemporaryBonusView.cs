@@ -13,7 +13,7 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private Color _startColor;
         [SerializeField] private Color _endColor;
         [SerializeField] private Image _fill;
-        [SerializeField] private float _animationDuration = 0.5f;
+        [SerializeField] private float _animationDuration = 1.25f;
 
         private float _startTime;
         private bool _isActive = false;

@@ -34,11 +34,13 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private TemporaryBonusView _temporaryBonus;
 
         [Space(5), Header("Animations setup")]
-        [SerializeField] private float _coinsAnimationDuration = 0.5f;
-        [SerializeField] private float _gemsAnimationDuration = 0.75f;
+        [SerializeField] private float _coinsAnimationDuration = 0.25f;
+        [SerializeField] private float _gemsAnimationDuration = 0.25f;
 
         private int _displayedCoinsCount = 0;
         private int _displayedGemsCount = 0;
+        private int _displayedCoinsPerClick = 0;
+        private int _displayedPassiveIncome = 0;
 
         private EconomyPlayerInfoViewModel _viewModel;
         private NumberFormatter _formatter;
@@ -80,7 +82,7 @@ namespace UI.GameplayMenu.Views
 
             DOVirtual.Float(oldAmount, _displayedCoinsCount, _coinsAnimationDuration, value =>
             {
-                _currentCoinsCount.text = $"<color=#FFCB7A>{Mathf.RoundToInt(value)}</color>";
+                _currentCoinsCount.text = $"<color=#FFCB7A>{_formatter.FormatNumber(Mathf.RoundToInt(value))}</color>";
             }).SetEase(Ease.OutQuad);
         }
 
@@ -95,11 +97,29 @@ namespace UI.GameplayMenu.Views
             }).SetEase(Ease.OutQuad);
         }
 
-        private void UpdateCoinsPerClick(float amount) => _currentCoinsPerClick.text = $"<color=#00FFFF>{_formatter.FormatNumber(amount)}</color>/Click";
+        private void UpdateCoinsPerClick(float amount)
+        {
+            int oldAmount = _displayedCoinsPerClick;
+            _displayedCoinsPerClick = Mathf.RoundToInt(amount);
+
+            DOVirtual.Float(oldAmount, _displayedCoinsPerClick, _coinsAnimationDuration, value =>
+            {
+                _currentCoinsPerClick.text = $"<color=#00FFFF>{_formatter.FormatNumber(Mathf.RoundToInt(value))}</color>/Click";
+            }).SetEase(Ease.OutQuad);
+        }
 
         private void UpdateAnimations(float amount) => _animationsService?.ClickAnimation(_formatter.FormatNumber(amount));
 
-        private void UpdateCurrentPassiveIncome(float amount) => _currentPassiveIncome.text = $"<color=green>{_formatter.FormatNumber(amount)}</color>/Sec";
+        private void UpdateCurrentPassiveIncome(float amount)
+        {
+            int oldAmount = _displayedPassiveIncome;
+            _displayedPassiveIncome = Mathf.RoundToInt(amount);
+
+            DOVirtual.Float(oldAmount, _displayedPassiveIncome, _coinsAnimationDuration, value =>
+            {
+                _currentPassiveIncome.text = $"<color=green>{_formatter.FormatNumber(Mathf.RoundToInt(value))}</color>/Sec";
+            }).SetEase(Ease.OutQuad);
+        }
 
         private void UpdateTemporaryBonusTimer(float time) => _temporaryBonus.UpdateProgress(time);
         private void HandleChangedTemporaryBonusState(bool state) => _temporaryBonus.Toggle(state);
