@@ -1,4 +1,4 @@
-name: First CI Test
+name: Checkout commit
 
 on:
   push: 
