@@ -1,4 +1,6 @@
 ﻿using Common.MVVM;
+using Core.AudioSystemCommon;
+using DG.Tweening;
 using R3;
 using UI.GameplayMenu.ViewModels;
 using UnityEngine;
@@ -34,13 +36,26 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private Sprite _musicOffSprite;
         [SerializeField] private Image _musicIcon;
 
+        [Space(5), Header("Animation Setup")]
+        [SerializeField] private float _toggleAnimationDuration = 1.25f;
+
+        private readonly SoundType _openSoundType = SoundType.Open;
+        private readonly SoundType _closeSoundType = SoundType.Close;
+
+        private Vector2 _originalScale;
+
         private SettingsViewModel _viewModel;
+
+        private Tween _openTween;
+        private Tween _closeTween;
 
         private void Start()
         {
 #if UNITY_WEBGL
             _openVK.gameObject.SetActive(false);
 #endif
+
+            _originalScale = Vector2.one;
 
             _sfxVolumeSlider.onValueChanged.AddListener(ChangeSFXVolume);
             _musicVolumeSlider.onValueChanged.AddListener(ChangeMusicVolume);
@@ -103,7 +118,39 @@ namespace UI.GameplayMenu.Views
 
         private void HandleChangedWindowState(bool state)
         {
-            gameObject.SetActive(state);
+            if (state)
+            {
+                AudioEventBus.InvokeSoundSignalByType(_openSoundType);
+                transform.localScale = Vector2.zero;
+                gameObject.SetActive(true);
+
+                _openTween?.Kill();
+                _closeTween?.Kill();
+
+                _openTween = transform
+                    .DOScale(Vector2.one, _toggleAnimationDuration)
+                    .SetEase(Ease.InOutSine)
+                    .OnComplete(() =>
+                    {
+                        transform.localScale = _originalScale;
+                    });
+            }
+            else
+            {
+                AudioEventBus.InvokeSoundSignalByType(_closeSoundType);
+
+                _openTween?.Kill();
+                _closeTween?.Kill();
+
+                _closeTween = transform
+                    .DOScale(Vector2.zero, _toggleAnimationDuration)
+                    .SetEase(Ease.InOutSine)
+                    .OnComplete(() =>
+                    {
+                        transform.localScale = Vector2.zero;
+                        gameObject.SetActive(false);
+                    });
+            }
         }
 
         private void HandleChangedSFXVolume(float volume) => _sfxVolumeSlider.value = volume;

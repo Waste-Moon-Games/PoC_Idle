@@ -149,7 +149,7 @@ namespace Core.GlobalGameState
                 _rewardedBonusesService,
                 _playerConfig.BonusClickMultiplier,
                 _rewardedsAdsConfig.Items.FirstOrDefault(item => item.Type == BonusItemType.TemporaryBonus).Amount);
-            _playerUpgradeService = new(_playerEconomyService, _playerBonusesService, _audioSystemService);
+            _playerUpgradeService = new(_playerEconomyService, _playerBonusesService);
             _playerRewardsByLevelService = new(
                 _rewardsByLevelConfig,
                 _cyclicRewardsConfig,
@@ -188,7 +188,7 @@ namespace Core.GlobalGameState
                 _playerConfig.BonusClickMultiplier,
                 _rewardedsAdsConfig.Items.FirstOrDefault(item => item.Type == BonusItemType.TemporaryBonus).Amount,
                 loadedData);
-            _playerUpgradeService = new(_playerEconomyService, _playerBonusesService, _audioSystemService);
+            _playerUpgradeService = new(_playerEconomyService, _playerBonusesService);
             _playerRewardsByLevelService = new(_rewardsByLevelConfig,
                 _cyclicRewardsConfig,
                 _playerBonusesService.LevelChanged,

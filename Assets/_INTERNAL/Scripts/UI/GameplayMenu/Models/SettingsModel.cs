@@ -14,7 +14,7 @@ namespace UI.GameplayMenu.Models
 
         private readonly BehaviorSubject<bool> _sfxStateChangedSignal;
         private readonly BehaviorSubject<bool> _musicStateChangedSignal;
-        private readonly BehaviorSubject<bool> _settingsWindowStateChangedSignal;
+        private readonly Subject<bool> _settingsWindowStateChangedSignal;
 
         private readonly AudioSystemService _audioSystemService;
 
@@ -46,7 +46,7 @@ namespace UI.GameplayMenu.Models
             _audioSystemService.SFXVolumeChange(_currentSfxVolume);
             _audioSystemService.MusicVolumeChange(_currentMusicVolume);
 
-            _settingsWindowStateChangedSignal = new(_settingsWindowState);
+            _settingsWindowStateChangedSignal = new();
 
             _sfxVolumeChangedSignal = new(_currentSfxVolume);
             _musicVolumeChangedSignal = new(_currentMusicVolume);

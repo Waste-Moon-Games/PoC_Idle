@@ -229,7 +229,6 @@ GameObject:
   - component: {fileID: 1942592263908401291}
   - component: {fileID: 354042187086157187}
   - component: {fileID: 795527229814174131}
-  - component: {fileID: 7141871710751720848}
   m_Layer: 5
   m_Name: CurrencyPanel
   m_TagString: Untagged
@@ -278,7 +277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 8818fa0db5547a347a0207fa1e0acafd, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -286,7 +285,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 019b78fb10c81644e80230d8364517ca, type: 3}
+  m_Sprite: {fileID: -856382779127982482, guid: 0420b8b3045edcd48ac2ccd29abd9a53, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -296,21 +295,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7141871710751720848
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2418233280537816946}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.6509804}
-  m_EffectDistance: {x: -15, y: -15}
-  m_UseGraphicAlpha: 1
 --- !u!1 &3712780305031499027
 GameObject:
   m_ObjectHideFlags: 0
@@ -635,8 +619,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -255}
-  m_SizeDelta: {x: 940, y: 480}
+  m_AnchoredPosition: {x: 0, y: -260}
+  m_SizeDelta: {x: 940, y: 520}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1430097333312334869
 CanvasRenderer:
@@ -663,6 +647,8 @@ MonoBehaviour:
   _currentPassiveIncome: {fileID: 6287151242521564209}
   _currentGemsCount: {fileID: 8282089697282757186}
   _temporaryBonus: {fileID: 2043162762894662601}
+  _coinsAnimationDuration: 0.25
+  _gemsAnimationDuration: 0.25
 --- !u!1 &4662987662086950198
 GameObject:
   m_ObjectHideFlags: 0
@@ -672,8 +658,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1199904783403014319}
-  - component: {fileID: 1141316504854985378}
-  - component: {fileID: 6376441989478929014}
   m_Layer: 5
   m_Name: PoCsContainer
   m_TagString: Untagged
@@ -702,44 +686,6 @@ RectTransform:
   m_AnchoredPosition: {x: 240, y: 0}
   m_SizeDelta: {x: 300, y: -44}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1141316504854985378
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4662987662086950198}
-  m_CullTransparentMesh: 1
---- !u!114 &6376441989478929014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4662987662086950198}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &5409628397055730917
 GameObject:
   m_ObjectHideFlags: 0
@@ -803,6 +749,7 @@ MonoBehaviour:
   _startColor: {r: 0.3921569, g: 0.9607844, b: 0.2901961, a: 1}
   _endColor: {r: 1, g: 0.118188396, b: 0, a: 1}
   _fill: {fileID: 38660890036485762}
+  _animationDuration: 1.25
 --- !u!1 &5824929150133603472
 GameObject:
   m_ObjectHideFlags: 0
@@ -1212,8 +1159,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7637833520721370233}
-  - component: {fileID: 1730366713743177747}
-  - component: {fileID: 214904843699575194}
   m_Layer: 5
   m_Name: GemsContainer
   m_TagString: Untagged
@@ -1242,44 +1187,6 @@ RectTransform:
   m_AnchoredPosition: {x: -240, y: 0}
   m_SizeDelta: {x: 300, y: -44}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1730366713743177747
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7069905786711461741}
-  m_CullTransparentMesh: 1
---- !u!114 &214904843699575194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7069905786711461741}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &7287461360364510818
 GameObject:
   m_ObjectHideFlags: 0
@@ -1639,7 +1546,6 @@ GameObject:
   - component: {fileID: 9191236574047108824}
   - component: {fileID: 1373105174250986553}
   - component: {fileID: 6989990574042933711}
-  - component: {fileID: 6700239548443351401}
   m_Layer: 5
   m_Name: StatsPanel
   m_TagString: Untagged
@@ -1688,7 +1594,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 8818fa0db5547a347a0207fa1e0acafd, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -1696,7 +1602,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 019b78fb10c81644e80230d8364517ca, type: 3}
+  m_Sprite: {fileID: -856382779127982482, guid: 0420b8b3045edcd48ac2ccd29abd9a53, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1706,18 +1612,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6700239548443351401
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9156666451887681668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.6509804}
-  m_EffectDistance: {x: -15, y: -15}
-  m_UseGraphicAlpha: 1

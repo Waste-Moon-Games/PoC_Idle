@@ -52,7 +52,6 @@ namespace Entry.Local.Shop
         private void CreateScene(in DIContainer container, out NavigationButtonsModel navigationButtonsModel)
         {
             var gameWorldState = container.Resolve<GameWorldState>();
-            navigationButtonsModel = new(gameWorldState.AudioSystemService);
 
             CreateModels(gameWorldState,
                 out EconomyPlayerInfoModel playerInfoModel);
@@ -71,6 +70,9 @@ namespace Entry.Local.Shop
             _shopModels.AddRange(gameWorldState.PlayerState.ShopState.ShopModels.Values);
             foreach (var shopModel in _shopModels)
                 shopModel.SubscribeOnItems();
+
+            var activeShopModel = _shopModels.FirstOrDefault(s => s.IsOpened);
+            navigationButtonsModel = new(activeShopModel);
 
             _shopMenuModel = new(_shopModels, navigationButtonsModel.Actions);
 

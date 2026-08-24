@@ -1,15 +1,14 @@
 using Common.MVVM;
-using R3;
+using UI.Common.Components;
 using UI.GameplayMenu.ViewModels;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.GameplayMenu.Views
 {
     public class NavigationButtonsView : MonoBehaviour, IView
     {
-        [SerializeField] private Button _shopButton;
-        [SerializeField] private Button _settingsButton;
+        [SerializeField] private ActionButton _shopButton;
+        [SerializeField] private ActionButton _settingsButton;
 
         private NavigationButtonsViewModel _viewModel;
 
@@ -18,8 +17,8 @@ namespace UI.GameplayMenu.Views
             if (_shopButton == null || _settingsButton == null)
                 return;
 
-            _shopButton.onClick.AddListener(HandleShopClick);
-            _settingsButton.onClick.AddListener(HandleSettingsClick);
+            _shopButton.OnButtonClick += HandleShopClick;
+            _settingsButton.OnButtonClick += HandleSettingsClick;
         }
 
         private void OnDestroy()
@@ -27,8 +26,8 @@ namespace UI.GameplayMenu.Views
             if (_shopButton == null || _settingsButton == null)
                 return;
 
-            _shopButton.onClick.RemoveListener(HandleShopClick);
-            _settingsButton.onClick.RemoveListener(HandleSettingsClick);
+            _shopButton.OnButtonClick -= HandleShopClick;
+            _settingsButton.OnButtonClick -= HandleSettingsClick;
         }
 
         public void BindViewModel(IViewModel viewModel)

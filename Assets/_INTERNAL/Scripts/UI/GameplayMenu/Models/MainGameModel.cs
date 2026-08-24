@@ -12,16 +12,16 @@ namespace UI.GameplayMenu.Models
         private readonly Subject<float> _bonusGaugeChangedSignal = new();
 
         private readonly PlayerState _model;
-        private readonly AudioSystemService _audioSystemService;
+
+        private readonly SoundType _clickSoundType = SoundType.Click;
 
         public Observable<float> BonusGaugeChange => _bonusGaugeChangedSignal.AsObservable();
 
-        public MainGameModel(PlayerState model, AudioSystemService audioSystemService)
+        public MainGameModel(PlayerState model)
         {
             _model = model;
 
             _model.BonusesService.BonusGaugeChanged.Subscribe(HandleChangedBonusGauge).AddTo(_disposables);
-            _audioSystemService = audioSystemService;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace UI.GameplayMenu.Models
         {
             _model.EconomyService.AddCoins();
             _model.BonusesService.Click();
-            _audioSystemService.PlaySoundByID(SoundsIds.ClickSound);
+            AudioEventBus.InvokeSoundSignalByType(_clickSoundType);
         }
 
         private void HandleChangedBonusGauge(float amount) => _bonusGaugeChangedSignal.OnNext(amount);

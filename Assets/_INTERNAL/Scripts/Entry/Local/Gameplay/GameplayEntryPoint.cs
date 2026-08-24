@@ -57,7 +57,7 @@ namespace Entry.Local.Gameplay
             
             var gameWorldState = container.Resolve<GameWorldState>();
 
-            navigationModel = new(gameWorldState.AudioSystemService);
+            navigationModel = new();
 
             CreateModels(
                 out MainGameModel mainGameModel,
@@ -184,7 +184,6 @@ namespace Entry.Local.Gameplay
 
             RewardsSystemView view = _loader.LoadRewardsSystemView();
             view.BindViewModel(viewModel);
-            view.BindAudioSystemService(audioSystemService);
 
             mainGameView.AttachView(view.gameObject);
         }
@@ -219,7 +218,7 @@ namespace Entry.Local.Gameplay
             var playerState = gameWorldState.PlayerState;
             var offlineIncomeLocalizationConfig = _loader.LoadOfflineIncomeLocalizationConfig();
 
-            mainGameModel = new MainGameModel(playerState, gameWorldState.AudioSystemService);
+            mainGameModel = new MainGameModel(playerState);
             playerInfoModel = new EconomyPlayerInfoModel();
             playerStatsModel = new PlayerStatsModel();
             offlineIncomeModel = new(

@@ -1,4 +1,5 @@
 using Common.MVVM;
+using R3;
 using UI.ShopMenu.Models;
 
 namespace UI.ShopMenu.ViewModels
@@ -6,6 +7,8 @@ namespace UI.ShopMenu.ViewModels
     public class NavigationButtonsViewModel : IViewModel
     {
         private NavigationButtonsModel _model;
+
+        public Observable<int> ActiveShopSignal => _model.ActiveShopOpenSignal;
 
         public void BindModel(IModel model)
         {

@@ -16,6 +16,6 @@ MonoBehaviour:
     ClipID: Click_Sound
     MixerGroup: {fileID: -4765821915389071513, guid: dab346246005db34188e7daea77c1eef, type: 2}
     Type: 0
-    Clip: {fileID: 8300000, guid: e4a567faea1fd074992997cf4523c135, type: 3}
+    Clip: {fileID: 8300000, guid: d0c28bc5c5bddb34bbbed6e62ea5d94d, type: 3}
     InitVolume: 1
     InitPitch: 1

@@ -2,15 +2,14 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using R3;
-using TMPro;
+using UI.Common.Components;
 using UI.GameplayMenu.ViewModels.BonusesFromRewardAd;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.Localization;
 
 namespace UI.GameplayMenu.Views.BonusesFromRewardAd
 {
-    [RequireComponent(typeof(Button))]
+    [RequireComponent(typeof(ActionButton))]
     public class BonusItemView : MonoBehaviour, IView
     {
         [SerializeField] private Vector2 _activatedPosition;
@@ -20,24 +19,24 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
 
         private BonusItemViewModel _viewModel;
 
-        private Button _openButton;
+        private ActionButton _openButton;
 
         private RectTransform _rectTransform;
         private Vector2 _defaultPosition;
 
         private void Awake()
         {
-            _openButton = GetComponent<Button>();
+            _openButton = GetComponent<ActionButton>();
             _rectTransform = GetComponent<RectTransform>();
 
-            _openButton.onClick.AddListener(HandleClickedButton);
+            _openButton.OnButtonClick += HandleClickedButton;
 
             _defaultPosition = _rectTransform.anchoredPosition;
         }
 
         private void OnDestroy()
         {
-            _openButton.onClick.RemoveListener(HandleClickedButton);
+            _openButton.OnButtonClick -= HandleClickedButton;
 
             _disposables.Dispose();
 
@@ -50,7 +49,7 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
 
             if (_viewModel.IsActive)
             {
-                _openButton.interactable = false;
+                _openButton.Interactable = false;
                 _rectTransform.anchoredPosition = _activatedPosition;
             }
 
@@ -66,7 +65,7 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
         {
             if (state)
             {
-                _openButton.interactable = false;
+                _openButton.Interactable = false;
 
                 _rectTransform.DOAnchorPos(_activatedPosition, _activateAnimationDuration)
                     .SetEase(Ease.OutElastic)
@@ -78,17 +77,17 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
             else
             {
                 gameObject.SetActive(true);
-                _openButton.interactable = true;
+                _openButton.Interactable = true;
                 _rectTransform.DOAnchorPos(_defaultPosition, _activateAnimationDuration).SetEase(Ease.OutElastic);
             }
         }
 
-        private void HandleBonusInfoWindowClosed() => _openButton.interactable = true;
+        private void HandleBonusInfoWindowClosed() => _openButton.Interactable = true;
 
         private void HandleClickedButton()
         {
             _viewModel.OpenItemWindow();
-            _openButton.interactable = false;
+            _openButton.Interactable = false;
         }
     }
 }

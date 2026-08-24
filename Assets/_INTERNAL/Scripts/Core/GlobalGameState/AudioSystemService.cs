@@ -4,12 +4,16 @@ using R3;
 using SO.AudioSystemConfigs;
 using System.Collections.Generic;
 using PlayerPrefs = RedefineYG.PlayerPrefs;
+using System.Linq;
 
 namespace Core.GlobalGameState
 {
     public class AudioSystemService
     {
+        private readonly CompositeDisposable _disposables = new();
+
         private readonly Dictionary<string, Sound> _soundsLibrary = new();
+        private readonly List<Sound> _cachedSounds;
         private readonly Sound _mainThemeMusic;
 
         private readonly Subject<Sound> _soundPlaySignal = new();
@@ -25,6 +29,8 @@ namespace Core.GlobalGameState
 
         private bool _currentSFXState;
         private bool _currentMusicState;
+
+        public IReadOnlyList<Sound> Sounds => _cachedSounds.AsReadOnly();
 
         public Observable<Sound> SoundPlaySignal => _soundPlaySignal.AsObservable();
         public Observable<float> SFXVolumeChangedSignal => _sfxVolumeChangedSignal.AsObservable();
@@ -42,16 +48,17 @@ namespace Core.GlobalGameState
                 var soundSource = sources[i];
                 var sound = new Sound(soundSource.SoundData);
 
-                SoundsIds.SetNewIdByType(sound.ID, sound.Type);
-
                 _soundsLibrary[sound.ID] = sound;
             }
 
             _mainThemeMusic = new(mainThemeMusic.SoundData);
+            _cachedSounds = _soundsLibrary.Values.ToList();
         }
 
         public void Initialization()
         {
+            AudioEventBus.SoundPlayById.Subscribe(PlaySoundByID).AddTo(_disposables);
+
             LoadPrefs();
 
             _sfxVolumeChangedSignal = new(_currentSFXVolume);
@@ -63,6 +70,7 @@ namespace Core.GlobalGameState
 
         public void Dispose()
         {
+            _disposables.Dispose();
             SavePrefs();
         }
 

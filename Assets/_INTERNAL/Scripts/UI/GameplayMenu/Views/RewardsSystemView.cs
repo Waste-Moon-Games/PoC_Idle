@@ -29,12 +29,14 @@ namespace UI.GameplayMenu.Views
         [Space(5), Header("Localization setup")]
         [SerializeField] private LocalizedText _nameLocalizations;
 
+        private readonly SoundType _openSoundType = SoundType.Open;
+        private readonly SoundType _closeSoundType = SoundType.Close;
+
         private readonly CompositeDisposable _disposables = new();
 
         private readonly List<RewardView> _rewadViews = new();
 
         private RewardsSystemViewModel _viewModel;
-        private AudioSystemService _audioSystemService;
 
         private void Start()
         {
@@ -70,17 +72,12 @@ namespace UI.GameplayMenu.Views
             _viewModel.RequestedRewardModels();
         }
 
-        public void BindAudioSystemService(AudioSystemService audioSystemService)
-        {
-            _audioSystemService = audioSystemService;
-        }
-
         private void OpenRewardsPanel()
         {
             if(!_rewardsPanel.activeSelf)
                 _rewardsPanel.SetActive(true);
 
-            _audioSystemService.PlaySoundByID(SoundsIds.CloseSound);
+            AudioEventBus.InvokeSoundSignalByType(_openSoundType);
         }
 
         private void CloseRewardsPanel()
@@ -88,7 +85,7 @@ namespace UI.GameplayMenu.Views
             if(_rewardsPanel.activeSelf)
                 _rewardsPanel.SetActive(false);
 
-            _audioSystemService.PlaySoundByID(SoundsIds.CloseSound);
+            AudioEventBus.InvokeSoundSignalByType(_closeSoundType);
         }
 
         private void HandleAvailableRewardsSignal(bool value)

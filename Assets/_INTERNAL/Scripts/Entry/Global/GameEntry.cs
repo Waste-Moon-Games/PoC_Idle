@@ -16,6 +16,8 @@ using Utils.DI;
 using Utils.SceneLoader;
 using Utils.CustomResourceLoader;
 using RuStore.Review;
+using SO.GameConfigs;
+using Core.AudioSystemCommon;
 
 #if UNITY_WEBGL
 using YG;
@@ -78,11 +80,12 @@ namespace Entry.Global
         {
             var adRatesConfig = ResourceLoader.LoadOrThrow<AdRatesConfig>("Configs/Ads/AdRatesConfig");
             var soundsLibrary = ResourceLoader.LoadOrThrow<SoundsCollectionConfig>("Configs/AudioSystem/SoundsCollectionConfig");
+            var loadingConfig = ResourceLoader.LoadOrThrow<LoadingConfig>("Configs/Game/Loading/LoadingConfig");
 
             _rootContainer.RegisterInstance(_loadingView);
 
             var loadingScreen = _rootContainer.Resolve<UILoadingView>();
-            _rootContainer.RegisterFactory(slc => new SceneLoaderService(loadingScreen)).AsSingle();
+            _rootContainer.RegisterFactory(slc => new SceneLoaderService(loadingScreen, loadingConfig)).AsSingle();
 
             _rootContainer.RegisterFactory(ssc => new SaveSystemContext(SaveSystemStrategyFactory.CreateStrategy())).AsSingle();
             _rootContainer.RegisterFactory(ads => new AdsSystemContext(AdsStrategyFactory.CreateStrategy(), adRatesConfig.InterstitialAdShowChance)).AsSingle();
@@ -91,6 +94,8 @@ namespace Entry.Global
             var saveSystemContext = _rootContainer.Resolve<SaveSystemContext>();
             var adsSystemContext = _rootContainer.Resolve<AdsSystemContext>();
             var audioSystemService = _rootContainer.Resolve<AudioSystemService>();
+            AudioEventBus.InitSoundCollection(audioSystemService.Sounds);
+
             _rootContainer.RegisterFactory(gws => new GameWorldState(saveSystemContext, adsSystemContext, audioSystemService)).AsSingle();
         }
 
