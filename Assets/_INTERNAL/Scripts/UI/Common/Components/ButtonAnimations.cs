@@ -22,6 +22,8 @@ namespace UI.Common.Components
         [Space(5), Header("Click Animation Setup")]
         [SerializeField] private float _clickAnimationDuration = 0.15f;
         [SerializeField] private Vector2 _clickedScale = Vector2.one;
+        [SerializeField] private float _clickedRandomRotation = 5f;
+        [SerializeField] private float _clickedRotationDuration = 0.075f;
 
         private RectTransform _objectRectTransform;
         private RectTransform _glowRectTransform;
@@ -42,6 +44,8 @@ namespace UI.Common.Components
             if(_glowRectTransform == null && glowRectObject != null)
                 _glowRectTransform = glowRectObject;
 
+            _clickAnimationDuration = 0.1f;
+
             _defaultScale = _objectRectTransform.localScale;
             StartObjectPulsing();
         }
@@ -49,10 +53,7 @@ namespace UI.Common.Components
         public void StartGlowPulsing()
         {
             if (!_useGlowPulsing && _glowRectTransform == null)
-            {
-                //Debug.LogWarning($"[Button Animations [{_glowRectTransform.gameObject.name}]] didn't use pulsing or null!");
                 return;
-            }
 
             if (_glowPulseSequence?.IsActive() == true)
                 return;
@@ -127,14 +128,26 @@ namespace UI.Common.Components
 
             float pressDuration = _clickAnimationDuration;
             float releaseDuration = _clickAnimationDuration * 2f;
+            float randomRotationOffset = UnityEngine.Random.Range(-_clickedRandomRotation, _clickedRandomRotation);
+            float clickedRotationDuration = _clickedRotationDuration;
+            float clickedRotationReleaseDuration = _clickedRotationDuration * 0.5f;
 
             _clickSequence.Append(
                 _objectRectTransform
                 .DOScale(_clickedScale, pressDuration)
-                .SetEase(Ease.OutQuart));
+                .SetEase(Ease.OutQuart)
+                );
+            _clickSequence.Append(
+                _objectRectTransform
+                .DOLocalRotate(new(0f, 0f, randomRotationOffset), clickedRotationDuration)
+                );
             _clickSequence.Append(_objectRectTransform
                 .DOScale(_defaultScale, releaseDuration)
                 .SetEase(Ease.OutBack));
+            _clickSequence.Append(
+                _objectRectTransform
+                .DOLocalRotate(Vector2.zero, clickedRotationReleaseDuration)
+                );
 
             _clickSequence.OnComplete(() =>
             {

@@ -38,7 +38,7 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 160}
-  m_Pivot: {x: 1, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1542615166402793823
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -146,6 +146,8 @@ MonoBehaviour:
     _glowPulseDelay: 0
     _clickAnimationDuration: 0.15
     _clickedScale: {x: 0.85, y: 0.85}
+    _clickedRandomRotation: 5
+    _clickedRotationDuration: 0.075
 --- !u!1 &994965734602495839
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,7 +484,7 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 160}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6136591765526542038
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -590,3 +592,5 @@ MonoBehaviour:
     _glowPulseDelay: 0
     _clickAnimationDuration: 0.15
     _clickedScale: {x: 0.85, y: 0.85}
+    _clickedRandomRotation: 5
+    _clickedRotationDuration: 0.075

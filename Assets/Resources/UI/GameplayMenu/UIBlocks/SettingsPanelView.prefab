@@ -2340,7 +2340,7 @@ MonoBehaviour:
   _musicOnSprite: {fileID: -7392700923183952967, guid: 3e5913c2172540343aa2dc085c4e38fd, type: 3}
   _musicOffSprite: {fileID: -530459508935938071, guid: bf5bdd80379cf8b4290443dcb6f0309e, type: 3}
   _musicIcon: {fileID: 3267114513207582464}
-  _toggleAnimationDuration: 1.25
+  _toggleAnimationDuration: 0.95
 --- !u!1 &8615978077505406095
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,10 +4,11 @@ using UI.GameplayMenu.ViewModels;
 using R3;
 using System.Collections.Generic;
 using UnityEngine.UI;
-using Core.GlobalGameState;
 using Core.AudioSystemCommon;
 using Utils.Localization;
 using TMPro;
+using UI.Common.Components;
+using UI.GameplayMenu.Views.Panels;
 
 namespace UI.GameplayMenu.Views
 {
@@ -19,10 +20,10 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private TextMeshProUGUI _nameText;
 
         [Space(10), Header("Other")]
-        [SerializeField] private Button _openRewardsPanelButton;
+        [SerializeField] private ActionButton _openRewardsPanelButton;
         [SerializeField] private Image _chestIcon;
-        [SerializeField] private Button _closeRewardsPanelButton;
-        [SerializeField] private GameObject _rewardsPanel;
+        [SerializeField] private ActionButton _closeRewardsPanelButton;
+        [SerializeField] private RewardsPanelView _rewardsPanel;
         [SerializeField] private Sprite _availableRewardsChestSprite;
         [SerializeField] private Sprite _defaultChestSprite;
 
@@ -44,10 +45,16 @@ namespace UI.GameplayMenu.Views
                 return;
 
             transform.SetAsLastSibling();
-            _openRewardsPanelButton.onClick.AddListener(OpenRewardsPanel);
-            _closeRewardsPanelButton.onClick.AddListener(CloseRewardsPanel);
+            _openRewardsPanelButton.OnButtonClick += HandleOpenRewardsButtonClick;
+            _closeRewardsPanelButton.OnButtonClick += HandleCloseRewardsButtonClick;
 
             _nameText.text = _nameLocalizations.Get(Application.systemLanguage);
+
+            if (_rewardsPanel.gameObject.activeSelf)
+            {
+                _rewardsPanel.gameObject.SetActive(false);
+                _rewardsPanel.MoveDisappearAnimation();
+            }
         }
 
         private void OnDestroy()
@@ -55,8 +62,8 @@ namespace UI.GameplayMenu.Views
             if(_openRewardsPanelButton == null || _closeRewardsPanelButton == null)
                 return;
 
-            _openRewardsPanelButton.onClick.RemoveListener(OpenRewardsPanel);
-            _closeRewardsPanelButton.onClick.RemoveListener(CloseRewardsPanel);
+            _openRewardsPanelButton.OnButtonClick -= HandleOpenRewardsButtonClick;
+            _closeRewardsPanelButton.OnButtonClick -= HandleCloseRewardsButtonClick;
 
             _viewModel.Dispose();
             _disposables.Dispose();
@@ -72,18 +79,18 @@ namespace UI.GameplayMenu.Views
             _viewModel.RequestedRewardModels();
         }
 
-        private void OpenRewardsPanel()
+        private void HandleOpenRewardsButtonClick()
         {
-            if(!_rewardsPanel.activeSelf)
-                _rewardsPanel.SetActive(true);
+            if(!_rewardsPanel.gameObject.activeSelf)
+                _rewardsPanel.MoveAppearAnimation();
 
             AudioEventBus.InvokeSoundSignalByType(_openSoundType);
         }
 
-        private void CloseRewardsPanel()
+        private void HandleCloseRewardsButtonClick()
         {
-            if(_rewardsPanel.activeSelf)
-                _rewardsPanel.SetActive(false);
+            if(_rewardsPanel.gameObject.activeSelf)
+                _rewardsPanel.MoveDisappearAnimation();
 
             AudioEventBus.InvokeSoundSignalByType(_closeSoundType);
         }

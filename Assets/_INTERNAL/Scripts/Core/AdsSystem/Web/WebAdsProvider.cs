@@ -24,13 +24,20 @@ namespace Core.AdsSystem.Web
             }
         }
 
-        public void ShowRewarded(Action onComplete = null)
+        public void ShowRewarded(RewardedAdType type, Action onComplete = null)
         {
             _pendingCallback = onComplete;
+            
+            string adId = string.Empty;
+
+            if(type == RewardedAdType.Free_Gems)
+                adId = "Free_Gems";
+            else
+                adId = "Income_Boost";
 
             try
             {
-                YG2.RewardedAdvShow("", () =>
+                YG2.RewardedAdvShow(adId, () =>
                 {
                     _pendingCallback?.Invoke();
                     _pendingCallback = null;

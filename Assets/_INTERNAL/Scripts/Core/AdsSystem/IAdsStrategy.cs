@@ -7,6 +7,6 @@ namespace Core.AdsSystem
     {
         UniTask SetupLoaders();
         void ShowInterstitial();
-        void ShowRewarded(Action onComplete = null);
+        void ShowRewarded(RewardedAdType type, Action onComplete = null);
     }
 }

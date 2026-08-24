@@ -50,7 +50,7 @@ namespace Core.GlobalGameState.Services
 
         public void ReceiveDoubleOfflineIncome()
         {
-            _adsContext.ShowRewarded(() =>
+            _adsContext.ShowRewarded(RewardedAdType.Income_Boost, () =>
             {
                 ReceiveOfflineIncome(2f);
                 _offlineIncomeReceived = true;

@@ -14,7 +14,7 @@ namespace Core.AdsSystem
             _interstitialAdShowChance = interstitialAdShowChance;
         }
 
-        public void ShowRewarded(Action onCompeted = null) => _currentStrategy.ShowRewarded(onCompeted);
+        public void ShowRewarded(RewardedAdType type, Action onCompeted = null) => _currentStrategy.ShowRewarded(type, onCompeted);
 
         public void ShowInterstitial()
         {

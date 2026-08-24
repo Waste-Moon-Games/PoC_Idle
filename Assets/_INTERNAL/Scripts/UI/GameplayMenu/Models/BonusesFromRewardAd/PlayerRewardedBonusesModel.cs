@@ -62,12 +62,12 @@ namespace UI.GameplayMenu.Models.BonusesFromRewardAd
 
         public void ShowAd()
         {
-            _adsSystem.ShowRewarded(() =>
+            RewardedAdType type = _selectedBonus.Type == BonusItemType.GetCurrencyBonus ? RewardedAdType.Income_Boost : RewardedAdType.Free_Gems;
+
+            _adsSystem.ShowRewarded(type, () =>
             {
                 if (_selectedBonus.Type == BonusItemType.TemporaryBonus)
-                {
                     _rewardAdsBonusesService.ActiveTemporaryBonus();
-                }
                 else if (_selectedBonus.Type == BonusItemType.GetCurrencyBonus)
                     _rewardAdsBonusesService.GiveCurrencyBonus(_selectedBonus.Amount);
             });

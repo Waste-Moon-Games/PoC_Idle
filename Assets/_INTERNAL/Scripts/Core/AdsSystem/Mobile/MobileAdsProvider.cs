@@ -9,8 +9,13 @@ namespace Core.AdsSystem.Mobile
 {
     public class MobileAdsProvider : IAdsStrategy
     {
+        private readonly string _freeGemsRewardedID = "R-M-19758917-2";
+        private readonly string _incomeBoostRewardedID = "R-M-19758917-3";
+        private readonly string _interstitialAdID = "R-M-19758917-1";
+
         private RewardedAdLoader _rewardedLoader;
         private RewardedAd _rewardedAd;
+        private RewardedAdType _type;
 
         private InterstitialAdLoader _interstitialLoader;
         private Interstitial _interstitialAd;
@@ -30,24 +35,22 @@ namespace Core.AdsSystem.Mobile
 
             _interstitialLoader = new();
 
-            await RequestRewarded();
             await RequestInterstitial();
         }
 
         public void ShowInterstitial() => _interstitialAd?.Show();
 
-        public void ShowRewarded(Action onComplete = null)
+        public void ShowRewarded(RewardedAdType type, Action onComplete = null)
         {
             _onComplete = onComplete;
+            _type = type;
 
             if (_rewardedAd != null)
-            {
                 _rewardedAd.Show();
-            }
             else
             {
                 _pendingShowRewarded = true;
-                RequestRewarded().Forget();
+                RequestRewarded(type).Forget();
             }
         }
 
@@ -63,9 +66,15 @@ namespace Core.AdsSystem.Mobile
             _interstitialAd = null;
         }
 
-        private async UniTask RequestRewarded()
+        private async UniTask RequestRewarded(RewardedAdType type)
         {
-            string adUnitId = "R-M-19182918-1";
+            string adUnitId  = string.Empty;
+
+            if(type == RewardedAdType.Free_Gems)
+                adUnitId = _freeGemsRewardedID;
+            else
+                adUnitId = _incomeBoostRewardedID;
+
             try
             {
                 var loadedAd = await _rewardedLoader.LoadAd(new(adUnitId));
@@ -75,13 +84,11 @@ namespace Core.AdsSystem.Mobile
             {
                 HandleRewardedFailedToLoad(e);
             }
-            
-            
         }
 
         private async UniTask RequestInterstitial()
         {
-            string adUnitId = "R-M-19182918-2";
+            string adUnitId = _interstitialAdID;
             try
             {
                 var loadedAd = await _interstitialLoader.LoadAd(new(adUnitId));
@@ -135,20 +142,20 @@ namespace Core.AdsSystem.Mobile
             if (_pendingShowRewarded)
             {
                 _pendingShowRewarded = false;
-                ShowRewarded(_onComplete);
+                ShowRewarded(_type, _onComplete);
             }
         }
 
         private void HandleRewardedAdDismissed(object sender, EventArgs e)
         {
             DestroyRewarded();
-            RequestRewarded().Forget();
+            RequestRewarded(_type).Forget();
         }
 
         private void HandleRewardedFailedToLoad(AdLoadingException e)
         {
             DestroyRewarded();
-            RequestRewarded().Forget();
+            RequestRewarded(_type).Forget();
 
             _onComplete = null;
         }
@@ -162,7 +169,7 @@ namespace Core.AdsSystem.Mobile
         private void HandleRewardedAdFailedToShow(object sender, AdFailureEventArgs e)
         {
             DestroyRewarded();
-            RequestRewarded().Forget();
+            RequestRewarded(_type).Forget();
         }
 
         private void HandleRewardedAdShown(object sender, EventArgs e)
