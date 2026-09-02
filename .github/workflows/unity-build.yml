@@ -1,38 +1,101 @@
-name: Unity Build
+name: Build Android APK
 
-on: 
+on:
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build:
+    name: Build signed Release APK
     runs-on: ubuntu-latest
+    environment: Cloud Unity Build
+    timeout-minutes: 45
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
-      - name: Disk usage before cleanup
-        run: df -h
-
-      - name: Free more disk space
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
-          sudo rm -rf /opt/hostedtoolcache
-          sudo apt-get clean
-          docker system prune -af
-          df -h
-
-      - name: Disk usage after cleanup
-        run: df -h
-
-      - name: Build Unity Project
+      - name: Build APK
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL}}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          targetPlatform: Android
+          projectPath: .
           unityVersion: 6000.4.1f1
+          targetPlatform: Android
+          buildName: com.WasteMoonGames.PoCIdle
+          androidExportType: androidPackage
+          androidKeystoreName: PoC.keystore
+          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          androidKeyaliasName: ${{ secrets.ANDROID_KEY_ALIAS }}
+          androidKeyaliasPass: ${{ secrets.ANDROID_KEY_ALIAS_PASSWORD }}
+
+      - name: Locate APK
+        id: apk
+        shell: bash
+        run: |
+          apk_path="$(find build -type f -name '*.apk' -print -quit)"
+          if [ -z "$apk_path" ]; then
+            echo "APK was not produced" >&2
+            exit 1
+          fi
+          echo "path=$apk_path" >> "$GITHUB_OUTPUT"
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: com.MSTech.MellBCannonStrike
+          path: ${{ steps.apk.outputs.path }}
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Send APK to Telegram
+        shell: bash
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          APK_PATH: ${{ steps.apk.outputs.path }}
+        run: |
+          if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+            echo "Telegram secrets are not configured" >&2
+            exit 1
+          fi
+          telegram_url="https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument"
+          # Keep each multipart request below Telegram's 50 MB document limit.
+          max_part_size=$((45 * 1024 * 1024))
+          apk_size="$(stat -c '%s' "$APK_PATH")"
+          parts_dir="$RUNNER_TEMP/apk-parts"
+          mkdir -p "$parts_dir"
+          if [ "$apk_size" -le "$max_part_size" ]; then
+            parts=("$APK_PATH")
+          else
+            echo "APK is ${apk_size} bytes; splitting it for Telegram"
+            split -b "$max_part_size" -d -a 3 "$APK_PATH" "$parts_dir/part-"
+            mapfile -t parts < <(find "$parts_dir" -type f -name 'part-*' -print | sort)
+          fi
+          part_count="${#parts[@]}"
+          part_number=0
+          for part in "${parts[@]}"; do
+            part_number=$((part_number + 1))
+            if [ "$part_count" -eq 1 ]; then
+              caption="Release APK: com.MSTech.MellBCannonStrike"
+            else
+              caption="Release APK part $part_number/$part_count. Reassemble in order with: cat part-* > com.mellbcannon.strike.apk"
+            fi
+            response="$(curl --fail --silent --show-error \
+              --request POST \
+              --form-string "chat_id=$TELEGRAM_CHAT_ID" \
+              --form "document=@$part" \
+              --form-string "caption=$caption" \
+              "$telegram_url")"
+            if ! grep -q '"ok":true' <<< "$response"; then
+              echo "Telegram API rejected part $part_number: $response" >&2
+              exit 1
+            fi
+          done
