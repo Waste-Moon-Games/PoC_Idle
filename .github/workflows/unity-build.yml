@@ -87,9 +87,9 @@ jobs:
           for part in "${parts[@]}"; do
             part_number=$((part_number + 1))
             if [ "$part_count" -eq 1 ]; then
-              caption="Release APK: com.MSTech.MellBCannonStrike"
+              caption="Release APK: com.WasteMoonGames.PoCIdle"
             else
-              caption="Release APK part $part_number/$part_count. Reassemble in order with: cat part-* > com.mellbcannon.strike.apk"
+              caption="Release APK part $part_number/$part_count. Reassemble in order with: cat part-* > com.WasteMoonGames.PoCIdle"
             fi
             response="$(curl --fail --silent --show-error \
               --request POST \
