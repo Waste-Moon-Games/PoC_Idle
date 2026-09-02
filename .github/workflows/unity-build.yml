@@ -30,6 +30,9 @@ jobs:
           unityVersion: 6000.4.1f1
           targetPlatform: Android
           buildName: com.WasteMoonGames.PoCIdle
+          versioning: Custom
+          version: "2.1R"
+          androidVersionCode: 12
           androidExportType: androidPackage
           androidKeystoreName: PoC.keystore
           androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
