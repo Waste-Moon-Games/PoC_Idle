@@ -30,6 +30,9 @@ jobs:
           unityVersion: 6000.4.1f1
           targetPlatform: Android
           buildName: com.WasteMoonGames.PoCIdle
+          versioning: Custom
+          version: "2.1R"
+          androidVersionCode: 12
           androidExportType: androidPackage
           androidKeystoreName: PoC.keystore
           androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -50,7 +53,7 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: com.MSTech.MellBCannonStrike
+          name: com.WasteMoonGames.PoCIdle
           path: ${{ steps.apk.outputs.path }}
           if-no-files-found: error
           retention-days: 14
@@ -84,9 +87,9 @@ jobs:
           for part in "${parts[@]}"; do
             part_number=$((part_number + 1))
             if [ "$part_count" -eq 1 ]; then
-              caption="Release APK: com.MSTech.MellBCannonStrike"
+              caption="Release APK: com.WasteMoonGames.PoCIdle"
             else
-              caption="Release APK part $part_number/$part_count. Reassemble in order with: cat part-* > com.mellbcannon.strike.apk"
+              caption="Release APK part $part_number/$part_count. Reassemble in order with: cat part-* > com.WasteMoonGames.PoCIdle"
             fi
             response="$(curl --fail --silent --show-error \
               --request POST \
