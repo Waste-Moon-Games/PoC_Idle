@@ -148,6 +148,7 @@ MonoBehaviour:
     _clickedScale: {x: 0.85, y: 0.85}
     _clickedRandomRotation: 5
     _clickedRotationDuration: 0.075
+    _onClick: 8
 --- !u!1 &994965734602495839
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,6 +162,7 @@ GameObject:
   - component: {fileID: 1218967456872657449}
   - component: {fileID: 4764770582704606451}
   - component: {fileID: 241926066703160757}
+  - component: {fileID: 278011024316507301}
   m_Layer: 5
   m_Name: UIButtonsView
   m_TagString: Untagged
@@ -266,6 +268,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: UI.GameplayMenu.Views::UI.GameplayMenu.Views.UIButtonsView
   _shopButton: {fileID: 5814636706542605039}
   _settingsButton: {fileID: 4948203528526541750}
+  _buttonsAnimationService: {fileID: 278011024316507301}
+--- !u!114 &278011024316507301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994965734602495839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 361556bdfb17fb24d872fe31637da310, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.Common.Components.ActionButtonsAnimationsService
+  _buttonsToWaveAnimation:
+  - {fileID: 5814636706542605039}
+  - {fileID: 4948203528526541750}
+  _waveTargetScale: {x: 1.1, y: 1.1}
+  _waveDelay: 0.45
+  _waveDuration: 0.75
+  _delayBetweenWaves: 2.5
 --- !u!1 &1563859731451912048
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,3 +616,4 @@ MonoBehaviour:
     _clickedScale: {x: 0.85, y: 0.85}
     _clickedRandomRotation: 5
     _clickedRotationDuration: 0.075
+    _onClick: 8

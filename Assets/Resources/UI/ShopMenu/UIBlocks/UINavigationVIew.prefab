@@ -491,6 +491,9 @@ MonoBehaviour:
     _glowPulseDelay: 0
     _clickAnimationDuration: 0.15
     _clickedScale: {x: 0.9, y: 0.9}
+    _clickedRandomRotation: 5
+    _clickedRotationDuration: 0.075
+    _onClick: 8
 --- !u!1 &2725728189903915660
 GameObject:
   m_ObjectHideFlags: 0
@@ -777,7 +780,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 2100000, guid: 3765da1f0b159d84192a64b85145a7be, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -852,7 +855,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 2100000, guid: 3765da1f0b159d84192a64b85145a7be, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -991,6 +994,9 @@ MonoBehaviour:
     _glowPulseDelay: 0
     _clickAnimationDuration: 0.15
     _clickedScale: {x: 0.9, y: 0.9}
+    _clickedRandomRotation: 5
+    _clickedRotationDuration: 0.075
+    _onClick: 8
 --- !u!1 &5330219118168012497
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,7 +1056,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 2100000, guid: 3765da1f0b159d84192a64b85145a7be, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1264,6 +1270,9 @@ MonoBehaviour:
     _glowPulseDelay: 0
     _clickAnimationDuration: 0.15
     _clickedScale: {x: 0.9, y: 0.9}
+    _clickedRandomRotation: 5
+    _clickedRotationDuration: 0.075
+    _onClick: 8
 --- !u!1 &6528234068331542223
 GameObject:
   m_ObjectHideFlags: 0
@@ -1607,3 +1616,6 @@ MonoBehaviour:
     _glowPulseDelay: 0
     _clickAnimationDuration: 0.15
     _clickedScale: {x: 0.9, y: 0.9}
+    _clickedRandomRotation: 5
+    _clickedRotationDuration: 0.075
+    _onClick: 8
