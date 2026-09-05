@@ -98,22 +98,23 @@ jobs:
             --arg chat_id "$TELEGRAM_CHAT_ID" \
             --arg text "Release APK готов!
           
-          *com.WasteMoonGames.PoCIdle* v2.1R
+          com.WasteMoonGames.PoCIdle v2.1R
           
           Скачать артефакт:
-          {$ARTIFACT_URL}" \
-            --arg parse_mode "Markdown" \
-            '{chat_id: $chat_id, text: $text, parse_mode: $parse_mode}')
+          $ARTIFACT_URL" \
+            '{chat_id: $chat_id, text: $text}')
           
+          echo "Sending message to Telegram..."
+
           response="$(curl --fail --silent --show-error \
             --request POST \
             --header "Content-Type: application/json" \
             --data "$json_payload" \
             "$telegram_url")"
-          
+
           if ! echo "$response" | grep -q '"ok":true'; then
             echo "Telegram API rejected message: $response" >&2
             exit 1
           fi
-          
+
           echo "Telegram message sent successfully!"
