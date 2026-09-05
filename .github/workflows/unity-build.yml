@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   build:
@@ -50,6 +51,7 @@ jobs:
             exit 1
           fi
           echo "path=$apk_path" >> "$GITHUB_OUTPUT"
+
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
@@ -58,47 +60,57 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Send APK to Telegram
+      - name: Get artifact URL
+        id: artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Получаем список артефактов для текущего run
+          artifacts_json=$(gh api repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts)
+          
+          # Ищем артефакт по имени
+          artifact_id=$(echo "$artifacts_json" | jq -r '.artifacts[] | select(.name == "com.WasteMoonGames.PoCIdle") | .id')
+          
+          if [ -z "$artifact_id" ] || [ "$artifact_id" = "null" ]; then
+            echo "Failed to find artifact" >&2
+            exit 1
+          fi
+          
+          # Формируем URL для скачивания артефакта
+          artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${artifact_id}"
+          echo "url=$artifact_url" >> "$GITHUB_OUTPUT"
+          echo "Artifact URL: $artifact_url"
+
+      - name: Send APK link to Telegram
         shell: bash
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          APK_PATH: ${{ steps.apk.outputs.path }}
+          ARTIFACT_URL: ${{ steps.artifact.outputs.url }}
         run: |
           if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
             echo "Telegram secrets are not configured" >&2
             exit 1
           fi
-          telegram_url="https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument"
-          # Keep each multipart request below Telegram's 50 MB document limit.
-          max_part_size=$((45 * 1024 * 1024))
-          apk_size="$(stat -c '%s' "$APK_PATH")"
-          parts_dir="$RUNNER_TEMP/apk-parts"
-          mkdir -p "$parts_dir"
-          if [ "$apk_size" -le "$max_part_size" ]; then
-            parts=("$APK_PATH")
-          else
-            echo "APK is ${apk_size} bytes; splitting it for Telegram"
-            split -b "$max_part_size" -d -a 3 "$APK_PATH" "$parts_dir/part-"
-            mapfile -t parts < <(find "$parts_dir" -type f -name 'part-*' -print | sort)
+          
+          telegram_url="https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"
+          message="🤖 *Release APK готов!*
+          
+          *com.WasteMoonGames.PoCIdle* v2.1R
+          
+          📦 Скачать артефакт:
+          ${ARTIFACT_URL}"
+          
+          response="$(curl --fail --silent --show-error \
+            --request POST \
+            --form-string "chat_id=$TELEGRAM_CHAT_ID" \
+            --form-string "text=$message" \
+            --form-string "parse_mode=Markdown" \
+            "$telegram_url")"
+          
+          if ! grep -q '"ok":true' <<< "$response"; then
+            echo "Telegram API rejected message: $response" >&2
+            exit 1
           fi
-          part_count="${#parts[@]}"
-          part_number=0
-          for part in "${parts[@]}"; do
-            part_number=$((part_number + 1))
-            if [ "$part_count" -eq 1 ]; then
-              caption="Release APK: com.WasteMoonGames.PoCIdle"
-            else
-              caption="Release APK part $part_number/$part_count. Reassemble in order with: cat part-* > com.WasteMoonGames.PoCIdle"
-            fi
-            response="$(curl --fail --silent --show-error \
-              --request POST \
-              --form-string "chat_id=$TELEGRAM_CHAT_ID" \
-              --form "document=@$part" \
-              --form-string "caption=$caption" \
-              "$telegram_url")"
-            if ! grep -q '"ok":true' <<< "$response"; then
-              echo "Telegram API rejected part $part_number: $response" >&2
-              exit 1
-            fi
-          done
+          
+          echo "Telegram message sent successfully!"
