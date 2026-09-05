@@ -94,21 +94,24 @@ jobs:
           fi
           
           telegram_url="https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"
-          message="🤖 *Release APK готов!*
+          json_payload=$(jq -n \
+            --arg chat_id "$TELEGRAM_CHAT_ID" \
+            --arg text "🤖 Release APK готов!
           
           *com.WasteMoonGames.PoCIdle* v2.1R
           
           📦 Скачать артефакт:
-          ${ARTIFACT_URL}"
+          {$ARTIFACT_URL}" \
+            --arg parse_mode "Markdown" \
+            '{chat_id: $chat_id, text: $text, parse_mode: $parse_mode}')
           
           response="$(curl --fail --silent --show-error \
             --request POST \
-            --form-string "chat_id=$TELEGRAM_CHAT_ID" \
-            --form-string "text=$message" \
-            --form-string "parse_mode=Markdown" \
+            --header "Content-Type: application/json" \
+            --data "$json_payload" \
             "$telegram_url")"
           
-          if ! grep -q '"ok":true' <<< "$response"; then
+          if ! echo "$response" | grep -q '"ok":true'; then
             echo "Telegram API rejected message: $response" >&2
             exit 1
           fi
