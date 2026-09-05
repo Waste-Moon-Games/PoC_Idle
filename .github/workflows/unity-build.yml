@@ -96,11 +96,11 @@ jobs:
           telegram_url="https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"
           json_payload=$(jq -n \
             --arg chat_id "$TELEGRAM_CHAT_ID" \
-            --arg text "🤖 Release APK готов!
+            --arg text "Release APK готов!
           
           *com.WasteMoonGames.PoCIdle* v2.1R
           
-          📦 Скачать артефакт:
+          Скачать артефакт:
           {$ARTIFACT_URL}" \
             --arg parse_mode "Markdown" \
             '{chat_id: $chat_id, text: $text, parse_mode: $parse_mode}')
