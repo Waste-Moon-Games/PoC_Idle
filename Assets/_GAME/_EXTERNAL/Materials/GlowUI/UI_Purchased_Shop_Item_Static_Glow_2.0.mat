@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: UI_Purchased_Shop_Item_Static_Glow
-  m_Shader: {fileID: 4800000, guid: 08281eac768b4a742b4946caa268616c, type: 3}
+  m_Name: UI_Purchased_Shop_Item_Static_Glow_2.0
+  m_Shader: {fileID: 4800000, guid: bc3bd5aae61b0454391b1dcce4e3f268, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -105,10 +105,15 @@ Material:
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _ColorMask: 15
+    - _CoreIntensity: 1.25
+    - _CoreOffset: 0
+    - _CoreTightness: 60
+    - _CoreWhiteness: 0.25
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
+    - _Dither: 0.005
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
@@ -117,12 +122,18 @@ Material:
     - _GlossyReflections: 0
     - _GlowPower: 2.75
     - _GlowSpread: 0.2
+    - _HaloFalloff: 2.5
+    - _HaloIntensity: 0.6
+    - _HaloSpread: 0.15
+    - _InnerGlow: 2
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _PulseSpeed: 0
+    - _PulseStrength: 0.08
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Roundness: 0.11
+    - _Roundness: 0.165
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

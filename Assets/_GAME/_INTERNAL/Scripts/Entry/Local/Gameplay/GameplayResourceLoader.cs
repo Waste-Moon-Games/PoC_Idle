@@ -1,13 +1,14 @@
-﻿using Core.AddressablesLoadSystem;
+﻿using Common.MVVM;
+using Core.AddressablesLoadSystem;
 
 using Cysharp.Threading.Tasks;
-
+using SO;
 using SO.AdsConfigs;
 using SO.PlayerConfigs;
 
 using UI.GameplayMenu.Views;
 using UI.GameplayMenu.Views.BonusesFromRewardAd;
-
+using UI.GameplayMenu.Views.Settings;
 using UnityEngine;
 
 using Utils.CustomResourceLoader;
@@ -16,11 +17,17 @@ namespace Entry.Local.Gameplay
 {
     public class GameplayResourceLoader : IGameplayResourceLoader
     {
+        // TODO: remove config
+        private GameResourcePathsConfig _resourcePathsConfig;
+
         #region Legacy API
         // Legacy API
+
+        public void BindResourcePathsConfig(GameResourcePathsConfig config) => _resourcePathsConfig = config;
+        
         public UIRootTopBlockView LoadTopRootView()
         {
-            var topRootViewPrefab = ResourceLoader.LoadOrThrow<UIRootTopBlockView>(GameplayResourcePaths.UIRootTopBlockView);
+            var topRootViewPrefab = ResourceLoader.LoadOrThrow<UIRootTopBlockView>(GameplayResourcePathKeys.UIRootTopBlockViewKey);
 
             var topRootView = Object.Instantiate(topRootViewPrefab);
             return topRootView;
@@ -28,7 +35,7 @@ namespace Entry.Local.Gameplay
 
         public NavigationButtonsView LoadNavigationView()
         {
-            var navigationButtonsViewPrefab = ResourceLoader.LoadOrThrow<NavigationButtonsView>(GameplayResourcePaths.NavigationButtonsView);
+            var navigationButtonsViewPrefab = ResourceLoader.LoadOrThrow<NavigationButtonsView>(GameplayResourcePathKeys.NavigationButtonsViewKey);
 
             var navigationButtonsView = Object.Instantiate(navigationButtonsViewPrefab);
             return navigationButtonsView;
@@ -36,7 +43,7 @@ namespace Entry.Local.Gameplay
 
         public RewardsSystemView LoadRewardsSystemView()
         {
-            var rewardSystemViewPrefab = ResourceLoader.LoadOrThrow<RewardsSystemView>(GameplayResourcePaths.RewardsViewHolder);
+            var rewardSystemViewPrefab = ResourceLoader.LoadOrThrow<RewardsSystemView>(GameplayResourcePathKeys.RewardsViewHolderKey);
 
             var rewardSystemView = Object.Instantiate(rewardSystemViewPrefab);
             return rewardSystemView;
@@ -44,7 +51,8 @@ namespace Entry.Local.Gameplay
 
         public PlayerRewardedBonusesView LoadPlayerRewardedBonusesView()
         {
-            var rewardedBonusesViewPrefab = ResourceLoader.LoadOrThrow<PlayerRewardedBonusesView>(GameplayResourcePaths.RewardedBonusesViewHolder);
+            var path = _resourcePathsConfig.GetPathByKeyWord(GameplayResourcePathKeys.RewardedBonusesViewHolderKey);
+            var rewardedBonusesViewPrefab = ResourceLoader.LoadOrThrow<PlayerRewardedBonusesView>(path);
 
             var rewardedBonusesView = Object.Instantiate(rewardedBonusesViewPrefab);
             return rewardedBonusesView;
@@ -52,9 +60,13 @@ namespace Entry.Local.Gameplay
 
         public void LoadPlayableViews(out MainGameView mainGameView, out EconomyPlayerInfoView economyPlayerInfoView, out PlayerStatsView playerStatsView)
         {
-            var mainGameViewPrefab = ResourceLoader.LoadOrThrow<MainGameView>(GameplayResourcePaths.UIRootView);
-            var economyPlayerInfoViewPrefab = ResourceLoader.LoadOrThrow<EconomyPlayerInfoView>(GameplayResourcePaths.EconomyPlayerInfo);
-            var playerStatsViewPrefab = ResourceLoader.LoadOrThrow<PlayerStatsView>(GameplayResourcePaths.PlayerStatsInfoView);
+            var mainGamePath = _resourcePathsConfig.GetPathByKeyWord(GameplayResourcePathKeys.UIRootViewKey);
+            var economyViewPath = _resourcePathsConfig.GetPathByKeyWord(GameplayResourcePathKeys.EconomyPlayerInfoKey);
+            var playerStateViewPath = _resourcePathsConfig.GetPathByKeyWord(GameplayResourcePathKeys.PlayerStatsInfoViewKey);
+
+            var mainGameViewPrefab = ResourceLoader.LoadOrThrow<MainGameView>(mainGamePath);
+            var economyPlayerInfoViewPrefab = ResourceLoader.LoadOrThrow<EconomyPlayerInfoView>(economyViewPath);
+            var playerStatsViewPrefab = ResourceLoader.LoadOrThrow<PlayerStatsView>(playerStateViewPath);
 
             mainGameView = Object.Instantiate(mainGameViewPrefab);
             economyPlayerInfoView = Object.Instantiate(economyPlayerInfoViewPrefab);
@@ -63,7 +75,8 @@ namespace Entry.Local.Gameplay
 
         public OfflineIncomeView LoadOfflineIncomeView()
         {
-            var prefab = ResourceLoader.LoadOrThrow<OfflineIncomeView>(GameplayResourcePaths.OfflineIncomeView);
+            var path = _resourcePathsConfig.GetPathByKeyWord(GameplayResourcePathKeys.OfflineIncomeViewKey);
+            var prefab = ResourceLoader.LoadOrThrow<OfflineIncomeView>(path);
 
             var offlineIncomeView = Object.Instantiate(prefab);
 
@@ -72,7 +85,8 @@ namespace Entry.Local.Gameplay
 
         public SettingsView LoadSettingsView()
         {
-            var prefab = Resources.Load<SettingsView>(GameplayResourcePaths.SettingsPanelView);
+            var path = _resourcePathsConfig.GetPathByKeyWord(GameplayResourcePathKeys.SettingsPanelViewKey);
+            var prefab = Resources.Load<SettingsView>(path);
 
             var settingsView = Object.Instantiate(prefab);
 
@@ -81,13 +95,15 @@ namespace Entry.Local.Gameplay
 
         public RewardAdsConfig LoadRewardAdsConfig()
         {
-            var result = ResourceLoader.LoadOrThrow<RewardAdsConfig>(GameplayResourcePaths.RewardAdsConfig);
+            var path = _resourcePathsConfig.GetPathByKeyWord(GameplayResourcePathKeys.RewardAdsConfigKey);
+            var result = ResourceLoader.LoadOrThrow<RewardAdsConfig>(path);
             return result;
         }
 
         public OfflineIncomeLocalizationConfig LoadOfflineIncomeLocalizationConfig()
         {
-            var result = ResourceLoader.LoadOrThrow<OfflineIncomeLocalizationConfig>(GameplayResourcePaths.OfflineIncomeLocalizationConfig);
+            var path = _resourcePathsConfig.GetPathByKeyWord(GameplayResourcePathKeys.OfflineIncomeLocalizationConfigKey);
+            var result = ResourceLoader.LoadOrThrow<OfflineIncomeLocalizationConfig>(path);
             return result;
         }
         #endregion
@@ -137,6 +153,15 @@ namespace Entry.Local.Gameplay
         public UniTask<OfflineIncomeLocalizationConfig> LoadOfflineIncomeLocalizationConfigAsync()
         {
             throw new System.NotImplementedException();
+        }
+
+        public async UniTask<T> LoadViewEntity<T>(string path) where T: Object, IView
+        {
+            var entity = await Resources.LoadAsync<T>(path);
+            if(entity == null)
+                throw new System.ArgumentNullException(nameof(entity), $"Entity not found by path: {path}");
+
+            return (T)entity;
         }
         #endregion
     }

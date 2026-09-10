@@ -326,6 +326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ecb11ff614faa14e8e9ff767dbe9d6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Entry.Local.Gameplay::Entry.Local.Gameplay.GameplayEntryPoint
+  _resourcePathsConfig: {fileID: 11400000, guid: 275867c7780fea74ea70050b35de414f, type: 2}
 --- !u!4 &617038127
 Transform:
   m_ObjectHideFlags: 0

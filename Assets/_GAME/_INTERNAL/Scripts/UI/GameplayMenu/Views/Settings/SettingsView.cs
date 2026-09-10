@@ -6,7 +6,7 @@ using UI.GameplayMenu.ViewModels;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.GameplayMenu.Views
+namespace UI.GameplayMenu.Views.Settings
 {
     public class SettingsView : MonoBehaviour, IView
     {
@@ -65,6 +65,9 @@ namespace UI.GameplayMenu.Views
 
             _sfxToggle.onValueChanged.AddListener(ToggleSFXState);
             _musicToggle.onValueChanged.AddListener(ToggleMusicState);
+
+            ToggleSFXState(_viewModel.CurrentSFXState);
+            ToggleMusicState(_viewModel.CurrentMusicState);
         }
 
         private void OnDestroy()

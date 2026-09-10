@@ -26,6 +26,9 @@ namespace UI.GameplayMenu.Models
 
         private bool _settingsWindowState = false;
 
+        public bool CurrentSFXState => _sfxState;
+        public bool CurrentMusicState => _musicState;
+
         public Observable<float> SFXVolumeChangedSignal => _sfxVolumeChangedSignal.AsObservable();
         public Observable<float> MusicVolumeChangedSignal => _musicVolumeChangedSignal.AsObservable();
 

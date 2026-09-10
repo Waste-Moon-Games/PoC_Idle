@@ -1,6 +1,6 @@
 ﻿using Core.Consts;
 using Core.Consts.Enums;
-
+using Cysharp.Threading.Tasks;
 using Entry.Local.Gameplay;
 using Entry.Local.Shop;
 
@@ -64,7 +64,7 @@ namespace Entry.Global
             switch (sceneName)
             {
                 case SceneNames.GAME:
-                    CreateGameScene();
+                    CreateGameScene().Forget();
                     break;
                 case SceneNames.SHOP:
                     CreateShopScene();
@@ -72,20 +72,24 @@ namespace Entry.Global
             }
         }
 
-        private void CreateGameScene()
+        private async UniTask CreateGameScene()
         {
             var container = _cachedContainer = new(_rootContainer);
             var entryPoint = Object.FindAnyObjectByType<GameplayEntryPoint>();
 
-            entryPoint.Run(container).Subscribe(action =>
-            {
-                switch (action)
+            var actions = await entryPoint.Run(container);
+
+            actions
+                .Subscribe(action =>
                 {
-                    case MainMenuEvents.ShopClicked:
-                        LoadScene(SceneNames.SHOP);
-                        break;
-                }
-            }).AddTo(_disposables);
+                    switch (action)
+                    {
+                        case MainMenuEvents.ShopClicked:
+                            LoadScene(SceneNames.SHOP);
+                            break;
+                    }
+                })
+                .AddTo(_disposables);
         }
 
         private void CreateShopScene()

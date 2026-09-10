@@ -1,13 +1,15 @@
+using Core.AddressablesLoadSystem;
 using Core.AdsSystem;
 using Core.GlobalGameState;
-
+using Cysharp.Threading.Tasks;
 using R3;
 
 using RuStore;
 using RuStore.Review;
-
+using SO;
 using SO.AnimationConfigs;
 using System.Collections;
+using System.Threading.Tasks;
 using UI.GameplayMenu.Animations;
 using UI.GameplayMenu.Models;
 using UI.GameplayMenu.Models.BonusesFromRewardAd;
@@ -15,7 +17,7 @@ using UI.GameplayMenu.ViewModels;
 using UI.GameplayMenu.ViewModels.BonusesFromRewardAd;
 using UI.GameplayMenu.Views;
 using UI.GameplayMenu.Views.BonusesFromRewardAd;
-
+using UI.GameplayMenu.Views.Settings;
 using UnityEngine;
 
 using Utils.CustomResourceLoader;
@@ -28,36 +30,47 @@ namespace Entry.Local.Gameplay
 {
     public class GameplayEntryPoint : MonoBehaviour
     {
+        [SerializeField] private GameResourcePathsConfig _resourcePathsConfig;
+
         private const float ReviewDelaySeconds = 5f * 60f;
 
         private readonly GameplayResourceLoader _loader = new();
         private ReviewScreen _reviewScreen;
+        private MainGameView _mainGameView;
+
+        private DIContainer _container;
 
         private float _activeGameplayTime;
         private bool _reviewFlowPrepared;
         private bool _reviewWindowShown;
 
-        public Observable<MainMenuEvents> Run(DIContainer container)
+        public async UniTask<Observable<MainMenuEvents>> Run(DIContainer container)
         {
-            NavigationButtonsView navigationButtonsView = _loader.LoadNavigationView();
+            string path = _resourcePathsConfig.GetPathByKeyWord(GameplayResourcePathKeys.NavigationButtonsViewKey);
+            _loader.BindResourcePathsConfig(_resourcePathsConfig);
 
-            CreateScene(container, out NavigationButtonsModel navigationModel);
+            NavigationButtonsView view = await _loader.LoadViewEntity<NavigationButtonsView>(path);
 
-            var navigationViewModel = new NavigationButtonsViewModel();
+            NavigationButtonsModel model = await CreateScene(container);
 
-            navigationViewModel.BindModel(navigationModel);
-            navigationButtonsView.BindViewModel(navigationViewModel);
+            var viewModel = new NavigationButtonsViewModel();
 
-            return navigationModel.Actions.Where(action => action == MainMenuEvents.ShopClicked);
+            viewModel.BindModel(model);
+            view.BindViewModel(viewModel);
+
+            return model.Actions.Where(action => action == MainMenuEvents.ShopClicked);
         }
 
-        private void CreateScene(DIContainer container, out NavigationButtonsModel navigationModel)
+        private async UniTask<NavigationButtonsModel> CreateScene(DIContainer container)
         {
-            UIRootTopBlockView topRootView = _loader.LoadTopRootView();
+            _container = container;
+
+            string path = _resourcePathsConfig.GetPathByKeyWord(GameplayResourcePathKeys.UIRootTopBlockViewKey);
+            UIRootTopBlockView topRootView = await _loader.LoadViewEntity<UIRootTopBlockView>(path);
             
             var gameWorldState = container.Resolve<GameWorldState>();
 
-            navigationModel = new();
+            NavigationButtonsModel navigationModel = new();
 
             CreateModels(
                 out MainGameModel mainGameModel,
@@ -79,8 +92,10 @@ namespace Entry.Local.Gameplay
                 out OfflineIncomeView offlineIncomeView,
                 out SettingsView settingsView);
 
-            CreateLocalRewardsSystem(gameWorldState, mainGameView);
-            CreateLocalRewardedAdsSystem(container, gameWorldState, mainGameView);
+            _mainGameView = mainGameView;
+
+            await CreateLocalRewardsSystem();
+            await CreateLocalRewardedAdsSystem();
 
             topRootView.AttachView(economyPlayerInfoView.transform);
             topRootView.AttachView(playerStatsView.transform);
@@ -132,6 +147,8 @@ namespace Entry.Local.Gameplay
 #if UNITY_ANDROID
             StartCoroutine(TrackPlayerActivityForReview());
 #endif
+
+            return navigationModel;
         }
 
 #if UNITY_ANDROID
@@ -171,8 +188,9 @@ namespace Entry.Local.Gameplay
         }
 #endif
 
-        private void CreateLocalRewardsSystem(in GameWorldState gameWorldState, in MainGameView mainGameView)
+        private async UniTask CreateLocalRewardsSystem()
         {
+            var gameWorldState = _container.Resolve<GameWorldState>();
             var rewardsService = gameWorldState.PlayerState.RewardsService;
             var audioSystemService = gameWorldState.AudioSystemService;
 
@@ -182,15 +200,17 @@ namespace Entry.Local.Gameplay
             RewardsSystemViewModel viewModel = new();
             viewModel.BindModel(model);
 
-            RewardsSystemView view = _loader.LoadRewardsSystemView();
+            string path = _resourcePathsConfig.GetPathByKeyWord(GameplayResourcePathKeys.RewardsViewHolderKey);
+            RewardsSystemView view = await _loader.LoadViewEntity<RewardsSystemView>(path);
             view.BindViewModel(viewModel);
 
-            mainGameView.AttachView(view.gameObject);
+            _mainGameView.AttachView(view.gameObject);
         }
 
-        private void CreateLocalRewardedAdsSystem(in DIContainer container, in GameWorldState gameWorldState, in MainGameView mainGameView)
+        private async UniTask CreateLocalRewardedAdsSystem()
         {
-            var adsSystem = container.Resolve<AdsSystemContext>();
+            var adsSystem = _container.Resolve<AdsSystemContext>();
+            var gameWorldState = _container.Resolve<GameWorldState>();
             var bonusesService = gameWorldState.PlayerState.PlayerRewardedBonusesService;
             var localizationService = gameWorldState.LocalizationService;
             var rewardedBonusesConfig = _loader.LoadRewardAdsConfig();
@@ -201,10 +221,11 @@ namespace Entry.Local.Gameplay
             PlayerRewardedBonusesViewModel viewModel = new();
             viewModel.BindModel(model);
 
-            PlayerRewardedBonusesView view = _loader.LoadPlayerRewardedBonusesView();
+            string path = _resourcePathsConfig.GetPathByKeyWord(GameplayResourcePathKeys.RewardedBonusesViewHolderKey);
+            PlayerRewardedBonusesView view = await _loader.LoadViewEntity<PlayerRewardedBonusesView>(path);
             view.BindViewModel(viewModel);
 
-            mainGameView.AttachView(view.gameObject);
+            _mainGameView.AttachView(view.gameObject);
         }
 
         private void CreateModels(

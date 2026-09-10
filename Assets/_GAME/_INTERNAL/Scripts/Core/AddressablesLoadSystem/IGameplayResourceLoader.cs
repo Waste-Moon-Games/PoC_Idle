@@ -1,8 +1,11 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Common.MVVM;
+using Cysharp.Threading.Tasks;
 using SO.AdsConfigs;
 using SO.PlayerConfigs;
 using UI.GameplayMenu.Views;
 using UI.GameplayMenu.Views.BonusesFromRewardAd;
+using UI.GameplayMenu.Views.Settings;
+using UnityEngine;
 
 namespace Core.AddressablesLoadSystem
 {
@@ -33,5 +36,7 @@ namespace Core.AddressablesLoadSystem
 
         UniTask<RewardAdsConfig> LoadRewardsAdsConfigAsync();
         UniTask<OfflineIncomeLocalizationConfig> LoadOfflineIncomeLocalizationConfigAsync();
+
+        UniTask<T> LoadViewEntity<T>(string keyWord) where T: Object, IView;
     }
 }

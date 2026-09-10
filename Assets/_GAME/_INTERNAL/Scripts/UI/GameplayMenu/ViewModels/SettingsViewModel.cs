@@ -8,6 +8,9 @@ namespace UI.GameplayMenu.ViewModels
     {
         private SettingsModel _model;
 
+        public bool CurrentSFXState => _model.CurrentSFXState;
+        public bool CurrentMusicState => _model.CurrentMusicState;
+
         public Observable<bool> SettingsWindowStateChangedSignal => _model.SettingsWindowStateChangedSignal;
         public Observable<float> SFXVolumeChangedSignal => _model.SFXVolumeChangedSignal;
         public Observable<float> MusicVolumeChangedSignal => _model.MusicVolumeChangedSignal;
