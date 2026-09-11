@@ -39,6 +39,14 @@ jobs:
           echo "Unity Version: $UNITY_VERSION"
 
           echo "version=$UNITY_VERSION" >> $GITHUB_OUTPUT
+          
+      - name: Validate Android Version Code
+        run: |
+          if ! [[ "${{ inputs.androidVersionCode }}" =~ ^[0-9]+$ ]]; then
+            echo "Error: androidVersionCode should be a integer (ex 10), not a ${{ inputs.androidVersionCode }}"
+            exit 1
+          fi
+            echo "Version Code is valid."
 
       - name: Build APK
         uses: game-ci/unity-builder@v4
@@ -51,6 +59,7 @@ jobs:
           unityVersion: ${{ steps.get_unity_version.outputs.version }}
           targetPlatform: Android
           buildName: com.WasteMoonGames.PoCIdle
+          buildsPath: build
           versioning: Custom
           version: ${{ inputs.appVersion }}
           androidVersionCode: ${{ inputs.androidVersionCode }}
@@ -118,7 +127,8 @@ jobs:
             --arg chat_id "$TELEGRAM_CHAT_ID" \
             --arg text "Release APK готов!
           
-          com.WasteMoonGames.PoCIdle v${{ inputs.appVersion }}
+          com.WasteMoonGames.PoCIdle v${{ inputs.appVersion }} (code: ${{ inputs.androidVersionCode }})
+          Unity Version: ${{ steps.get_unity_version.outputs.version }}
           
           Скачать артефакт:
           $ARTIFACT_URL" \
