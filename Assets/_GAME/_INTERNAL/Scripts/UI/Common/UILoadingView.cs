@@ -1,3 +1,5 @@
+using System;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +12,7 @@ namespace UI.Common
         [SerializeField] private Image _progressBar;
         [SerializeField] private float _loadingAnimationDuration = 0.5f;
         [SerializeField] private float _logoPulseAnimationDuration = 1.0f;
+        [SerializeField] private float _hideDelay = 1.5f;
 
         private Vector2 _originalLogoScale;
 
@@ -35,8 +38,18 @@ namespace UI.Common
             _progressBar.fillAmount = 0f;
         }
 
-        public void HideLoadingScreen()
+        public void HideLoadingScreen() => AsyncHideScreen().Forget();
+
+        public void SetLoadingProgress(float progress)
         {
+            _progressTween?.Kill();
+            _progressTween = _progressBar.DOFillAmount(progress, _loadingAnimationDuration);
+        }
+
+        private async UniTask AsyncHideScreen()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(_hideDelay));
+
             if(_logoTransform != null)
             {
                 _logoPulseTween?.Kill();
@@ -46,12 +59,6 @@ namespace UI.Common
             _progressTween?.Kill();
             gameObject.SetActive(false);
             _progressBar.fillAmount = 0f;
-        }
-
-        public void SetLoadingProgress(float progress)
-        {
-            _progressTween?.Kill();
-            _progressTween = _progressBar.DOFillAmount(progress, _loadingAnimationDuration);
         }
     }
 }
