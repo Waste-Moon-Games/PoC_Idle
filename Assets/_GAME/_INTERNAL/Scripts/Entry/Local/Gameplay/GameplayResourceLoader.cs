@@ -2,6 +2,7 @@
 using Core.AddressablesLoadSystem;
 
 using Cysharp.Threading.Tasks;
+
 using SO;
 using SO.AdsConfigs;
 using SO.PlayerConfigs;
@@ -157,10 +158,11 @@ namespace Entry.Local.Gameplay
 
         public async UniTask<T> LoadViewEntity<T>(string path) where T: Object, IView
         {
-            var entity = await Resources.LoadAsync<T>(path);
-            if(entity == null)
-                throw new System.ArgumentNullException(nameof(entity), $"Entity not found by path: {path}");
+            var entityPrefab = await Resources.LoadAsync<T>(path);
+            if(entityPrefab == null)
+                throw new System.ArgumentNullException(nameof(entityPrefab), $"Entity not found by path: {path}");
 
+            Object entity = Object.Instantiate(entityPrefab);
             return (T)entity;
         }
         #endregion

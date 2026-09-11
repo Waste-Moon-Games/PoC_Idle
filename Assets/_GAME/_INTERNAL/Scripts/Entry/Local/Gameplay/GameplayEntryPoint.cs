@@ -110,9 +110,9 @@ namespace Entry.Local.Gameplay
             offlineIncomeViewModel.BindModel(offlineIncomeModel);
             settingsViewModel.BindModel(settingsModel);
 
-            mainGameView.BindViewModel(mainGameViewModel);
+            _mainGameView.BindViewModel(mainGameViewModel);
             CreateAnimationServices(out ClickAnimationsService clickAnimationsService, mainGameView.ClickableZone.transform);
-            mainGameView.BindAnimationService(clickAnimationsService);
+            _mainGameView.BindAnimationService(clickAnimationsService);
 
             economyPlayerInfoView.BindFormatter(new());
             economyPlayerInfoView.BindViewModel(economyPlayerInfoViewModel);
@@ -122,15 +122,15 @@ namespace Entry.Local.Gameplay
             offlineIncomeView.BindViewModel(offlineIncomeViewModel);
             settingsView.BindViewModel(settingsViewModel);
 
-            mainGameView.AttachView(offlineIncomeView.gameObject);
-            mainGameView.AttachView(settingsView.gameObject);
+            _mainGameView.AttachView(offlineIncomeView.gameObject);
+            _mainGameView.AttachView(settingsView.gameObject);
 
             gameWorldState.AudioSystemService.StartPlayMainThemeMusic();
 
             var reviewScreenPrefab = ResourceLoader.LoadOrThrow<ReviewScreen>("UI/Common/ReviewScreen");
             _reviewScreen = Instantiate(reviewScreenPrefab);
             _reviewScreen.gameObject.SetActive(false);
-            mainGameView.AttachView(_reviewScreen.gameObject);
+            _mainGameView.AttachView(_reviewScreen.gameObject);
 
 #if UNITY_ANDROID
             RuStoreReviewManager.Instance.RequestReviewFlow(
