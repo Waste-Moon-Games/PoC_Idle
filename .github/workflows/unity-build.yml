@@ -55,7 +55,7 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          projectPath: ${{ github.workspace }}
+          projectPath: .
           unityVersion: ${{ steps.get_unity_version.outputs.version }}
           targetPlatform: Android
           buildName: com.WasteMoonGames.PoCIdle
