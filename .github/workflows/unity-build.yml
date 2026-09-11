@@ -2,6 +2,17 @@ name: Build Android APK
 
 on:
   workflow_dispatch:
+      inputs:
+        appVersion:
+          description: 'Project Version (ex 1.0.0R)'
+          required: true
+          default: '2.0R'
+          type: string
+        androidVersionCode:
+          description: 'Project Version Code (Andoroid, 1-999999. Ex 10)'
+          required: true
+          default: '1'
+          type: string
 
 permissions:
   contents: read
@@ -20,6 +31,15 @@ jobs:
         with:
           lfs: true
 
+      - name: Get Unity Version
+        id: get_unity_version
+        run: |
+          UNITY_VERSION=$(sed -n 's/^m_EditorVersion: //p' ProjectSettings/ProjectVersion.txt | tr -d '\r')
+
+          echo "Unity Version: $UNITY_VERSION"
+
+          echo "version=$UNITY_VERSION" >> $GITHUB_OUTPUT
+
       - name: Build APK
         uses: game-ci/unity-builder@v4
         env:
@@ -27,13 +47,13 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          projectPath: .
-          unityVersion: 6000.4.1f1
+          projectPath: ${{ github.workspace }}
+          unityVersion: ${{ steps.get_unity_version.outputs.version }}
           targetPlatform: Android
           buildName: com.WasteMoonGames.PoCIdle
           versioning: Custom
-          version: "2.1R"
-          androidVersionCode: 12
+          version: ${{ inputs.appVersion }}
+          androidVersionCode: ${{ inputs.androidVersionCode }}
           androidExportType: androidPackage
           androidKeystoreName: PoC.keystore
           androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -98,7 +118,7 @@ jobs:
             --arg chat_id "$TELEGRAM_CHAT_ID" \
             --arg text "Release APK готов!
           
-          com.WasteMoonGames.PoCIdle v2.1R
+          com.WasteMoonGames.PoCIdle v${{ inputs.appVersion }}
           
           Скачать артефакт:
           $ARTIFACT_URL" \
