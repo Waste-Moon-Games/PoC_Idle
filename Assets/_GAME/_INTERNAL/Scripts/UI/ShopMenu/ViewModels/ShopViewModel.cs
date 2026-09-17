@@ -16,6 +16,7 @@ namespace UI.ShopMenu.ViewModels
         private ShopModel _model;
 
         public string ShopID => _model.ShopId;
+        public float ShopOpenDuration => _model.ShopOpenDuration;
 
         public Observable<List<ItemViewModel>> RequestedItems => _requestedItemsSignal.AsObservable();
         public Observable<bool> StateChanged => _stateChangeSignal.AsObservable();

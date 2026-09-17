@@ -1,12 +1,17 @@
 ﻿using Common.MVVM;
+using Core.Common.Command;
+using Core.Common.Command.Shop;
 using Core.Consts.Enums;
 using Core.Shop.Base;
+using Cysharp.Threading.Tasks;
 using R3;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Core.Shop.Models
 {
-    public class ShopMenuModel : IModel
+    public class ShopMenuModel : IModel, ICommandInvoker
     {
         private readonly CompositeDisposable _disposables = new();
 
@@ -22,17 +27,21 @@ namespace Core.Shop.Models
 
         public void Dispose() => _disposables.Dispose();
 
-        private void ChangeModelState(string id)
+        public void Run(string receiverId)
         {
-            if (!_models.TryGetValue(id, out var changebleModel))
-                throw new System.Exception($"Model with id {id} not found!");
+            if (!_models.TryGetValue(receiverId, out var changebleModel))
+                throw new System.Exception($"Model with id {receiverId} not found!");
 
-            changebleModel.Open();
+            var modelToClose = _models.Values.FirstOrDefault(model => model.IsOpened == true && model.ShopId != receiverId);
+            var modelToOpen = _models.Values.FirstOrDefault(model => model.ShopId == receiverId);
+            Debug.Log($"[Shop Menu Model] Model to Close / Model to Open: {modelToClose.ShopId}/{modelToOpen.ShopId}");
 
-            foreach (var model in _models.Values)
-                if (model.ShopId != id)
-                    model.Close();
+            var changeShopsViewCommand = new ChangeShopViewStateCommand(modelToClose, modelToOpen);
+            changeShopsViewCommand.SetExecutionDelay(modelToClose.ShopOpenDuration);
+            changeShopsViewCommand.Execute().Forget();
         }
+
+        private void ChangeModelState(string id) => Run(id);
 
         private void HandleNavigationEvents(ShopEvents events)
         {

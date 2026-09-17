@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc77f705fd1414e4a84db90f1861572b, type: 3}
   m_Name: ClickItemsConfig
   m_EditorClassIdentifier: SO.ShopConfigs::SO.ShopConfigs.ShopItemsConfig
-  _ratesConfig: {fileID: 11400000, guid: 30971e41a184d1b4ab265e2a6a578ce9, type: 2}
   <ShopID>k__BackingField: click_upgrades_shop
+  <ShopOpenAnimationDuration>k__BackingField: 0.55
   <OpenedByDefault>k__BackingField: 1
   <Items>k__BackingField:
   - {fileID: 11400000, guid: 193346d73a45d0f4886ab44366b4d87e, type: 2}

@@ -121,6 +121,7 @@ MonoBehaviour:
   _progressBar: {fileID: 2261510143226533987}
   _loadingAnimationDuration: 1
   _logoPulseAnimationDuration: 1.25
+  _hideDelay: 0.75
 --- !u!114 &6975912904743947493
 MonoBehaviour:
   m_ObjectHideFlags: 0

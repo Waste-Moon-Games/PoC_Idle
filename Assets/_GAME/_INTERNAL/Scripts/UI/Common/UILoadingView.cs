@@ -38,7 +38,7 @@ namespace UI.Common
             _progressBar.fillAmount = 0f;
         }
 
-        public void HideLoadingScreen() => AsyncHideScreen().Forget();
+        public void HideLoadingScreen(bool useDelay) => AsyncHideScreen(useDelay).Forget();
 
         public void SetLoadingProgress(float progress)
         {
@@ -46,9 +46,10 @@ namespace UI.Common
             _progressTween = _progressBar.DOFillAmount(progress, _loadingAnimationDuration);
         }
 
-        private async UniTask AsyncHideScreen()
+        private async UniTask AsyncHideScreen(bool useDelay)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(_hideDelay));
+            if(useDelay)
+                await UniTask.Delay(TimeSpan.FromSeconds(_hideDelay));
 
             if(_logoTransform != null)
             {

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: PrestigeItemsConfig
   m_EditorClassIdentifier: SO.ShopConfigs::SO.ShopConfigs.ShopItemsConfig
   <ShopID>k__BackingField: prestige_upgrades_shop
+  <ShopOpenAnimationDuration>k__BackingField: 0.55
   <OpenedByDefault>k__BackingField: 0
   <Items>k__BackingField:
   - {fileID: 11400000, guid: 92ff7217c684e594388ac43ce47eb392, type: 2}

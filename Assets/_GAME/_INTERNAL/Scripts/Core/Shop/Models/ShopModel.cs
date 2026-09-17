@@ -1,4 +1,5 @@
 using Common.MVVM;
+using Core.Common.Command;
 using Core.SaveSystemBase.Data;
 using Core.Shop.Base;
 using R3;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace Core.Shop.Models
 {
-    public class ShopModel : IModel
+    public class ShopModel : IModel, ICommandReceiver
     {
         private readonly string _sId;
         private readonly CompositeDisposable _disposables = new();
@@ -21,13 +22,16 @@ namespace Core.Shop.Models
         private readonly Subject<(ItemModel, string)> _purchaseSignal = new();
 
         private readonly Dictionary<int, ItemModel> _itemsDict = new();
-        private readonly ShopItemsConfig _itemsConfig;
+        private readonly ShopConfig _itemsConfig;
 
         private readonly SystemLanguage _currentLanguage;
+
+        private readonly float _shopOpenDuration;
 
         private bool _state;
 
         public string ShopId => _sId;
+        public float ShopOpenDuration => _shopOpenDuration;
         public bool IsOpened => _state;
         public IReadOnlyDictionary<int, ItemModel> ItemsDict => _itemsDict;
 
@@ -39,12 +43,13 @@ namespace Core.Shop.Models
         public ShopModel(
             Observable<(int, string)> successfulPurchase,
             Observable<(int, string)> failedPurchase,
-            ShopItemsConfig itemsConfig, SystemLanguage currentLanguage)
+            ShopConfig shopConfig, SystemLanguage currentLanguage)
         {
-            _sId = itemsConfig.ShopID;
-            _itemsConfig = itemsConfig;
-            _state = itemsConfig.OpenedByDefault;
+            _sId = shopConfig.ShopID;
+            _itemsConfig = shopConfig;
+            _state = shopConfig.OpenedByDefault;
             _currentLanguage = currentLanguage;
+            _shopOpenDuration = shopConfig.ShopOpenAnimationDuration;
 
             successfulPurchase
                 .Where(info => info.Item2 == _sId)
@@ -174,18 +179,6 @@ namespace Core.Shop.Models
 
         public void RequestState() => _stateChangedSignal.OnNext(_state);
 
-        public void Open()
-        {
-            _state = true;
-            _stateChangedSignal.OnNext(_state);
-        }
-
-        public void Close()
-        {
-            _state = false;
-            _stateChangedSignal.OnNext(_state);
-        }
-
         public void ItemsDisposablesClear()
         {
             _itemsDisposables.Clear();
@@ -201,6 +194,13 @@ namespace Core.Shop.Models
 
             foreach (var item in _itemsDict.Values)
                 item.Purchased.Subscribe(HandleBuyItem).AddTo(_itemsDisposables);
+        }
+
+        public void Operation()
+        {
+            _state = !_state;
+
+            _stateChangedSignal.OnNext(_state);
         }
 
         private void ApplyUIMigration(ItemUpgradeData loadedData, string currentName, string currentDesc)

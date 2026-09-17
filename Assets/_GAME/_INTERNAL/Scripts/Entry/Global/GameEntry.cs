@@ -163,6 +163,8 @@ namespace Entry.Global
             var audioPlayer = uiSfxSystem.AudioPlayer;
             gameWorldState.AudioSystemService.Initialization();
             audioPlayer.BindAudioSystemService(gameWorldState.AudioSystemService);
+
+            _analyticsService.ReportGameStart();
         }
 
 #if UNITY_ANDROID

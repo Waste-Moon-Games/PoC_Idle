@@ -252,6 +252,7 @@ GameObject:
   - component: {fileID: 4967221362336019534}
   - component: {fileID: 331010619861114560}
   - component: {fileID: 5378181901565973559}
+  - component: {fileID: -5232202305515866069}
   m_Layer: 5
   m_Name: PrestigeUpgradesView
   m_TagString: Untagged
@@ -299,5 +300,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 823cc11b8d02b484a98c2fb59a83f022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UI.ShopMenu.Views::UI.ShopMenu.Views.ShopView
+  _objectRectTransform: {fileID: 0}
+  _moveAppearAnimationDuration: 1
+  _scaleAppearAnimationDuration: 1
+  _fadeAppearAnimationDuration: 0.75
+  _targetPosition: {x: 0, y: 0}
+  _inEase: 27
+  _outEase: 26
+  _targetCanvasGroup: {fileID: -5232202305515866069}
   _prefab: {fileID: 847128460204070669, guid: 56d26c43768270345a9605e81af6a63d, type: 3}
   _container: {fileID: 7808068807211272750}
+--- !u!225 &-5232202305515866069
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8791475317892462169}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Core.Consts;
+using Cysharp.Threading.Tasks;
 using R3;
 using SO.GameConfigs;
 using System;
@@ -82,7 +83,7 @@ namespace Utils.SceneLoader
             }
 
             token.ThrowIfCancellationRequested();
-            _loadindScreen.HideLoadingScreen();
+            _loadindScreen.HideLoadingScreen(sceneName == SceneNames.GAME);
 
             _sceneLoaded.OnNext(sceneName);
         }

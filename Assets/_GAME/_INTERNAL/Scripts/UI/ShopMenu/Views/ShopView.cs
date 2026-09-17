@@ -1,12 +1,13 @@
 ﻿using Common.MVVM;
 using R3;
 using System.Collections.Generic;
+using UI.Common.Components;
 using UI.ShopMenu.ViewModels;
 using UnityEngine;
 
 namespace UI.ShopMenu.Views
 {
-    public class ShopView : MonoBehaviour, IView
+    public class ShopView : PanelAnimations, IView
     {
         private readonly CompositeDisposable _disposables = new();
 
@@ -22,6 +23,8 @@ namespace UI.ShopMenu.Views
         public void BindViewModel(IViewModel viewModel)
         {
             _viewModel = viewModel as ShopViewModel;
+            
+            _fadeAppearAnimationDuration = _viewModel.ShopOpenDuration;
 
             _viewModel.RequestedItems.Subscribe(HandleRequestedItems).AddTo(_disposables);
             _viewModel.StateChanged.Subscribe(HandleChangedState).AddTo(_disposables);
@@ -29,7 +32,18 @@ namespace UI.ShopMenu.Views
             _viewModel.RequestState();
         }
 
-        private void HandleChangedState(bool state) => gameObject.SetActive(state);
+        private void HandleChangedState(bool state)
+        {
+            if (state)
+            {
+                _targetCanvasGroup.alpha = 0f;
+                gameObject.SetActive(true);
+                FadeAnimation(1f);
+                return;
+            }
+
+            FadeAnimation(0f, () => gameObject.SetActive(false));
+        }
 
         private void HandleRequestedItems(List<ItemViewModel> itemViewModels)
         {

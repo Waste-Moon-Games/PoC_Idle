@@ -14,6 +14,8 @@ namespace Core.AdsSystem.Mobile
         private readonly string _incomeBoostRewardedID = "R-M-19758917-3";
         private readonly string _interstitialAdID = "R-M-19758917-1";
 
+        private string _requestedRewardedID = string.Empty;
+
         private RewardedAdLoader _rewardedLoader;
         private RewardedAd _rewardedAd;
         private RewardedAdType _type;
@@ -75,6 +77,8 @@ namespace Core.AdsSystem.Mobile
                 adUnitId = _freeGemsRewardedID;
             else
                 adUnitId = _incomeBoostRewardedID;
+
+            _requestedRewardedID = adUnitId;
 
             AnalyticsService.Instance.ReportRewardedAdClick(adUnitId);
 
@@ -177,13 +181,21 @@ namespace Core.AdsSystem.Mobile
 
         private void HandleRewardedAdShown(object sender, EventArgs e)
         {
+            _onComplete?.Invoke();
+            _onComplete = null;
             Debug.Log($"YandexAds: ad shown {e}");
+
+            AnalyticsService.Instance.ReportRewardedAdComplete(_requestedRewardedID);
+            _requestedRewardedID = string.Empty;
         }
 
         private void HandleRewarded(object sender, Reward e)
         {
             _onComplete?.Invoke();
             _onComplete = null;
+
+            AnalyticsService.Instance.ReportRewardedAdReward(_requestedRewardedID);
+            _requestedRewardedID = string.Empty;
         }
     }
 }

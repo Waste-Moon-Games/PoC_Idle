@@ -7,11 +7,11 @@ namespace SO.ShopConfigs
     [CreateAssetMenu(fileName = "ShopConfigsDatabase", menuName = "Configs/Shop/ShopConfigsDatabase")]
     public class ShopConfigsDatabase : ScriptableObject
     {
-        [field: SerializeField] public List<ShopItemsConfig> ItemsConfigs { get; private set; }
+        [field: SerializeField] public List<ShopConfig> ItemsConfigs { get; private set; }
 
-        public ShopItemsConfig GetItemsConfigByID(string id)
+        public ShopConfig GetItemsConfigByID(string id)
         {
-            ShopItemsConfig config = ItemsConfigs.FirstOrDefault(c => c.ShopID == id);
+            ShopConfig config = ItemsConfigs.FirstOrDefault(c => c.ShopID == id);
 
             return config;
         }
