@@ -6,6 +6,7 @@ apply from: '../shared/keepUnitySymbols.gradle'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
+    implementation 'androidx.annotation:annotation:1.2.0' // Assets/AdRevenue/Editor/AppMetricaAdRevenueAdapterDependencies.xml:4
     implementation 'com.yandex.android:mobileads-mediation:8.4.0.0' // Assets/YandexMobileAds/Editor/YandexMobileadsMediationDependencies.xml:14
     implementation 'io.appmetrica.analytics:analytics:8.0.0' // Assets/YandexMobileAds/Editor/YandexMobileadsMediationDependencies.xml:15
     implementation 'ru.rustore.sdk:core:10.3.1' // Assets/RuStoreSDK/Editor/Common/CoreClientDependencies.xml:7

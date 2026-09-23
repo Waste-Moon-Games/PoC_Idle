@@ -16,7 +16,7 @@ using Utils.CustomResourceLoader;
 
 namespace Entry.Local.Gameplay
 {
-    public class GameplayResourceLoader : IGameplayResourceLoader
+    public class GameplayResourceLoader : IUniversalResourceLoader
     {
         // TODO: remove config
         private GameResourcePathsConfig _resourcePathsConfig;
@@ -111,50 +111,6 @@ namespace Entry.Local.Gameplay
 
         #region Addressables API
         // New addressables API
-        public UniTask<UIRootTopBlockView> LoadRootViewAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public UniTask<NavigationButtonsView> LoadNavigationViewAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public UniTask<RewardsSystemView> LoadRewardsSystemViewAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public UniTask<PlayerRewardedBonusesView> LoadPlayerRewardedBonusesViewAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public UniTask<(MainGameView, EconomyPlayerInfoView, PlayerStatsView)> LoadPlayableViewAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public UniTask<OfflineIncomeView> LoadOfflineIncomeViewAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public UniTask<SettingsView> LoadSettignsViewAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public UniTask<RewardAdsConfig> LoadRewardsAdsConfigAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public UniTask<OfflineIncomeLocalizationConfig> LoadOfflineIncomeLocalizationConfigAsync()
-        {
-            throw new System.NotImplementedException();
-        }
 
         public async UniTask<T> LoadViewEntity<T>(string path) where T: Object, IView
         {

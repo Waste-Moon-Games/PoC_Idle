@@ -5,7 +5,7 @@ namespace UI.GameplayMenu.Models
 {
     public enum MainMenuEvents
     {
-        ShopClicked, SettingsClicked
+        ShopClicked, SettingsClicked, WheelOfLuckClicked
     }
 
     public class NavigationButtonsModel : IModel
@@ -15,13 +15,18 @@ namespace UI.GameplayMenu.Models
         public Observable<MainMenuEvents> Actions => _actionSignal.AsObservable();
 
         /// <summary>
-        /// Клик по кнопке Магазина
+        /// Shop Clicked Signal Invoke
         /// </summary>
         public void ClickShopSignal() => _actionSignal.OnNext(MainMenuEvents.ShopClicked);
 
         /// <summary>
-        /// Клик по кнопке Настроек
+        /// Settings Clicked Signal Invoke
         /// </summary>
         public void ClickSettingsSignal() => _actionSignal.OnNext(MainMenuEvents.SettingsClicked);
+
+        /// <summary>
+        /// Wheel Of Luck Clicked Signal Invoke
+        /// </summary>
+        public void ClickWheelOfLuckSignal() => _actionSignal.OnNext(MainMenuEvents.WheelOfLuckClicked);
     }
 }

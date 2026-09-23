@@ -47,7 +47,14 @@ namespace UI.GameplayMenu.Animations
             var targetRectTransform = target.GetComponent<RectTransform>();
             var coinGlowRectTransform = target.GetChild(0).GetComponent<RectTransform>();
             _coinFlowAnimationService = new(targetRectTransform, coinFlowAnimsConfig.Amplitude, coinFlowAnimsConfig.Duration);
-            _coinGlowPulseAnimationService = new(coinGlowRectTransform, coinGlowPulseAnimsConfig.Duration, coinGlowPulseAnimsConfig.MinScale, coinGlowPulseAnimsConfig.MaxScale);
+            
+            _coinGlowPulseAnimationService = new(
+                coinGlowRectTransform, 
+                coinGlowPulseAnimsConfig.Duration,
+                coinGlowPulseAnimsConfig.MinAlpha,
+                coinGlowPulseAnimsConfig.MaxAlpha, 
+                coinGlowPulseAnimsConfig.MinScale, 
+                coinGlowPulseAnimsConfig.MaxScale);
         }
 
         public override void OnClickDown()

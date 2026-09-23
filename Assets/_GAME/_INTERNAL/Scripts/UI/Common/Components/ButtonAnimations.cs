@@ -48,7 +48,7 @@ namespace UI.Common.Components
             if(_glowRectTransform == null && glowRectObject != null)
                 _glowRectTransform = glowRectObject;
 
-            _clickAnimationDuration = 0.1f;
+            _clickAnimationDuration = 0.55f;
 
             _defaultScale = _objectRectTransform.localScale;
             StartObjectPulsing();
@@ -131,7 +131,7 @@ namespace UI.Common.Components
             _objectRectTransform.localScale = _defaultScale;
 
             float pressDuration = _clickAnimationDuration;
-            float releaseDuration = _clickAnimationDuration * 2f;
+            float releaseDuration = _clickAnimationDuration * 0.5f;
             float randomRotationOffset = UnityEngine.Random.Range(-_clickedRandomRotation, _clickedRandomRotation);
             float clickedRotationDuration = _clickedRotationDuration;
             float clickedRotationReleaseDuration = _clickedRotationDuration * 0.5f;

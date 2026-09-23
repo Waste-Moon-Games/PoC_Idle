@@ -65,9 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0412\u044B \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u0438 \u0437\u0430
-    \u0432\u0440\u0435\u043C\u044F \u043E\u0444\u0444\u043B\u0430\u0439\u043D\u0430
-    {income}!"
+  m_text: "\u0412\u044B \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u0438 \u0437\u0430 \u0432\u0440\u0435\u043C\u044F \u043E\u0444\u0444\u043B\u0430\u0439\u043D\u0430 {income}!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
@@ -117,7 +115,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -204,8 +202,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0412\u044B \u043E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u043E\u0432\u0430\u043B\u0438
-    {hours} \u0447\u0430\u0441\u0430...."
+  m_text: "\u0412\u044B \u043E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u043E\u0432\u0430\u043B\u0438 {hours} \u0447\u0430\u0441\u0430...."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
@@ -255,7 +252,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -370,6 +367,7 @@ GameObject:
   - component: {fileID: 7014738910176291314}
   - component: {fileID: 2426378376143017862}
   - component: {fileID: 4295785248482229204}
+  - component: {fileID: 8621603099080190983}
   m_Layer: 5
   m_Name: ReceiveDoubleIncomeButton
   m_TagString: Untagged
@@ -425,7 +423,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 64452e98f94a1cc468ec09323dd787c5, type: 3}
+  m_Sprite: {fileID: -6248571146564713339, guid: 5902476fba622b84993116e57cea4def, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -479,6 +477,34 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8621603099080190983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3511428541265844462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dfc216d93562f3449edd5779559c81e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.Common.Components.ActionButton
+  _glowRectTransform: {fileID: 0}
+  _objectRectTransform: {fileID: 0}
+  _animations:
+    _objecPusleAnimationDuration: 1
+    _objecPulseScale: {x: 1, y: 1}
+    _useObjectPulsing: 0
+    _objectPulseDelay: 0
+    _glowPulseAnimationDuration: 1
+    _glowPulseScale: {x: 1, y: 1}
+    _useGlowPulsing: 0
+    _glowPulseDelay: 0
+    _clickAnimationDuration: 0.15
+    _clickedScale: {x: 0.95, y: 0.95}
+    _clickedRandomRotation: 5
+    _clickedRotationDuration: 0.075
+    _onClick: 8
 --- !u!1 &3975142144550324350
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,7 +620,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -803,7 +829,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3173875214397649899
 RectTransform:
   m_ObjectHideFlags: 0
@@ -813,7 +839,7 @@ RectTransform:
   m_GameObject: {fileID: 6339500616180009427}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8629011334289369918}
@@ -992,7 +1018,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -1026,6 +1052,7 @@ GameObject:
   - component: {fileID: 1507515449562332839}
   - component: {fileID: 165467909445639925}
   - component: {fileID: 1598849782611010368}
+  - component: {fileID: 1042333462963165281}
   m_Layer: 5
   m_Name: ReceiveIcnomeButton
   m_TagString: Untagged
@@ -1081,7 +1108,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 64452e98f94a1cc468ec09323dd787c5, type: 3}
+  m_Sprite: {fileID: -6248571146564713339, guid: 5902476fba622b84993116e57cea4def, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1135,3 +1162,31 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1042333462963165281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9050451565373476191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dfc216d93562f3449edd5779559c81e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.Common.Components.ActionButton
+  _glowRectTransform: {fileID: 0}
+  _objectRectTransform: {fileID: 0}
+  _animations:
+    _objecPusleAnimationDuration: 1
+    _objecPulseScale: {x: 1, y: 1}
+    _useObjectPulsing: 0
+    _objectPulseDelay: 0
+    _glowPulseAnimationDuration: 1
+    _glowPulseScale: {x: 1, y: 1}
+    _useGlowPulsing: 0
+    _glowPulseDelay: 0
+    _clickAnimationDuration: 0.15
+    _clickedScale: {x: 0.95, y: 0.95}
+    _clickedRandomRotation: 5
+    _clickedRotationDuration: 0.075
+    _onClick: 8

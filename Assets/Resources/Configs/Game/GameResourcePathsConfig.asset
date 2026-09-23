@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1789e116dbece1c4087dce81476324e6, type: 3}
   m_Name: GameResourcePathsConfig
   m_EditorClassIdentifier: Assembly-CSharp::SO.GameResourcePathsConfig
+  <KeysClassName>k__BackingField: Core.AddressablesLoadSystem.GameplayResourcePathKeys, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   <Paths>k__BackingField:
   - key: root_top_block_view
     value: UI/GameplayMenu/UIBlocks/Root/UIRootTopBlockView

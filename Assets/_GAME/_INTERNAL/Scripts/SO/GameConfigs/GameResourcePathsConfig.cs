@@ -6,6 +6,7 @@ namespace SO
     [CreateAssetMenu(menuName = "Game Resources/Resource Paths Config")]
     public class GameResourcePathsConfig : ScriptableObject
     {
+        [field: SerializeField] public string KeysClassName { get; set; }
         [field: SerializeField] public Dictionary<string, string> Paths { get; private set; } = new();
 
         public void SetPath(string key, string path)

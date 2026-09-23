@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: CoinGlow
-  m_Shader: {fileID: 10720, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: bc3bd5aae61b0454391b1dcce4e3f268, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -106,13 +106,20 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
+    - _BoxSize: 0.47
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
+    - _ColorMask: 15
+    - _CoreIntensity: 1.5
+    - _CoreOffset: 0
+    - _CoreTightness: 20
+    - _CoreWhiteness: 0.55
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
+    - _Dither: 0.005
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnableExternalAlpha: 0
@@ -120,16 +127,30 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _GlowPower: 2
+    - _GlowSpread: 0.5
+    - _HaloFalloff: 2.25
+    - _HaloIntensity: 0.6
+    - _HaloSpread: 0.25
+    - _InnerGlow: 0.15
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _PulseSpeed: 0
+    - _PulseStrength: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _Roundness: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
     - _Surface: 0
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
@@ -139,6 +160,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _GlowColor: {r: 0.9911022, g: 0.6444799, b: 0.000607054, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []

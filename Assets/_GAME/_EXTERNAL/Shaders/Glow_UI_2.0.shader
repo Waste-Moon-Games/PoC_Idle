@@ -4,7 +4,7 @@ Shader "UI/Premium Glow"
     {
         [Header(Shape)]
         _BoxSize   ("Inner Box Size", Range(0.05, 1.0)) = 0.75
-        _Roundness ("Corner Roundness", Range(0.0, 0.5)) = 0.15
+        _Roundness ("Corner Roundness", Range(0.0, 1)) = 0.15
 
         [Header(Glow Layers)]
         [HDR] _GlowColor     ("Glow Color (HDR)", Color) = (0.25, 1, 1, 1)

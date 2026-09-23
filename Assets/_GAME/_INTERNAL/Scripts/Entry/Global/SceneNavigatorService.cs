@@ -66,6 +66,9 @@ namespace Entry.Global
                 case SceneNames.GAME:
                     CreateGameScene().Forget();
                     break;
+                case SceneNames.WHEEL_OF_LUCK:
+                    CreateWheelOfLuckScene();
+                    break;
                 case SceneNames.SHOP:
                     CreateShopScene();
                     break;
@@ -90,6 +93,11 @@ namespace Entry.Global
                     }
                 })
                 .AddTo(_disposables);
+        }
+
+        private void CreateWheelOfLuckScene()
+        {
+            var container = _cachedContainer = new(_rootContainer);
         }
 
         private void CreateShopScene()

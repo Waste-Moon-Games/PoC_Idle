@@ -8,6 +8,7 @@ namespace UI.GameplayMenu.Views
     public class NavigationButtonsView : MonoBehaviour, IView
     {
         [SerializeField] private ActionButton _shopButton;
+        [SerializeField] private ActionButton _wheelOfLuckButton;
         [SerializeField] private ActionButton _settingsButton;
 
         [SerializeField] private ActionButtonsAnimationsService _buttonsAnimationService;
@@ -16,10 +17,14 @@ namespace UI.GameplayMenu.Views
 
         private void Start()
         {
-            if (_shopButton == null || _settingsButton == null)
+            if (_shopButton == null || _settingsButton == null || _wheelOfLuckButton == null)
+            {
+                Debug.LogError($"[Navigation Buttons View] Some button ref is null!");
                 return;
+            }
 
             _shopButton.OnButtonClick += HandleShopClick;
+            _wheelOfLuckButton.OnButtonClick += HandleWheelOfLuckClick;
             _settingsButton.OnButtonClick += HandleSettingsClick;
 
             _buttonsAnimationService.StartAsyncWaveAnimation().Forget();
@@ -27,10 +32,14 @@ namespace UI.GameplayMenu.Views
 
         private void OnDestroy()
         {
-            if (_shopButton == null || _settingsButton == null)
+            if (_shopButton == null || _settingsButton == null || _wheelOfLuckButton == null)
+            {
+                Debug.LogError($"[Navigation Buttons View] Some button ref is null!");
                 return;
+            }
 
             _shopButton.OnButtonClick -= HandleShopClick;
+            _wheelOfLuckButton.OnButtonClick -= HandleWheelOfLuckClick;
             _settingsButton.OnButtonClick -= HandleSettingsClick;
         }
 
@@ -40,6 +49,7 @@ namespace UI.GameplayMenu.Views
         }
 
         private void HandleShopClick() => _viewModel.ClickShop();
+        private void HandleWheelOfLuckClick() => _viewModel.ClickWheelOfLuck();
         private void HandleSettingsClick() => _viewModel.ClickSettings();
     }
 }

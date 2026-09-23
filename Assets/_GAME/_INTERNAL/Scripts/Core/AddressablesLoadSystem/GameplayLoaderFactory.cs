@@ -4,7 +4,7 @@ namespace Core.AddressablesLoadSystem
 {
     public static class GameplayLoaderFactory
     {
-        public static IGameplayResourceLoader Create()
+        public static IUniversalResourceLoader Create()
         {
 #if USE_ADDRESSABLES
             return new GameplayAddressablesResourceLoader();

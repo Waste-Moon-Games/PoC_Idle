@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd0bc35c60577f943b25acaaf82c6328, type: 3}
   m_Name: CoinGlowPulseAnimationConfig
   m_EditorClassIdentifier: Assembly-CSharp::SO.AnimationConfigs.CoinGlowPulseAnimationConfig
-  <Duration>k__BackingField: 3
-  <MinScale>k__BackingField: 1.05
-  <MaxScale>k__BackingField: 1.2
+  <Duration>k__BackingField: 1
+  <MinAlpha>k__BackingField: 0.25
+  <MaxAlpha>k__BackingField: 1
+  <MinScale>k__BackingField: 0.925
+  <MaxScale>k__BackingField: 1

@@ -135,12 +135,6 @@ MonoBehaviour:
       it: 
       de: 
       hi: 
-  InterstitialAdv:
-    showFirstAdv: 1
-    interAdvInterval: 15
-    postponeCallByFail: 0
-    postponeCallTimer: 10
-    labelAdvSimLabel: 0
   Localization:
     setLanguageMod: 1
   Payments:
@@ -207,7 +201,7 @@ MonoBehaviour:
     loadSceneIfSDKLate: 0
     loadSceneIndex: 0
     initDelaySimulation: 0
-    buildNumber: 60
+    buildNumber: 93
   Simulation:
     device: 1
     language: en
@@ -250,9 +244,6 @@ MonoBehaviour:
   platformInfo:
     ownHost: 0
   platformToggles:
-    showFirstAdv: 0
-    interAdvInterval: 0
-    postponeCallByFail: 0
     setLanguageMod: 0
     skipInterAdvAfterReward: 0
     saveLocal: 0

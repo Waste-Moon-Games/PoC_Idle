@@ -51,6 +51,7 @@ namespace UI.Common.Components
         private void OnDestroy()
         {
             _button.onClick.RemoveListener(HandleButtonClick);
+            OnButtonClick = null;
 
             _animations.KillAnimations();
         }

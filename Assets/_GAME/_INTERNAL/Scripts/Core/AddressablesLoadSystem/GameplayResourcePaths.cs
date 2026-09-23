@@ -1,5 +1,8 @@
-﻿namespace Core.AddressablesLoadSystem
+﻿using Attributes;
+
+namespace Core.AddressablesLoadSystem
 {
+    [ResourceKeysProvider]
     public static class GameplayResourcePathKeys
     {
         public const string UIRootTopBlockViewKey = "root_top_block_view";

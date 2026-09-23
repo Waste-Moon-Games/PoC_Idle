@@ -13,6 +13,7 @@ namespace UI.GameplayMenu.ViewModels
         }
 
         public void ClickShop() => _model.ClickShopSignal();
+        public void ClickWheelOfLuck() => _model.ClickWheelOfLuckSignal();
         public void ClickSettings() => _model.ClickSettingsSignal();
     }
 }
