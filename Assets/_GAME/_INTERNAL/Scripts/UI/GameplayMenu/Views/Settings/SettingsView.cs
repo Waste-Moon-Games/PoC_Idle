@@ -2,6 +2,7 @@
 using Core.AudioSystemCommon;
 using DG.Tweening;
 using R3;
+using UI.Common.Components;
 using UI.GameplayMenu.ViewModels;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,8 +24,8 @@ namespace UI.GameplayMenu.Views.Settings
         [SerializeField] private GameObject _musicCheckmark;
 
         [Space(5), Header("Buttons")]
-        [SerializeField] private Button _openVK;
-        [SerializeField] private Button _closeWindow;
+        [SerializeField] private ActionButton _openVK;
+        [SerializeField] private ActionButton _closeWindow;
 
         [Space(5), Header("SFX Sprites")]
         [SerializeField] private Sprite _sfxOnSprite;
@@ -54,14 +55,13 @@ namespace UI.GameplayMenu.Views.Settings
 #if UNITY_WEBGL
             _openVK.gameObject.SetActive(false);
 #endif
-
             _originalScale = Vector2.one;
 
             _sfxVolumeSlider.onValueChanged.AddListener(ChangeSFXVolume);
             _musicVolumeSlider.onValueChanged.AddListener(ChangeMusicVolume);
 
-            _openVK.onClick.AddListener(HandleOpenVKButtonClick);
-            _closeWindow.onClick.AddListener(HandleCloseButtonClick);
+            _openVK.OnButtonClick += HandleOpenVKButtonClick;
+            _closeWindow.OnButtonClick += HandleCloseButtonClick;
 
             _sfxToggle.onValueChanged.AddListener(ToggleSFXState);
             _musicToggle.onValueChanged.AddListener(ToggleMusicState);
@@ -75,8 +75,8 @@ namespace UI.GameplayMenu.Views.Settings
             _sfxVolumeSlider.onValueChanged.RemoveListener(ChangeSFXVolume);
             _musicVolumeSlider.onValueChanged.RemoveListener(ChangeMusicVolume);
 
-            _openVK.onClick.RemoveListener(HandleOpenVKButtonClick);
-            _closeWindow.onClick.RemoveListener(HandleCloseButtonClick);
+            _openVK.OnButtonClick -= HandleOpenVKButtonClick;
+            _closeWindow.OnButtonClick -= HandleCloseButtonClick;
 
             _sfxToggle.onValueChanged.RemoveListener(ToggleSFXState);
             _musicToggle.onValueChanged.RemoveListener(ToggleMusicState);

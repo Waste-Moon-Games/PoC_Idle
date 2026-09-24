@@ -25,6 +25,7 @@ namespace UI.Common.Components
         [SerializeField] private Vector2 _clickedScale = Vector2.one;
         [SerializeField] private float _clickedRandomRotation = 5f;
         [SerializeField] private float _clickedRotationDuration = 0.075f;
+        [SerializeField] private bool _useFastClickAnimation = true;
 
         [Space(5), Header("Animations Feel Setup")]
         [SerializeField] private MOST_HapticFeedback.HapticTypes _onClick = MOST_HapticFeedback.HapticTypes.SoftImpact;
@@ -48,7 +49,8 @@ namespace UI.Common.Components
             if(_glowRectTransform == null && glowRectObject != null)
                 _glowRectTransform = glowRectObject;
 
-            _clickAnimationDuration = 0.55f;
+            if(_useFastClickAnimation)
+                _clickAnimationDuration *= 0.5f;
 
             _defaultScale = _objectRectTransform.localScale;
             StartObjectPulsing();

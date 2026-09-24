@@ -2,9 +2,9 @@
 using DG.Tweening;
 using R3;
 using TMPro;
+using UI.Common.Components;
 using UI.GameplayMenu.ViewModels;
 using UnityEngine;
-using UnityEngine.UI;
 using Utils.Localization;
 
 namespace UI.GameplayMenu.Views
@@ -18,10 +18,11 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private TextMeshProUGUI _offlineIncome;
         [SerializeField] private TextMeshProUGUI _getText;
         [SerializeField] private TextMeshProUGUI _doubleGetText;
+        [SerializeField] private TextMeshProUGUI _welcomeMessageText;
 
         [Space(5), Header("Buttons setup")]
-        [SerializeField] private Button _receiveIncome;
-        [SerializeField] private Button _receiveDoubleIncome;
+        [SerializeField] private ActionButton _receiveIncome;
+        [SerializeField] private ActionButton _receiveDoubleIncome;
 
         [Space(5), Header("Animation setup")]
         [SerializeField] private float _openAnimDuration = 1f;
@@ -33,6 +34,9 @@ namespace UI.GameplayMenu.Views
         [SerializeField] private LocalizedText _getLocalizations;
         [SerializeField] private LocalizedText _doubleGetLocalizations;
 
+        [Space(5), Header("Other text localizations setup")]
+        [SerializeField] private LocalizedText _welcomeMessageLocalizations;
+
         [Space(5), Header("Other")]
         [SerializeField] private GameObject _viewport;
 
@@ -43,7 +47,13 @@ namespace UI.GameplayMenu.Views
 
         private RectTransform _rectTransform;
 
-        private void Awake() => _rectTransform = _viewport.GetComponent<RectTransform>();
+        private void Awake()
+        {
+            _rectTransform = _viewport.GetComponent<RectTransform>();
+
+            _rectTransform.localScale = _receivedScale;
+            _viewport.SetActive(false);
+        }
 
         private void Start()
         {
@@ -53,8 +63,8 @@ namespace UI.GameplayMenu.Views
                 return;
             }
 
-            _receiveIncome.onClick.AddListener(HandleReceiveIncomeButtonClick);
-            _receiveDoubleIncome.onClick.AddListener(HandleReceiveDoubleIncomeButtonClick);
+            _receiveIncome.OnButtonClick += HandleReceiveIncomeButtonClick;
+            _receiveDoubleIncome.OnButtonClick += HandleReceiveDoubleIncomeButtonClick;
         }
 
         private void OnDestroy()
@@ -62,8 +72,8 @@ namespace UI.GameplayMenu.Views
             _viewModel.Dispose();
             _disposables.Dispose();
 
-            _receiveIncome.onClick.RemoveListener(HandleReceiveIncomeButtonClick);
-            _receiveDoubleIncome.onClick.RemoveListener(HandleReceiveDoubleIncomeButtonClick);
+            _receiveIncome.OnButtonClick -= HandleReceiveIncomeButtonClick;
+            _receiveDoubleIncome.OnButtonClick -= HandleReceiveDoubleIncomeButtonClick;
         }
 
         public void BindViewModel(IViewModel viewModel)
@@ -83,19 +93,25 @@ namespace UI.GameplayMenu.Views
             OpenWindow();
         }
 
-        private void HandleCurrentLang(SystemLanguage lang)
-        {
-            _getText.text = _getLocalizations.Get(lang);
-            _doubleGetText.text = _doubleGetLocalizations.Get(lang);
-        }
+        [ContextMenu("Force Open Window")]
+        public void ForceOpenWindow() => OpenWindow();
 
         private void OpenWindow()
         {
             _viewport.SetActive(true);
 
+            _receiveDoubleIncome.Animations.StartGlowPulsing();
+
             _rectTransform
                 .DOScale(_defaultScale, _openAnimDuration)
                 .SetEase(Ease.InOutSine);
+        }
+
+        private void HandleCurrentLang(SystemLanguage lang)
+        {
+            _getText.text = _getLocalizations.Get(lang);
+            _doubleGetText.text = _doubleGetLocalizations.Get(lang);
+            _welcomeMessageText.text = _welcomeMessageLocalizations.Get(lang);
         }
 
         private void HandleReceivedOfflineIncome(bool state)
@@ -105,17 +121,18 @@ namespace UI.GameplayMenu.Views
                 _isReceived = state;
 
                 _rectTransform
-                .DOScale(_receivedScale, _closeAnimDuration)
-                .SetEase(Ease.OutFlash)
-                .OnComplete(() =>
-                {
-                    _viewport.SetActive(false);
-                });
+                    .DOScale(_receivedScale, _closeAnimDuration)
+                    .SetEase(Ease.OutFlash)
+                    .OnComplete(() =>
+                    {
+                        _viewport.SetActive(false);
+                    });
 
                 return;
             }
 
             _isReceived = state;
+            _receiveDoubleIncome.Animations.StopGlowPulsing();
         }
 
         private void HandleCanBeOpenedSignal(bool value) => _isCanBeOpened = value;

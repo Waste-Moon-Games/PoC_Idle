@@ -6,6 +6,7 @@
 	],
 	"settings": {
 		"files.autoSave": "onWindowChange",
-		"editor.fontSize": 15
+		"editor.fontSize": 15,
+		"dotnet.defaultSolution": "Poc Idle.slnx"
 	}
 }
