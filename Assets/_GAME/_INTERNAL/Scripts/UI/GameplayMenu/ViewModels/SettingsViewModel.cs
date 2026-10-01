@@ -10,6 +10,7 @@ namespace UI.GameplayMenu.ViewModels
 
         public bool CurrentSFXState => _model.CurrentSFXState;
         public bool CurrentMusicState => _model.CurrentMusicState;
+        public bool CurrentVibroState => _model.CurrentVibroState;
 
         public Observable<bool> SettingsWindowStateChangedSignal => _model.SettingsWindowStateChangedSignal;
         public Observable<float> SFXVolumeChangedSignal => _model.SFXVolumeChangedSignal;
@@ -31,5 +32,6 @@ namespace UI.GameplayMenu.ViewModels
         public void SetMusicVolume(float volume) => _model.SetMusicVolume(volume);
         public void ToggleSFXState(bool state) => _model.ToggleSFXState(state);
         public void ToggleMusicState(bool state) => _model.ToggleMusicState(state);
+        public void ToggleVibroState(bool state) => _model.ToggleVibroState(state);
     }
 }

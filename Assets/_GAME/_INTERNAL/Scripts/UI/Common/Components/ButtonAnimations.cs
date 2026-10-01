@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using Core.Consts;
+using DG.Tweening;
 using Solo.MOST_IN_ONE;
 using System;
 using UnityEngine;
@@ -159,8 +160,12 @@ namespace UI.Common.Components
             {
                 if (_useObjectPulsing)
                     StartObjectPulsing();
+                    
                 _objectRectTransform.localScale = _defaultScale;
-                MOST_HapticFeedback.Generate(_onClick);
+
+                if(PlayerPrefs.GetInt(SettingsPlayerPrefsKeys.VIBRO_STATE, 1) == 1)
+                    MOST_HapticFeedback.Generate(_onClick);
+
                 onComplete?.Invoke();
             });
         }

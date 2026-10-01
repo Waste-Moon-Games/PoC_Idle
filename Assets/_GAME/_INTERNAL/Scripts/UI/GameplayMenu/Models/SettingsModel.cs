@@ -1,4 +1,5 @@
 ﻿using Common.MVVM;
+using Core.Consts;
 using Core.GlobalGameState;
 using R3;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace UI.GameplayMenu.Models
 
         private readonly BehaviorSubject<bool> _sfxStateChangedSignal;
         private readonly BehaviorSubject<bool> _musicStateChangedSignal;
+        private readonly BehaviorSubject<bool> _vibroStateChangedSignal;
         private readonly Subject<bool> _settingsWindowStateChangedSignal;
 
         private readonly AudioSystemService _audioSystemService;
@@ -23,17 +25,20 @@ namespace UI.GameplayMenu.Models
 
         private bool _sfxState = true;
         private bool _musicState = true;
+        private bool _vibroState = true;
 
         private bool _settingsWindowState = false;
 
         public bool CurrentSFXState => _sfxState;
         public bool CurrentMusicState => _musicState;
+        public bool CurrentVibroState => _vibroState;
 
         public Observable<float> SFXVolumeChangedSignal => _sfxVolumeChangedSignal.AsObservable();
         public Observable<float> MusicVolumeChangedSignal => _musicVolumeChangedSignal.AsObservable();
 
         public Observable<bool> SFXStateChangedSignal => _sfxStateChangedSignal.AsObservable();
         public Observable<bool> MusicStateChangedSignal => _musicStateChangedSignal.AsObservable();
+        public Observable<bool> VibroStateChangedSignal => _vibroStateChangedSignal.AsObservable();
         public Observable<bool> SettingsWindowStateChangedSignal => _settingsWindowStateChangedSignal.AsObservable();
 
         public SettingsModel(AudioSystemService audioSystemService)
@@ -46,6 +51,8 @@ namespace UI.GameplayMenu.Models
             _audioSystemService.SFXStateChangedSignal.Subscribe(HandleSFXChangedState).AddTo(_disposables);
             _audioSystemService.MusicStateChangedSignal.Subscribe(HandleMusicChagedState).AddTo(_disposables);
 
+            _vibroState = PlayerPrefs.GetInt(SettingsPlayerPrefsKeys.VIBRO_STATE) == 1;
+
             _audioSystemService.SFXVolumeChange(_currentSfxVolume);
             _audioSystemService.MusicVolumeChange(_currentMusicVolume);
 
@@ -56,6 +63,7 @@ namespace UI.GameplayMenu.Models
 
             _sfxStateChangedSignal = new(_sfxState);
             _musicStateChangedSignal = new(_musicState);
+            _vibroStateChangedSignal = new(_vibroState);
         }
 
         public void BindNavigationActions(Observable<MainMenuEvents> settingsButtonClickSignal)
@@ -78,6 +86,17 @@ namespace UI.GameplayMenu.Models
         public void ToggleSFXState(bool state) => _audioSystemService.SFXStateChange(state);
 
         public void ToggleMusicState(bool state) => _audioSystemService.MusicStateChange(state);
+
+        public void ToggleVibroState(bool state)
+        {
+            _vibroState = state;
+            _vibroStateChangedSignal?.OnNext(_vibroState);
+
+            if (state)
+                PlayerPrefs.SetInt(SettingsPlayerPrefsKeys.VIBRO_STATE, 1);
+            else
+                PlayerPrefs.SetInt(SettingsPlayerPrefsKeys.VIBRO_STATE, 0);
+        }
 
         public void Close()
         {

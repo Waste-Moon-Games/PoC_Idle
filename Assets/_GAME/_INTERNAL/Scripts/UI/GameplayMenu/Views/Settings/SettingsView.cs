@@ -17,28 +17,42 @@ namespace UI.GameplayMenu.Views.Settings
         [SerializeField] private Slider _sfxVolumeSlider;
         [SerializeField] private Slider _musicVolumeSlider;
 
-        [Space(5), Header("Checkboxes")]
-        [SerializeField] private Toggle _sfxToggle;
-        [SerializeField] private Toggle _musicToggle;
-        [SerializeField] private GameObject _sfxCheckmark;
-        [SerializeField] private GameObject _musicCheckmark;
-
         [Space(5), Header("Buttons")]
         [SerializeField] private ActionButton _openVK;
         [SerializeField] private ActionButton _closeWindow;
 
-        [Space(5), Header("SFX Sprites")]
+        [Space(5), Header("SFX")]
+        [SerializeField] private ActionButton _sfxToggler;
+        [SerializeField] private Image _sfxTogglerIcon;
         [SerializeField] private Sprite _sfxOnSprite;
         [SerializeField] private Sprite _sfxOffSprite;
         [SerializeField] private Image _sfxIcon;
+        [SerializeField] private RectTransform _sfxHandlerRect;
 
-        [Space(5), Header("Music Sprites")]
+        [Space(5), Header("Music")]
+        [SerializeField] private ActionButton _musicToggler;
+        [SerializeField] private Image _musicTogglerIcon;
         [SerializeField] private Sprite _musicOnSprite;
         [SerializeField] private Sprite _musicOffSprite;
         [SerializeField] private Image _musicIcon;
+        [SerializeField] private RectTransform _musicHandlerRect;
 
-        [Space(5), Header("Animation Setup")]
+        [Space(5), Header("Vibration Settings")]
+        [SerializeField] private Image _vibroIcon;
+        [SerializeField] private Image _vibroTogglerIcon;
+        [SerializeField] private Sprite _vibroOffSprite;
+        [SerializeField] private Sprite _vibroOnSprite;
+        [SerializeField] private ActionButton _vibrationsToggler;
+        [SerializeField] private RectTransform _vibroHandlerRect;
+        
+        [Space(5), Header("Other Settings")]
+        [SerializeField] private Sprite _onHandlerSprite;
+        [SerializeField] private Sprite _offHandlerSprite;
+
+        [Space(5), Header("Animations Setup")]
         [SerializeField] private float _toggleAnimationDuration = 1.25f;
+        [SerializeField] private float _toggleHandlerAnimationDuration = 0.15f;
+        [SerializeField] private float _onTogglePostionX;
 
         private readonly SoundType _openSoundType = SoundType.Open;
         private readonly SoundType _closeSoundType = SoundType.Close;
@@ -50,6 +64,10 @@ namespace UI.GameplayMenu.Views.Settings
         private Tween _openTween;
         private Tween _closeTween;
 
+        private Tween _toggleVibrationsTween;
+        private Tween _toggleSFXTween;
+        private Tween _toggleMusicTween;
+
         private void Start()
         {
 #if UNITY_WEBGL
@@ -60,14 +78,16 @@ namespace UI.GameplayMenu.Views.Settings
             _sfxVolumeSlider.onValueChanged.AddListener(ChangeSFXVolume);
             _musicVolumeSlider.onValueChanged.AddListener(ChangeMusicVolume);
 
+            _sfxToggler.OnButtonClick += ToggleSFXState;
+            _musicToggler.OnButtonClick += ToggleMusicState;
+            _vibrationsToggler.OnButtonClick += ToggleVibroState;
+
             _openVK.OnButtonClick += HandleOpenVKButtonClick;
             _closeWindow.OnButtonClick += HandleCloseButtonClick;
 
-            _sfxToggle.onValueChanged.AddListener(ToggleSFXState);
-            _musicToggle.onValueChanged.AddListener(ToggleMusicState);
-
-            ToggleSFXState(_viewModel.CurrentSFXState);
-            ToggleMusicState(_viewModel.CurrentMusicState);
+            ToggleSFXState();
+            ToggleMusicState();
+            ToggleVibroState();
         }
 
         private void OnDestroy()
@@ -78,8 +98,9 @@ namespace UI.GameplayMenu.Views.Settings
             _openVK.OnButtonClick -= HandleOpenVKButtonClick;
             _closeWindow.OnButtonClick -= HandleCloseButtonClick;
 
-            _sfxToggle.onValueChanged.RemoveListener(ToggleSFXState);
-            _musicToggle.onValueChanged.RemoveListener(ToggleMusicState);
+            _sfxToggler.OnButtonClick -= ToggleSFXState;
+            _musicToggler.OnButtonClick -= ToggleMusicState;
+            _vibrationsToggler.OnButtonClick -= ToggleVibroState;
 
             _viewModel?.Dispose();
             _disposables.Dispose();
@@ -89,6 +110,8 @@ namespace UI.GameplayMenu.Views.Settings
         {
             _viewModel = viewModel as SettingsViewModel;
 
+            InitTogglers();
+
             _viewModel.SettingsWindowStateChangedSignal.Subscribe(HandleChangedWindowState).AddTo(_disposables);
             _viewModel.SFXVolumeChangedSignal.Subscribe(HandleChangedSFXVolume).AddTo(_disposables);
             _viewModel.MusicVolumeChangedSignal.Subscribe(HandleChangedMusicVolume).AddTo(_disposables);
@@ -97,26 +120,146 @@ namespace UI.GameplayMenu.Views.Settings
         private void ChangeSFXVolume(float volume) => _viewModel.SetSFXVolume(volume);
         private void ChangeMusicVolume(float volume) => _viewModel.SetMusicVolume(volume);
 
-        private void ToggleSFXState(bool state)
+        private void InitTogglers()
         {
-            _viewModel.ToggleSFXState(state);
-            _sfxCheckmark.SetActive(state);
+            bool sfxState = _viewModel.CurrentSFXState;
+            bool musicState = _viewModel.CurrentMusicState;
+            bool vibroState = _viewModel.CurrentVibroState;
 
-            if (state)
+            if (sfxState)
+            {
+                _sfxHandlerRect.anchoredPosition = new(_onTogglePostionX, _sfxHandlerRect.anchoredPosition.y);
                 _sfxIcon.sprite = _sfxOnSprite;
+                _sfxTogglerIcon.sprite = _onHandlerSprite;
+            }
             else
+            {
+                _sfxHandlerRect.anchoredPosition = new(-_onTogglePostionX, _sfxHandlerRect.anchoredPosition.y);
                 _sfxIcon.sprite = _sfxOffSprite;
+                _sfxTogglerIcon.sprite = _offHandlerSprite;
+            }
+
+            if (musicState)
+            {
+                _musicHandlerRect.anchoredPosition = new(_onTogglePostionX, _musicHandlerRect.anchoredPosition.y);
+                _musicIcon.sprite = _musicOnSprite;
+                _musicTogglerIcon.sprite = _onHandlerSprite;
+            }
+            else
+            {
+                _musicHandlerRect.anchoredPosition = new(-_onTogglePostionX, _musicHandlerRect.anchoredPosition.y);
+                _musicIcon.sprite = _musicOffSprite;
+                _musicTogglerIcon.sprite = _offHandlerSprite;
+            }
+
+            if (vibroState)
+            {
+                _vibroHandlerRect.anchoredPosition = new(_onTogglePostionX, _vibroHandlerRect.anchoredPosition.y);
+                _vibroIcon.sprite = _vibroOnSprite;
+                _vibroTogglerIcon.sprite = _onHandlerSprite;
+            }
+            else
+            {
+                _vibroHandlerRect.anchoredPosition = new(-_onTogglePostionX, _vibroHandlerRect.anchoredPosition.y);
+                _vibroIcon.sprite = _vibroOffSprite;
+                _vibroTogglerIcon.sprite = _offHandlerSprite;
+            }
         }
 
-        private void ToggleMusicState(bool state)
+        private void ToggleSFXState()
         {
-            _viewModel.ToggleMusicState(state);
-            _musicCheckmark.SetActive(state);
+            bool state = _viewModel.CurrentSFXState;
 
             if (state)
-                _musicIcon.sprite = _musicOnSprite;
+            {
+                _toggleSFXTween?.Kill();
+                _toggleSFXTween = _sfxHandlerRect
+                    .DOAnchorPosX(_onTogglePostionX, _toggleHandlerAnimationDuration)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() =>
+                    {
+                        _sfxIcon.sprite = _sfxOnSprite;
+                        _sfxTogglerIcon.sprite = _onHandlerSprite;
+                    });
+            }
             else
-                _musicIcon.sprite = _musicOffSprite;
+            {
+                _toggleSFXTween?.Kill();
+                _toggleSFXTween = _sfxHandlerRect
+                    .DOAnchorPosX(-_onTogglePostionX, _toggleHandlerAnimationDuration)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() =>
+                    {
+                        _sfxIcon.sprite = _sfxOffSprite;
+                        _sfxTogglerIcon.sprite = _offHandlerSprite;
+                    });
+            }
+
+            _viewModel.ToggleSFXState(!state);
+        }
+
+        private void ToggleMusicState()
+        {
+            bool state = _viewModel.CurrentMusicState;
+
+            if (state)
+            {
+                _toggleMusicTween?.Kill();
+                _toggleMusicTween = _musicHandlerRect
+                    .DOAnchorPosX(_onTogglePostionX, _toggleHandlerAnimationDuration)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() =>
+                    {
+                        _musicIcon.sprite = _musicOnSprite;
+                        _musicTogglerIcon.sprite = _onHandlerSprite;
+                    });
+            }
+            else
+            {
+                _toggleMusicTween?.Kill();
+                _toggleMusicTween = _musicHandlerRect
+                    .DOAnchorPosX(-_onTogglePostionX, _toggleHandlerAnimationDuration)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() =>
+                    {
+                        _musicIcon.sprite = _musicOffSprite;
+                        _musicTogglerIcon.sprite = _offHandlerSprite;
+                    });
+            }
+
+            _viewModel.ToggleMusicState(!state);
+        }
+
+        private void ToggleVibroState()
+        {
+            bool state = _viewModel.CurrentVibroState;
+
+            if (state)
+            {
+                _toggleVibrationsTween?.Kill();
+                _toggleVibrationsTween = _vibroHandlerRect
+                    .DOAnchorPosX(_onTogglePostionX, _toggleHandlerAnimationDuration)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() =>
+                    {
+                        _vibroIcon.sprite = _vibroOnSprite;
+                        _vibroTogglerIcon.sprite = _onHandlerSprite;
+                    });
+            }
+            else
+            {
+                _toggleVibrationsTween?.Kill();
+                _toggleVibrationsTween = _vibroHandlerRect
+                    .DOAnchorPosX(-_onTogglePostionX, _toggleHandlerAnimationDuration)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() =>
+                    {
+                        _vibroIcon.sprite = _vibroOffSprite;
+                        _vibroTogglerIcon.sprite = _offHandlerSprite;
+                    });
+            }
+
+            _viewModel.ToggleVibroState(!state);
         }
 
         private void HandleChangedWindowState(bool state)
