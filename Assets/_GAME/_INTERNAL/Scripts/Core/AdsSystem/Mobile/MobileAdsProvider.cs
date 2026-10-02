@@ -147,7 +147,8 @@ namespace Core.AdsSystem.Mobile
             _rewardedAd.OnAdFailedToShow += HandleRewardedAdFailedToShow;
             _rewardedAd.OnAdDismissed += HandleRewardedAdDismissed;
 
-            _rewardedAd.Show();
+            if(_isRewardedProcessing)
+                _rewardedAd.Show();
         }
 
         private void HandleRewardedAdDismissed(object sender, EventArgs e)
