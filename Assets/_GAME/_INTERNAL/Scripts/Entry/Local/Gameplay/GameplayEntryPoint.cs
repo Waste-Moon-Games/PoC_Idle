@@ -94,8 +94,8 @@ namespace Entry.Local.Gameplay
 
             _mainGameView = mainGameView;
 
-            await CreateLocalRewardsSystem();
             await CreateLocalRewardedAdsSystem();
+            await CreateLocalRewardsSystem();
 
             topRootView.AttachView(economyPlayerInfoView.transform);
             topRootView.AttachView(playerStatsView.transform);
@@ -124,6 +124,8 @@ namespace Entry.Local.Gameplay
 
             _mainGameView.AttachView(offlineIncomeView.gameObject);
             _mainGameView.AttachView(settingsView.gameObject);
+
+            settingsView.transform.SetAsLastSibling();
 
             gameWorldState.AudioSystemService.StartPlayMainThemeMusic();
 
@@ -192,7 +194,6 @@ namespace Entry.Local.Gameplay
         {
             var gameWorldState = _container.Resolve<GameWorldState>();
             var rewardsService = gameWorldState.PlayerState.RewardsService;
-            var audioSystemService = gameWorldState.AudioSystemService;
 
             RewardsSystemModel model = new(rewardsService);
             model.InitRewards();
@@ -203,6 +204,7 @@ namespace Entry.Local.Gameplay
             string path = _resourcePathsConfig.GetPathByKeyWord(GameplayResourcePathKeys.RewardsViewHolderKey);
             RewardsSystemView view = await _loader.LoadViewEntity<RewardsSystemView>(path);
             view.BindViewModel(viewModel);
+            view.transform.SetAsLastSibling();
 
             _mainGameView.AttachView(view.gameObject);
         }

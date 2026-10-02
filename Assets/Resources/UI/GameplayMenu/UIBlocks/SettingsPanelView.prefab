@@ -2853,7 +2853,7 @@ MonoBehaviour:
   _vibroOffSprite: {fileID: 21300000, guid: 7db17f1d521014d48b5b6db996700796, type: 3}
   _vibroOnSprite: {fileID: 21300000, guid: ae5e158437b4f7e46a5f404c241fb8c0, type: 3}
   _vibrationsToggler: {fileID: 2525724294100831640}
-  _vibroHandlerRect: {fileID: 1114330520672543760}
+  _vibroHandlerRect: {fileID: 8506571809586982750}
   _onHandlerSprite: {fileID: 21300000, guid: 9c1596c89063add43aa6b8d070348b4e, type: 3}
   _offHandlerSprite: {fileID: 21300000, guid: d5253efa44363db4d857f56eb314307a, type: 3}
   _toggleAnimationDuration: 0.95

@@ -51,7 +51,7 @@ namespace UI.GameplayMenu.Models
             _audioSystemService.SFXStateChangedSignal.Subscribe(HandleSFXChangedState).AddTo(_disposables);
             _audioSystemService.MusicStateChangedSignal.Subscribe(HandleMusicChagedState).AddTo(_disposables);
 
-            _vibroState = PlayerPrefs.GetInt(SettingsPlayerPrefsKeys.VIBRO_STATE) == 1;
+            _vibroState = PlayerPrefs.GetInt(SettingsPlayerPrefsKeys.VIBRO_STATE, 1) == 1;
 
             _audioSystemService.SFXVolumeChange(_currentSfxVolume);
             _audioSystemService.MusicVolumeChange(_currentMusicVolume);

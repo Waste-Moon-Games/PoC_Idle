@@ -23,7 +23,7 @@ namespace UI.GameplayMenu.ViewModels
 
         public void Dispose()
         {
-            _model.Dispose();
+            _model = null;
         }
 
         public void OpenVK() => _model.OpenVK();

@@ -44,7 +44,6 @@ namespace UI.GameplayMenu.Views
             if(_openRewardsPanelButton == null || _closeRewardsPanelButton == null)
                 return;
 
-            transform.SetAsLastSibling();
             _openRewardsPanelButton.OnButtonClick += HandleOpenRewardsButtonClick;
             _closeRewardsPanelButton.OnButtonClick += HandleCloseRewardsButtonClick;
 

@@ -84,10 +84,6 @@ namespace UI.GameplayMenu.Views.Settings
 
             _openVK.OnButtonClick += HandleOpenVKButtonClick;
             _closeWindow.OnButtonClick += HandleCloseButtonClick;
-
-            ToggleSFXState();
-            ToggleMusicState();
-            ToggleVibroState();
         }
 
         private void OnDestroy()
@@ -168,104 +164,120 @@ namespace UI.GameplayMenu.Views.Settings
 
         private void ToggleSFXState()
         {
-            bool state = _viewModel.CurrentSFXState;
+            bool newState = !_viewModel.CurrentSFXState;
 
-            if (state)
+            if (newState)
             {
-                _toggleSFXTween?.Kill();
-                _toggleSFXTween = _sfxHandlerRect
-                    .DOAnchorPosX(_onTogglePostionX, _toggleHandlerAnimationDuration)
-                    .SetEase(Ease.Linear)
-                    .OnComplete(() =>
-                    {
-                        _sfxIcon.sprite = _sfxOnSprite;
-                        _sfxTogglerIcon.sprite = _onHandlerSprite;
-                    });
+                ApplyTogglerVisualState(
+                    ref _toggleSFXTween, 
+                    _onTogglePostionX, 
+                    _sfxHandlerRect,
+                    _sfxTogglerIcon,
+                    _onHandlerSprite,
+                    _sfxIcon,
+                    _sfxOnSprite);
             }
             else
             {
-                _toggleSFXTween?.Kill();
-                _toggleSFXTween = _sfxHandlerRect
-                    .DOAnchorPosX(-_onTogglePostionX, _toggleHandlerAnimationDuration)
-                    .SetEase(Ease.Linear)
-                    .OnComplete(() =>
-                    {
-                        _sfxIcon.sprite = _sfxOffSprite;
-                        _sfxTogglerIcon.sprite = _offHandlerSprite;
-                    });
+                ApplyTogglerVisualState(
+                    ref _toggleSFXTween, 
+                    -_onTogglePostionX, 
+                    _sfxHandlerRect,
+                    _sfxTogglerIcon,
+                    _offHandlerSprite,
+                    _sfxIcon,
+                    _sfxOffSprite);
             }
 
-            _viewModel.ToggleSFXState(!state);
+            _viewModel.ToggleSFXState(newState);
         }
 
         private void ToggleMusicState()
         {
-            bool state = _viewModel.CurrentMusicState;
+            bool newState = !_viewModel.CurrentMusicState;
 
-            if (state)
+            if (newState)
             {
-                _toggleMusicTween?.Kill();
-                _toggleMusicTween = _musicHandlerRect
-                    .DOAnchorPosX(_onTogglePostionX, _toggleHandlerAnimationDuration)
-                    .SetEase(Ease.Linear)
-                    .OnComplete(() =>
-                    {
-                        _musicIcon.sprite = _musicOnSprite;
-                        _musicTogglerIcon.sprite = _onHandlerSprite;
-                    });
+                ApplyTogglerVisualState(
+                    ref _toggleMusicTween, 
+                    _onTogglePostionX, 
+                    _musicHandlerRect,
+                    _musicTogglerIcon,
+                    _onHandlerSprite,
+                    _musicIcon,
+                    _musicOnSprite);
             }
             else
             {
-                _toggleMusicTween?.Kill();
-                _toggleMusicTween = _musicHandlerRect
-                    .DOAnchorPosX(-_onTogglePostionX, _toggleHandlerAnimationDuration)
-                    .SetEase(Ease.Linear)
-                    .OnComplete(() =>
-                    {
-                        _musicIcon.sprite = _musicOffSprite;
-                        _musicTogglerIcon.sprite = _offHandlerSprite;
-                    });
+                ApplyTogglerVisualState(
+                    ref _toggleMusicTween, 
+                    -_onTogglePostionX, 
+                    _musicHandlerRect,
+                    _musicTogglerIcon,
+                    _offHandlerSprite,
+                    _musicIcon,
+                    _musicOffSprite);
             }
 
-            _viewModel.ToggleMusicState(!state);
+            _viewModel.ToggleMusicState(newState);
         }
 
         private void ToggleVibroState()
         {
-            bool state = _viewModel.CurrentVibroState;
+            bool newState = !_viewModel.CurrentVibroState;
 
-            if (state)
+            if (newState)
             {
-                _toggleVibrationsTween?.Kill();
-                _toggleVibrationsTween = _vibroHandlerRect
-                    .DOAnchorPosX(_onTogglePostionX, _toggleHandlerAnimationDuration)
-                    .SetEase(Ease.Linear)
-                    .OnComplete(() =>
-                    {
-                        _vibroIcon.sprite = _vibroOnSprite;
-                        _vibroTogglerIcon.sprite = _onHandlerSprite;
-                    });
+                ApplyTogglerVisualState(
+                    ref _toggleVibrationsTween, 
+                    _onTogglePostionX, 
+                    _vibroHandlerRect,
+                    _vibroTogglerIcon,
+                    _onHandlerSprite,
+                    _vibroIcon,
+                    _vibroOnSprite);
             }
             else
             {
-                _toggleVibrationsTween?.Kill();
-                _toggleVibrationsTween = _vibroHandlerRect
-                    .DOAnchorPosX(-_onTogglePostionX, _toggleHandlerAnimationDuration)
-                    .SetEase(Ease.Linear)
-                    .OnComplete(() =>
-                    {
-                        _vibroIcon.sprite = _vibroOffSprite;
-                        _vibroTogglerIcon.sprite = _offHandlerSprite;
-                    });
+                ApplyTogglerVisualState(
+                    ref _toggleVibrationsTween, 
+                    -_onTogglePostionX, 
+                    _vibroHandlerRect,
+                    _vibroTogglerIcon,
+                    _offHandlerSprite,
+                    _vibroIcon,
+                    _vibroOffSprite);
             }
 
-            _viewModel.ToggleVibroState(!state);
+            _viewModel.ToggleVibroState(newState);
+        }
+
+        private void ApplyTogglerVisualState(ref Tween togglerTween, 
+            float targetX,
+            RectTransform targetRect, 
+            Image togglerIcon, 
+            Sprite targetTogglerSprite,
+            Image settingIcon,
+            Sprite targetSettingSprite)
+        {
+            togglerTween?.Kill();
+            togglerTween = targetRect
+                .DOAnchorPosX(targetX, _toggleHandlerAnimationDuration)
+                .SetEase(Ease.Linear)
+                .OnComplete(() =>
+                {
+                    togglerIcon.sprite = targetTogglerSprite;
+                    settingIcon.sprite = targetSettingSprite;
+                });
         }
 
         private void HandleChangedWindowState(bool state)
         {
             if (state)
             {
+                if(gameObject.activeSelf)
+                    return;
+
                 AudioEventBus.InvokeSoundSignalByType(_openSoundType);
                 transform.localScale = Vector2.zero;
                 gameObject.SetActive(true);
