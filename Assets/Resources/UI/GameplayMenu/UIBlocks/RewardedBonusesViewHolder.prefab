@@ -64,81 +64,6 @@ MonoBehaviour:
   - {fileID: 1830014267591952367}
   _bonusInfoView: {fileID: 8961646451849730678}
   _buttonsAnimationService: {fileID: 8073834916334749045}
---- !u!1 &821465837594190757
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4389010271732375213}
-  - component: {fileID: 3030617762286371491}
-  - component: {fileID: 4048202810899016156}
-  m_Layer: 5
-  m_Name: Icon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &4389010271732375213
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 821465837594190757}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1876001989114573992}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 65, y: 65}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &3030617762286371491
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 821465837594190757}
-  m_CullTransparentMesh: 1
---- !u!114 &4048202810899016156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 821465837594190757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3f302b37d4c72954a87f7d7a773b0fb9, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1167406855760496049
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,8 +156,8 @@ MonoBehaviour:
   _toggleAnimationDuration: 0.25
   _bonusDescription: {fileID: 3448645178622804478}
   _getText: {fileID: 3069929544197032842}
-  _showAdButton: {fileID: 4248573233054948290}
-  _closeButton: {fileID: 6269385246753660664}
+  _showAdButton: {fileID: 6450973345565500667}
+  _closeButton: {fileID: 8994210273405911774}
   _getLocalizations:
     _entries:
     - Language: 10
@@ -250,8 +175,9 @@ GameObject:
   - component: {fileID: 1876001989114573992}
   - component: {fileID: 3780201052261245558}
   - component: {fileID: 9146201504032723534}
-  - component: {fileID: 7942547293418341221}
   - component: {fileID: 6269385246753660664}
+  - component: {fileID: 103670797474832508}
+  - component: {fileID: 8994210273405911774}
   m_Layer: 5
   m_Name: CloseButton
   m_TagString: Untagged
@@ -270,14 +196,13 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4389010271732375213}
+  m_Children: []
   m_Father: {fileID: 4821516943696617307}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -90, y: -70}
-  m_SizeDelta: {x: 85, y: 85}
+  m_AnchoredPosition: {x: -70, y: -70}
+  m_SizeDelta: {x: 100, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3780201052261245558
 CanvasRenderer:
@@ -300,14 +225,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.5, b: 0.5, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 11b712ae2716487429cfdeb03f86a3ad, type: 3}
+  m_Sprite: {fileID: -6886922843744022701, guid: 07b9b4de6e63ad64d8ff1ef35c1002af, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -317,21 +242,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7942547293418341221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1641456543301028036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 2, y: 2}
-  m_UseGraphicAlpha: 1
 --- !u!114 &6269385246753660664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,6 +286,49 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &103670797474832508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641456543301028036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
+  m_AspectMode: 1
+  m_AspectRatio: 1
+--- !u!114 &8994210273405911774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641456543301028036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dfc216d93562f3449edd5779559c81e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.Common.Components.ActionButton
+  _glowRectTransform: {fileID: 0}
+  _objectRectTransform: {fileID: 0}
+  _animations:
+    _objecPusleAnimationDuration: 1
+    _objecPulseScale: {x: 1, y: 1}
+    _useObjectPulsing: 0
+    _objectPulseDelay: 0
+    _glowPulseAnimationDuration: 1
+    _glowPulseScale: {x: 1, y: 1}
+    _useGlowPulsing: 0
+    _glowPulseDelay: 0
+    _clickAnimationDuration: 0.15
+    _clickedScale: {x: 0.95, y: 0.95}
+    _clickedRandomRotation: 5
+    _clickedRotationDuration: 0.075
+    _useFastClickAnimation: 1
+    _onClick: 8
 --- !u!1 &3490981837467186400
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,6 +667,7 @@ MonoBehaviour:
     _clickedScale: {x: 0.95, y: 0.95}
     _clickedRandomRotation: 5
     _clickedRotationDuration: 0.075
+    _useFastClickAnimation: 1
     _onClick: 8
 --- !u!1 &5044804553174147254
 GameObject:
@@ -749,8 +703,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -52.75, y: -92.625}
-  m_SizeDelta: {x: -215.5, y: 155.25}
+  m_AnchoredPosition: {x: -52.75, y: -78.75}
+  m_SizeDelta: {x: -215.5, y: 117.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5243379787661573018
 CanvasRenderer:
@@ -830,7 +784,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -1106,6 +1060,7 @@ MonoBehaviour:
     _clickedScale: {x: 0.95, y: 0.95}
     _clickedRandomRotation: 5
     _clickedRotationDuration: 0.075
+    _useFastClickAnimation: 1
     _onClick: 8
 --- !u!1 &8363030631638095143
 GameObject:
@@ -1223,7 +1178,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -1424,7 +1379,7 @@ GameObject:
   - component: {fileID: 6980142722631926601}
   - component: {fileID: 4598969543718655594}
   - component: {fileID: 4248573233054948290}
-  - component: {fileID: 6392622789220883980}
+  - component: {fileID: 6450973345565500667}
   m_Layer: 5
   m_Name: ShowAdButton
   m_TagString: Untagged
@@ -1449,8 +1404,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 65}
-  m_SizeDelta: {x: 390, y: 85}
+  m_AnchoredPosition: {x: 0, y: 47.5}
+  m_SizeDelta: {x: 390, y: 95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6980142722631926601
 CanvasRenderer:
@@ -1480,7 +1435,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bd0195086f379264ead3d25d065bf297, type: 3}
+  m_Sprite: {fileID: -6248571146564713339, guid: 5902476fba622b84993116e57cea4def, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1534,7 +1489,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6392622789220883980
+--- !u!114 &6450973345565500667
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1543,9 +1498,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 8671919977266426653}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Script: {fileID: 11500000, guid: 6dfc216d93562f3449edd5779559c81e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 2, y: 2}
-  m_UseGraphicAlpha: 1
+  m_EditorClassIdentifier: Assembly-CSharp::UI.Common.Components.ActionButton
+  _glowRectTransform: {fileID: 0}
+  _objectRectTransform: {fileID: 0}
+  _animations:
+    _objecPusleAnimationDuration: 1
+    _objecPulseScale: {x: 1, y: 1}
+    _useObjectPulsing: 0
+    _objectPulseDelay: 0
+    _glowPulseAnimationDuration: 1
+    _glowPulseScale: {x: 1, y: 1}
+    _useGlowPulsing: 0
+    _glowPulseDelay: 0
+    _clickAnimationDuration: 0.15
+    _clickedScale: {x: 0.95, y: 0.95}
+    _clickedRandomRotation: 5
+    _clickedRotationDuration: 0.075
+    _useFastClickAnimation: 1
+    _onClick: 8

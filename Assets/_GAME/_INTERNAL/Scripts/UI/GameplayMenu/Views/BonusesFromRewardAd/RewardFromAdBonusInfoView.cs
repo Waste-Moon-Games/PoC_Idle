@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using R3;
 using TMPro;
+using UI.Common.Components;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Localization;
@@ -14,8 +15,8 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
         [SerializeField] private TextMeshProUGUI _getText;
 
         [Space(5), Header("Buttons")]
-        [SerializeField] private Button _showAdButton;
-        [SerializeField] private Button _closeButton;
+        [SerializeField] private ActionButton _showAdButton;
+        [SerializeField] private ActionButton _closeButton;
 
         [Space(5), Header("Localization setup")]
         [SerializeField] private LocalizedText _getLocalizations;
@@ -43,8 +44,8 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
 #if UNITY_ANDROID
             _getText.text = _getLocalizations.Get(Application.systemLanguage);
 #endif
-            _showAdButton.onClick.AddListener(HandleShowAdButtonClick);
-            _closeButton.onClick.AddListener(Close);
+            _showAdButton.OnButtonClick += HandleShowAdButtonClick;
+            _closeButton.OnButtonClick += Close;
         }
 
         private void OnDestroy()
@@ -55,8 +56,8 @@ namespace UI.GameplayMenu.Views.BonusesFromRewardAd
                 return;
             }
 
-            _showAdButton.onClick.RemoveListener(HandleShowAdButtonClick);
-            _closeButton.onClick.RemoveListener(Close);
+            _showAdButton.OnButtonClick -= HandleShowAdButtonClick;
+            _closeButton.OnButtonClick -= Close;
         }
 
         public void SetDescription(string desc) => _bonusDescription.text = desc;

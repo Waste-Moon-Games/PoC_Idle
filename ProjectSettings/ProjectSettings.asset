@@ -149,7 +149,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 2.1.5R
+  bundleVersion: 2.1.1R
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -290,7 +290,7 @@ PlayerSettings:
   AndroidEnableTango: 0
   androidEnableBanner: 1
   androidUseLowAccuracyLocation: 0
-  androidUseCustomKeystore: 0
+  androidUseCustomKeystore: 1
   m_AndroidBanners:
   - width: 320
     height: 180
@@ -313,32 +313,44 @@ PlayerSettings:
   m_BuildTargetPlatformIcons:
   - m_BuildTarget: Android
     m_Icons:
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: f62454c6a5292654e822fb3ae564a50b, type: 3}
+      - {fileID: 2800000, guid: 5c8f227db2aa7f24e87e2db603a2172a, type: 3}
       m_Width: 432
       m_Height: 432
       m_Kind: 2
       m_SubKind: 
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: f62454c6a5292654e822fb3ae564a50b, type: 3}
+      - {fileID: 2800000, guid: 5c8f227db2aa7f24e87e2db603a2172a, type: 3}
       m_Width: 324
       m_Height: 324
       m_Kind: 2
       m_SubKind: 
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: f62454c6a5292654e822fb3ae564a50b, type: 3}
+      - {fileID: 2800000, guid: 5c8f227db2aa7f24e87e2db603a2172a, type: 3}
       m_Width: 216
       m_Height: 216
       m_Kind: 2
       m_SubKind: 
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: f62454c6a5292654e822fb3ae564a50b, type: 3}
+      - {fileID: 2800000, guid: 5c8f227db2aa7f24e87e2db603a2172a, type: 3}
       m_Width: 162
       m_Height: 162
       m_Kind: 2
       m_SubKind: 
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: f62454c6a5292654e822fb3ae564a50b, type: 3}
+      - {fileID: 2800000, guid: 5c8f227db2aa7f24e87e2db603a2172a, type: 3}
       m_Width: 108
       m_Height: 108
       m_Kind: 2
       m_SubKind: 
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: f62454c6a5292654e822fb3ae564a50b, type: 3}
+      - {fileID: 2800000, guid: 5c8f227db2aa7f24e87e2db603a2172a, type: 3}
       m_Width: 81
       m_Height: 81
       m_Kind: 2
@@ -777,23 +789,23 @@ PlayerSettings:
   webEnableSubmoduleStrippingCompatibility: 0
   webProgressiveAssetLoading: 0
   scriptingDefineSymbols:
-    Android: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    Android: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;TMP_YG2;NJSON_YG2
     EmbeddedLinux: DOTWEEN
     GameCoreScarlett: DOTWEEN
     GameCoreXboxOne: DOTWEEN
-    LinuxHeadlessSimulation: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    Nintendo Switch: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    PS4: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    PS5: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    LinuxHeadlessSimulation: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;TMP_YG2;NJSON_YG2
+    Nintendo Switch: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;TMP_YG2;NJSON_YG2
+    PS4: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;TMP_YG2;NJSON_YG2
+    PS5: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;TMP_YG2;NJSON_YG2
     QNX: DOTWEEN
     Stadia: DOTWEEN
-    Standalone: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    Standalone: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;TMP_YG2;NJSON_YG2
     VisionOS: DOTWEEN
-    WebGL: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    Windows Store Apps: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    XboxOne: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    iPhone: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
-    tvOS: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg
+    WebGL: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;TMP_YG2;NJSON_YG2
+    Windows Store Apps: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;TMP_YG2;NJSON_YG2
+    XboxOne: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;TMP_YG2;NJSON_YG2
+    iPhone: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;TMP_YG2;NJSON_YG2
+    tvOS: DOTWEEN;PLUGIN_YG_2;RU_YG2;Localization_yg;RewardedAdv_yg;ServerTime_yg;Storage_yg;Authorization_yg;AutoTranslateLangs_yg;InterstitialAdv_yg;Payments_yg;NJSON_STORAGE_YG2;RedefinePlayerPrefs_yg;QuitGameEvent_yg;TMP_YG2;NJSON_YG2
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

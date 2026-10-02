@@ -23,7 +23,7 @@ namespace Core.AdsSystem.Mobile
         private InterstitialAdLoader _interstitialLoader;
         private Interstitial _interstitialAd;
 
-        private bool _pendingShowRewarded;
+        private bool _isRewardedProcessing;
 
         private event Action _onComplete;
 
@@ -45,16 +45,17 @@ namespace Core.AdsSystem.Mobile
 
         public void ShowRewarded(RewardedAdType type, Action onComplete = null)
         {
+            if(_isRewardedProcessing)
+                return;
+
+            _isRewardedProcessing = true;
             _onComplete = onComplete;
             _type = type;
 
             if (_rewardedAd != null)
                 _rewardedAd.Show();
             else
-            {
-                _pendingShowRewarded = true;
                 RequestRewarded(type).Forget();
-            }
         }
 
         private void DestroyRewarded()
@@ -146,21 +147,20 @@ namespace Core.AdsSystem.Mobile
             _rewardedAd.OnAdFailedToShow += HandleRewardedAdFailedToShow;
             _rewardedAd.OnAdDismissed += HandleRewardedAdDismissed;
 
-            if (_pendingShowRewarded)
-            {
-                _pendingShowRewarded = false;
-                ShowRewarded(_type, _onComplete);
-            }
+            _rewardedAd.Show();
         }
 
         private void HandleRewardedAdDismissed(object sender, EventArgs e)
         {
+            _isRewardedProcessing = false;
             DestroyRewarded();
             RequestRewarded(_type).Forget();
         }
 
         private void HandleRewardedFailedToLoad(AdLoadingException e)
         {
+            _isRewardedProcessing = false;
+
             DestroyRewarded();
             RequestRewarded(_type).Forget();
 
@@ -175,22 +175,21 @@ namespace Core.AdsSystem.Mobile
 
         private void HandleRewardedAdFailedToShow(object sender, AdFailureEventArgs e)
         {
+            _isRewardedProcessing = false;
+
             DestroyRewarded();
             RequestRewarded(_type).Forget();
         }
 
         private void HandleRewardedAdShown(object sender, EventArgs e)
         {
-            _onComplete?.Invoke();
-            _onComplete = null;
             Debug.Log($"YandexAds: ad shown {e}");
-
-            AnalyticsService.Instance.ReportRewardedAdComplete(_requestedRewardedID);
-            _requestedRewardedID = string.Empty;
         }
 
         private void HandleRewarded(object sender, Reward e)
         {
+            _isRewardedProcessing = false;
+            
             _onComplete?.Invoke();
             _onComplete = null;
 
