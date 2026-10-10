@@ -56,8 +56,8 @@ namespace Entry.Global
         {
             try
             {
-                await _instance.Run();
                 await _instance.InitializeAnalyticsSDK();
+                await _instance.Run();
             }
             catch (Exception ex)
             {
@@ -92,7 +92,7 @@ namespace Entry.Global
                 });
                 Debug.Log($"[GlobalAction Bootstrap] AppMetrica initialized successfully");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Debug.LogError($"[GlobalAction Bootstrap] Failed to initialize AppMetrica: {ex.Message}");
             }
