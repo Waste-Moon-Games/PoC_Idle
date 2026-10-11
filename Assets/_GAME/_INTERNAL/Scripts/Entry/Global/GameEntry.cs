@@ -46,7 +46,6 @@ namespace Entry.Global
             _instance = new GameEntry();
 
             RunAsync().Forget();
-
 #if UNITY_ANDROID
             Application.quitting += HandleApplicationQuit;
 #endif
@@ -56,8 +55,10 @@ namespace Entry.Global
         {
             try
             {
-                await _instance.InitializeAnalyticsSDK();
                 await _instance.Run();
+                await _instance.InitializeAnalyticsSDK();
+
+                _instance._analyticsService.ReportGameStart();
             }
             catch (Exception ex)
             {
@@ -163,8 +164,6 @@ namespace Entry.Global
             var audioPlayer = uiSfxSystem.AudioPlayer;
             gameWorldState.AudioSystemService.Initialization();
             audioPlayer.BindAudioSystemService(gameWorldState.AudioSystemService);
-
-            _analyticsService.ReportGameStart();
         }
 
 #if UNITY_ANDROID

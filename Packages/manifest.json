@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
+    "io.appmetrica.analytics": "https://github.com/appmetrica/appmetrica-unity-plugin.git#v6.10.0",
     "com.unity.addressables": "2.11.2",
     "com.unity.collab-proxy": "2.13.6",
     "com.unity.feature.2d": "2.0.2",

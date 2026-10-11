@@ -7,6 +7,13 @@
       "dependencies": {},
       "hash": "34432703a177c97631a4eb1d908f086037c67969"
     },
+    "com.google.external-dependency-manager": {
+      "version": "1.2.187",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.unity.2d.animation": {
       "version": "16.0.0",
       "depth": 1,
@@ -414,6 +421,15 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "io.appmetrica.analytics": {
+      "version": "https://github.com/appmetrica/appmetrica-unity-plugin.git#v6.10.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.google.external-dependency-manager": "1.2.187"
+      },
+      "hash": "3c536f6a20c2f03c539887be4e209a138c3979a5"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
