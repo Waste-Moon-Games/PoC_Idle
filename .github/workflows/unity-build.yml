@@ -37,6 +37,14 @@ jobs:
           rm -f Assets/YandexMobileAds/Editor/iOSBigoAdsPostProcess.cs*
           rm -f Assets/YandexMobileAds/Editor/iOSInMobiPostProcess.cs*
 
+      - name: Cache Library folder
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-Android-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-Android-
+
       - name: Get Unity Version
         id: get_unity_version
         run: |
