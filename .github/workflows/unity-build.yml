@@ -57,6 +57,7 @@ jobs:
         with:
           projectPath: .
           unityVersion: ${{ steps.get_unity_version.outputs.version }}
+          customImage: unityci/editor:ubuntu-6000.6.0f1-ios-3
           targetPlatform: Android
           buildName: com.WasteMoonGames.PoCIdle
           buildsPath: build
