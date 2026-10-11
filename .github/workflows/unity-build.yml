@@ -31,6 +31,12 @@ jobs:
         with:
           lfs: true
 
+      - name: Remove iOS post-process scripts (no iOS module in Android image)
+        run: |
+          rm -f Assets/YandexMobileAds/Editor/iOSAppLovinPostProcess.cs*
+          rm -f Assets/YandexMobileAds/Editor/iOSBigoAdsPostProcess.cs*
+          rm -f Assets/YandexMobileAds/Editor/iOSInMobiPostProcess.cs*
+
       - name: Get Unity Version
         id: get_unity_version
         run: |
@@ -57,7 +63,6 @@ jobs:
         with:
           projectPath: .
           unityVersion: ${{ steps.get_unity_version.outputs.version }}
-          customImage: unityci/editor:ubuntu-6000.6.0f1-ios-3
           targetPlatform: Android
           buildName: com.WasteMoonGames.PoCIdle
           buildsPath: build
