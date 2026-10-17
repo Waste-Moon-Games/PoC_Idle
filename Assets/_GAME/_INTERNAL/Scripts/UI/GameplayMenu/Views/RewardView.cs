@@ -15,12 +15,21 @@ namespace UI.GameplayMenu.Views
         private readonly CompositeDisposable _disposables = new();
         private readonly NumberFormatter _formatter = new();
 
-        [SerializeField] private TextMeshProUGUI _requiredLevelText;
         [SerializeField] private Button _reciveButton;
+
+        [Space(5), Header("States")]
         [SerializeField] private GameObject _lockState;
         [SerializeField] private GameObject _recievedState;
         [SerializeField] private GameObject _connector;
+
+        [Space(5), Header("Text Setup")]
+        [SerializeField] private TextMeshProUGUI _requiredLevelText;
         [SerializeField] private TextMeshProUGUI _amountText;
+
+        [Space(5), Header("Currency Icons Setup")]
+        [SerializeField] private Image _currencyIcon;
+        [SerializeField] private Sprite _coinIcon;
+        [SerializeField] private Sprite _gemIcon;
 
         private RewardViewModel _viewModel;
 
@@ -34,7 +43,20 @@ namespace UI.GameplayMenu.Views
         }
 
         private void HandleReciveButtonClick() => _viewModel.TryToReceiveThisReward();
-        private void HandleRequestedRewardAmount(float amount) => _amountText.text = $"<color=yellow>{_formatter.FormatNumber(amount)}</color>";
+        private void HandleRequestedRewardAmount(float amount)
+        {
+            if(_viewModel.Type == RewardType.Coins)
+            {
+                _amountText.text = $"<color=yellow>{_formatter.FormatNumber(amount)}</color>";
+                _currencyIcon.sprite = _coinIcon;
+            }
+            
+            if(_viewModel.Type == RewardType.Gems)
+            {
+                _amountText.text = $"<color=purple>{_formatter.FormatNumber(amount)}</color>";
+                _currencyIcon.sprite = _gemIcon;
+            }
+        }
         
         private void HandleRewardState(RewardState state)
         {

@@ -83,11 +83,11 @@ namespace Core.GlobalGameState
             _currentLanguage = _resolveCurrentLanguage();
             _audioSystemService = audioSystemService;
 
-            _economyConfig = Resources.Load<MainEconomyConfig>("Configs/Economy/MainEconomyConfig");
-            _playerConfig = Resources.Load<PlayerConfig>("Configs/Player/PlayerConfig");
-            _rewardsByLevelConfig = Resources.Load<RewardsByLevelConfig>("Configs/Player/RewardsByLevelConfig");
-            _cyclicRewardsConfig = Resources.Load<CyclicRewardsConfig>("Configs/Player/CyclicRewardsConfig");
-            _playerOfflineConfig = Resources.Load<PlayerOfflineConfig>("Configs/Player/PlayerOfflineConfig");
+            _economyConfig = ResourceLoader.LoadOrThrow<MainEconomyConfig>("Configs/Economy/MainEconomyConfig");
+            _playerConfig = ResourceLoader.LoadOrThrow<PlayerConfig>("Configs/Player/PlayerConfig");
+            _rewardsByLevelConfig = ResourceLoader.LoadOrThrow<RewardsByLevelConfig>("Configs/Player/RewardsByLevelConfig");
+            _cyclicRewardsConfig = ResourceLoader.LoadOrThrow<CyclicRewardsConfig>("Configs/Player/CyclicRewardsConfig");
+            _playerOfflineConfig = ResourceLoader.LoadOrThrow<PlayerOfflineConfig>("Configs/Player/PlayerOfflineConfig");
             _rewardedsAdsConfig = ResourceLoader.LoadOrThrow<RewardAdsConfig>("Configs/Ads/RewardAdsConfig");
 
             var autoSaveToken = new CancellationTokenSource();

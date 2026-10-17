@@ -15,6 +15,8 @@ namespace UI.GameplayMenu.ViewModels
 
         private RewardModel _model;
 
+        public RewardType Type => _model.Type;
+
         public Observable<RewardState> RequestedRewardStateSignal => _requestedRewardStateSignal.AsObservable();
         public Observable<float> RewardAmountSignal => _model.RewardAmountSignal.AsObservable();
         public Observable<int> RewardRequiredLevelSignal => _model.RewardRequiredLevelSignal.AsObservable();

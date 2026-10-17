@@ -125,14 +125,14 @@ namespace Entry.Global
             _rootContainer.RegisterFactory(ads => new AdsSystemContext(AdsStrategyFactory.CreateStrategy(rewardedAdsConfig), adRatesConfig.InterstitialAdShowChance)).AsSingle();
             _rootContainer.RegisterFactory(ass => new AudioSystemService(soundsLibrary.Sounds, soundsLibrary.MainTheme)).AsSingle();
 
-            rewardedAdsConfig = null;
-
             var saveSystemContext = _rootContainer.Resolve<SaveSystemContext>();
             var adsSystemContext = _rootContainer.Resolve<AdsSystemContext>();
             var audioSystemService = _rootContainer.Resolve<AudioSystemService>();
             AudioEventBus.InitSoundCollection(audioSystemService.Sounds);
 
             _rootContainer.RegisterFactory(gws => new GameWorldState(saveSystemContext, adsSystemContext, audioSystemService)).AsSingle();
+
+            rewardedAdsConfig = null;
         }
 
         private async UniTask Run()

@@ -16,9 +16,12 @@ namespace UI.GameplayMenu.Models
         private readonly BehaviorSubject<bool> _connectorStateSignal;
 
         private RewardState _state;
+        private RewardType _type;
         private readonly int _rewardId;
         private readonly float _rewardAmount;
         private readonly RewardsSystemModel _model;
+
+        public RewardType Type => _type;
 
         public Observable<RewardState> RequestedRewardStateSignal => _rewardStateSignal.AsObservable();
         public Observable<float> RewardAmountSignal => _rewardAmountSignal.AsObservable();
@@ -40,6 +43,7 @@ namespace UI.GameplayMenu.Models
             _model = model;
 
             _state = source.RewardState;
+            _type = source.RewardType;
         }
 
         public void Dispose() => _disposables.Dispose();

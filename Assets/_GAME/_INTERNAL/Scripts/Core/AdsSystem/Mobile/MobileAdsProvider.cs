@@ -26,7 +26,7 @@ namespace Core.AdsSystem.Mobile
 
         private event Action _onComplete;
 
-        public MobileAdsProvider(IReadOnlyDictionary<RewardedAdType, string> placementsDict)
+        public MobileAdsProvider(Dictionary<RewardedAdType, string> placementsDict)
         {
             _placementsDict = new();
 

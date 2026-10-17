@@ -58,7 +58,7 @@ namespace Core.Services.Analytics
 
             if (!string.IsNullOrEmpty(gameEvent.GameName))
             {
-                parameters.Add("game", gameEvent.GameName);
+                parameters.Add("start_game", gameEvent.GameName);
             }
 
             ReportEvent(AnalyticsEventNames.GAME, parameters);
