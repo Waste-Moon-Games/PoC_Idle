@@ -2,6 +2,7 @@
 using Core.Services.Analytics;
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using YandexMobileAds;
 using YandexMobileAds.Base;
@@ -10,11 +11,9 @@ namespace Core.AdsSystem.Mobile
 {
     public class MobileAdsProvider : IAdsStrategy
     {
-        private readonly string _freeGemsRewardedID = "R-M-19758917-2";
-        private readonly string _incomeBoostRewardedID = "R-M-19758917-3";
-        private readonly string _interstitialAdID = "R-M-19758917-1";
-
         private string _requestedRewardedID = string.Empty;
+
+        private readonly Dictionary<RewardedAdType, string> _placementsDict;
 
         private RewardedAdLoader _rewardedLoader;
         private RewardedAd _rewardedAd;
@@ -27,8 +26,13 @@ namespace Core.AdsSystem.Mobile
 
         private event Action _onComplete;
 
-        public MobileAdsProvider()
+        public MobileAdsProvider(IReadOnlyDictionary<RewardedAdType, string> placementsDict)
         {
+            _placementsDict = new();
+
+            foreach (var kpv in placementsDict.Keys)
+                _placementsDict[kpv] = placementsDict[kpv];
+
             SetupLoaders().Forget();
         }
 
@@ -39,6 +43,7 @@ namespace Core.AdsSystem.Mobile
             _interstitialLoader = new();
 
             await RequestInterstitial();
+            await RequestRewarded(RewardedAdType.Double_Offline_Income);
         }
 
         public void ShowInterstitial() => _interstitialAd?.Show();
@@ -72,12 +77,15 @@ namespace Core.AdsSystem.Mobile
 
         private async UniTask RequestRewarded(RewardedAdType type)
         {
-            string adUnitId  = string.Empty;
+            string adUnitId;
 
-            if(type == RewardedAdType.Free_Gems)
-                adUnitId = _freeGemsRewardedID;
+            if(_placementsDict.TryGetValue(type, out string placementId))
+                adUnitId = placementId;
             else
-                adUnitId = _incomeBoostRewardedID;
+            {
+                Debug.LogWarning($"[Mobile Ads Provider] Placement by type '{type}' not found!");
+                return;
+            }
 
             _requestedRewardedID = adUnitId;
 
@@ -88,6 +96,7 @@ namespace Core.AdsSystem.Mobile
                 var loadedAd = await _rewardedLoader.LoadAd(new(adUnitId));
                 HandleRewardedAdLoaded(loadedAd);
             }
+            catch (OperationCanceledException) { }
             catch (AdLoadingException e)
             {
                 HandleRewardedFailedToLoad(e);
@@ -96,12 +105,22 @@ namespace Core.AdsSystem.Mobile
 
         private async UniTask RequestInterstitial()
         {
-            string adUnitId = _interstitialAdID;
+            string adUnitId;
+
+            if(_placementsDict.TryGetValue(RewardedAdType.Transition_Interstitial, out string placementId))
+                adUnitId = placementId;
+            else
+            {
+                Debug.LogWarning($"[Mobile Ads Provider] Placement by type '{RewardedAdType.Transition_Interstitial}' not found!");
+                return;
+            }
+
             try
             {
                 var loadedAd = await _interstitialLoader.LoadAd(new(adUnitId));
                 HandleInterstitialAdLoaded(loadedAd);
             }
+            catch (OperationCanceledException) { }
             catch (AdLoadingException e)
             {
                 HandleInterstitialFailedToLoad(e);
@@ -141,6 +160,7 @@ namespace Core.AdsSystem.Mobile
         private void HandleRewardedAdLoaded(RewardedAd e)
         {
             _rewardedAd = e;
+            Debug.Log($"[Mobile Ads Provider] Ad '{e.GetInfo().AdUnitId}' loaded.");
 
             _rewardedAd.OnRewarded += HandleRewarded;
             _rewardedAd.OnAdShown += HandleRewardedAdShown;

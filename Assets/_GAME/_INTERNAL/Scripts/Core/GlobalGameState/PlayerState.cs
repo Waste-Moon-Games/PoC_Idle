@@ -15,6 +15,7 @@ using System.Linq;
 using System.Threading;
 
 using UnityEngine;
+using Utils.CustomResourceLoader;
 
 #if UNITY_WEBGL
 using YG;
@@ -87,7 +88,7 @@ namespace Core.GlobalGameState
             _rewardsByLevelConfig = Resources.Load<RewardsByLevelConfig>("Configs/Player/RewardsByLevelConfig");
             _cyclicRewardsConfig = Resources.Load<CyclicRewardsConfig>("Configs/Player/CyclicRewardsConfig");
             _playerOfflineConfig = Resources.Load<PlayerOfflineConfig>("Configs/Player/PlayerOfflineConfig");
-            _rewardedsAdsConfig = Resources.Load<RewardAdsConfig>("Configs/Ads/RewardAdsConfig");
+            _rewardedsAdsConfig = ResourceLoader.LoadOrThrow<RewardAdsConfig>("Configs/Ads/RewardAdsConfig");
 
             var autoSaveToken = new CancellationTokenSource();
             _autoSaveService = new(_playerConfig.AutoSaveDelay, autoSaveToken);

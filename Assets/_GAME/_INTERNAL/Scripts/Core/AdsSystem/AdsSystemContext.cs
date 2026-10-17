@@ -6,7 +6,7 @@ namespace Core.AdsSystem
     public class AdsSystemContext
     {
         private readonly IAdsStrategy _currentStrategy;
-        private readonly float _interstitialAdShowChance = 1f;
+        private readonly float _interstitialAdShowChance;
 
         public AdsSystemContext(IAdsStrategy adsStrategy, float interstitialAdShowChance)
         {

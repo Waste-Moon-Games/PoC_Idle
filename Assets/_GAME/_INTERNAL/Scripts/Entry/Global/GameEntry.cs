@@ -114,6 +114,7 @@ namespace Entry.Global
             var adRatesConfig = ResourceLoader.LoadOrThrow<AdRatesConfig>("Configs/Ads/AdRatesConfig");
             var soundsLibrary = ResourceLoader.LoadOrThrow<SoundsCollectionConfig>("Configs/AudioSystem/SoundsCollectionConfig");
             var loadingConfig = ResourceLoader.LoadOrThrow<LoadingConfig>("Configs/Game/Loading/LoadingConfig");
+            var rewardedAdsConfig = ResourceLoader.LoadOrThrow<RewardAdsConfig>("Configs/Ads/RewardAdsConfig");
 
             _rootContainer.RegisterInstance(_loadingView);
 
@@ -121,8 +122,10 @@ namespace Entry.Global
             _rootContainer.RegisterFactory(slc => new SceneLoaderService(loadingScreen, loadingConfig)).AsSingle();
 
             _rootContainer.RegisterFactory(ssc => new SaveSystemContext(SaveSystemStrategyFactory.CreateStrategy())).AsSingle();
-            _rootContainer.RegisterFactory(ads => new AdsSystemContext(AdsStrategyFactory.CreateStrategy(), adRatesConfig.InterstitialAdShowChance)).AsSingle();
+            _rootContainer.RegisterFactory(ads => new AdsSystemContext(AdsStrategyFactory.CreateStrategy(rewardedAdsConfig), adRatesConfig.InterstitialAdShowChance)).AsSingle();
             _rootContainer.RegisterFactory(ass => new AudioSystemService(soundsLibrary.Sounds, soundsLibrary.MainTheme)).AsSingle();
+
+            rewardedAdsConfig = null;
 
             var saveSystemContext = _rootContainer.Resolve<SaveSystemContext>();
             var adsSystemContext = _rootContainer.Resolve<AdsSystemContext>();
